@@ -1,0 +1,15 @@
+{
+    "tracking_page":"Tracking Page",
+    "trainingGuide": "Training Guide",
+    "prediction_page": "Blood Sugar Prediction",
+    "diagnose": "Diabetes Diagnosis",
+    "alarm_page": "Alarms",
+    "glucose_measurement":"Blood Sugar Measurement",
+    "insulin":"Insulin Application",
+    "foot_care":"Foot Care",
+    "nutrition":"Nutrition",
+    "exercise":"Exercise",
+    "hypoglycemia":"Hypoglycemia",
+    "hyperglycemia":"Hyperglycemia",
+    "oral_drugs":"Oral Antidiabetic Drugs"
+}

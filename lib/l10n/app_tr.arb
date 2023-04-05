@@ -1,0 +1,15 @@
+{
+    "tracking_page":"Takip Çizelgesi",
+    "trainingGuide": "Eğitim Kılavuzu",
+    "prediction_page": "Kan Şekeri Tahmini",
+    "diagnose": "Diyabet Teşhisi",
+    "alarm_page": "Alarmlar",
+    "glucose_measurement":"Kan Şekeri Ölçümü",
+    "insulin":"İnsülin Uygulaması",
+    "foot_care":"Ayak Bakımı",
+    "nutrition":"Beslenme",
+    "exercise":"Egzersiz",
+    "hypoglycemia":"Hipoglisemi",
+    "hyperglycemia":"Hiperglisemi",
+    "oral_drugs":"Oral Antidiyabetik İlaçlar"
+}
