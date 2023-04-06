@@ -1,75 +1,112 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'package:glucowizard_flutter/components/fifteen_min_prediction.dart';
+import 'package:glucowizard_flutter/components/fourty_five_min_prediction.dart';
+import 'package:glucowizard_flutter/components/hundred_twenty_prediction.dart';
+import 'package:glucowizard_flutter/components/sixty_prediction.dart';
+import 'package:glucowizard_flutter/components/thirty_min_prediction.dart';
+
+import 'package:glucowizard_flutter/providers/prediction_provider.dart';
 import 'package:glucowizard_flutter/services/prediction_service.dart';
 import 'package:provider/provider.dart';
-import 'package:stacked_card_carousel/stacked_card_carousel.dart';
-import 'package:lottie/lottie.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
-import '../providers/prediction_provider.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'ninety_min_prediction.dart';
 
 class PredictionTextFields extends StatelessWidget {
-  final List<String> items = [
-    '15 Dakika',
-    '30 Dakika',
-    '45 Dakika',
-    '60 Dakika',
-    '90 Dakika',
-    '120 Dakika',
-  ];
-  TextEditingController predictionController1 = TextEditingController();
-  TextEditingController predictionController2 = TextEditingController();
-  TextEditingController predictionController3 = TextEditingController();
-  TextEditingController predictionController4 = TextEditingController();
-  TextEditingController predictionController5 = TextEditingController();
-  TextEditingController predictionController6 = TextEditingController();
-
-  String? selectedValue;
-
   PredictionTextFields({super.key, required this.title});
   final String title;
 
-  // final List<Widget> fancyCards = <Widget>[
-  //   FancyCard(
-  //     image: Image.asset("assets/images/twenty-five.png"),
-  //     title: "Don't be sad!",
-  //     predictionController: TextEditingController(),
-  //   ),
-  //   FancyCard(
-  //     image: Image.asset("assets/images/twenty.png"),
-  //     title: "Go for a walk!",
-  //     predictionController: TextEditingController(),
-  //   ),
-  //   FancyCard(
-  //     image: Image.asset("assets/images/fifteen.png"),
-  //     title: "Try teleportation!",
-  //     predictionController: TextEditingController(),
-  //   ),
-  //   FancyCard(
-  //     image: Image.asset("assets/images/ten.png"),
-  //     title: "Enjoy your coffee!",
-  //     predictionController: TextEditingController(),
-  //   ),
-  //   FancyCard(
-  //     image: Image.asset("assets/images/five.png"),
-  //     title: "Play with your cat!",
-  //     predictionController: TextEditingController(),
-  //   ),
-  //   FancyCard(
-  //     image: Image.asset("assets/images/now.png"),
-  //     title: "Play with your cat!",
-  //     predictionController: TextEditingController(),
-  //   ),
-  // ];
+  final predictionController15_1 = TextEditingController();
+  final predictionController15_2 = TextEditingController();
+  final predictionController15_3 = TextEditingController();
+  final predictionController30_1 = TextEditingController();
+  final predictionController30_2 = TextEditingController();
+  final predictionController30_3 = TextEditingController();
+  final predictionController30_4 = TextEditingController();
+  final predictionController30_5 = TextEditingController();
+  final predictionController30_6 = TextEditingController();
+  final predictionController60_1 = TextEditingController();
+  final predictionController60_2 = TextEditingController();
+  final predictionController60_3 = TextEditingController();
+  final predictionController60_4 = TextEditingController();
+  final predictionController60_5 = TextEditingController();
+  final predictionController60_6 = TextEditingController();
+  final predictionController60_7 = TextEditingController();
+  final predictionController60_8 = TextEditingController();
+  final predictionController60_9 = TextEditingController();
+  final predictionController60_10 = TextEditingController();
+  final predictionController60_11 = TextEditingController();
+  final predictionController60_12 = TextEditingController();
+  final predictionController45_1 = TextEditingController();
+  final predictionController45_2 = TextEditingController();
+  final predictionController45_3 = TextEditingController();
+  final predictionController45_4 = TextEditingController();
+  final predictionController45_5 = TextEditingController();
+  final predictionController45_6 = TextEditingController();
+  final predictionController45_7 = TextEditingController();
+  final predictionController45_8 = TextEditingController();
+  final predictionController45_9 = TextEditingController();
+  final predictionController90_1 = TextEditingController();
+  final predictionController90_2 = TextEditingController();
+  final predictionController90_3 = TextEditingController();
+  final predictionController90_4 = TextEditingController();
+  final predictionController90_5 = TextEditingController();
+  final predictionController90_6 = TextEditingController();
+  final predictionController90_7 = TextEditingController();
+  final predictionController90_8 = TextEditingController();
+  final predictionController90_9 = TextEditingController();
+  final predictionController90_10 = TextEditingController();
+  final predictionController90_11 = TextEditingController();
+  final predictionController90_12 = TextEditingController();
+  final predictionController90_13 = TextEditingController();
+  final predictionController90_14 = TextEditingController();
+  final predictionController90_15 = TextEditingController();
+  final predictionController90_16 = TextEditingController();
+  final predictionController90_17 = TextEditingController();
+  final predictionController90_18 = TextEditingController();
+  final predictionController120_1 = TextEditingController();
+  final predictionController120_2 = TextEditingController();
+  final predictionController120_3 = TextEditingController();
+  final predictionController120_4 = TextEditingController();
+  final predictionController120_5 = TextEditingController();
+  final predictionController120_6 = TextEditingController();
+  final predictionController120_7 = TextEditingController();
+  final predictionController120_8 = TextEditingController();
+  final predictionController120_9 = TextEditingController();
+  final predictionController120_10 = TextEditingController();
+  final predictionController120_11 = TextEditingController();
+  final predictionController120_12 = TextEditingController();
+  final predictionController120_13 = TextEditingController();
+  final predictionController120_14 = TextEditingController();
+  final predictionController120_15 = TextEditingController();
+  final predictionController120_16 = TextEditingController();
+  final predictionController120_17 = TextEditingController();
+  final predictionController120_18 = TextEditingController();
+  final predictionController120_19 = TextEditingController();
+  final predictionController120_20 = TextEditingController();
+  final predictionController120_21 = TextEditingController();
+  final predictionController120_22 = TextEditingController();
+  final predictionController120_23 = TextEditingController();
+  final predictionController120_24 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    predictionController1.text = "254";
-    predictionController2.text = "250";
-    predictionController3.text = "249";
-    predictionController4.text = "247";
-    predictionController5.text = "242";
-    predictionController6.text = "235";
+    PredictionModel predictionModel = PredictionModel();
+    String? selectedValue = context.watch<PredictionProvider>().selectedValue;
+    final List<String> items = [
+      AppLocalizations.of(context)!.fiveMin,
+      AppLocalizations.of(context)!.thirtyMin,
+      AppLocalizations.of(context)!.fourtyMin,
+      AppLocalizations.of(context)!.sixtyMin,
+      AppLocalizations.of(context)!.ninetyMin,
+      AppLocalizations.of(context)!.houndredMin,
+    ];
+
+    var selectedText = context.watch<PredictionProvider>().selectedText ?? '';
+
     return Column(
       children: [
         Column(
@@ -82,19 +119,19 @@ class PredictionTextFields extends StatelessWidget {
             DropdownButton2(
                 isExpanded: true,
                 hint: Row(
-                  children: const [
-                    Icon(
+                  children: [
+                    const Icon(
                       Icons.list,
                       size: 16,
                       color: Colors.white,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 4,
                     ),
                     Expanded(
                       child: Text(
-                        'Select Item',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.selectTime,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -113,7 +150,7 @@ class PredictionTextFields extends StatelessWidget {
                     border: Border.all(
                       color: Colors.black26,
                     ),
-                    color: Color(0xff95ABFE),
+                    color: const Color.fromARGB(255, 164, 201, 255),
                   ),
                   elevation: 2,
                 ),
@@ -131,7 +168,7 @@ class PredictionTextFields extends StatelessWidget {
                     padding: null,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      color: Color(0xff95ABFE),
+                      color: const Color.fromARGB(255, 164, 201, 255),
                     ),
                     elevation: 8,
                     offset: const Offset(-20, 0),
@@ -147,7 +184,7 @@ class PredictionTextFields extends StatelessWidget {
                   height: 40,
                   padding: EdgeInsets.only(left: 14, right: 14),
                 ),
-                value: selectedValue,
+                value: context.watch<PredictionProvider>().head,
                 items: items
                     .map((item) => DropdownMenuItem<String>(
                           value: item,
@@ -162,329 +199,177 @@ class PredictionTextFields extends StatelessWidget {
                         ))
                     .toList(),
                 onChanged: (e) {
-                  selectedValue = e;
-                  // print(context
-                  //     .watch<PredictionProvider>()
-                  //     .predictionController!
-                  //     .text);
+                  context.read<PredictionProvider>().setSelectedValue(e!);
+                  context.read<PredictionProvider>().setHead(e);
+                  context.read<PredictionProvider>().setSelectedText(e);
+                  print(selectedValue);
                 }),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                  'Lütfen 5\'er dakika aralıklarla geçmiş 30 dakikalık verilerinizi giriniz',
+                  selectedText == '15 Dakika' || selectedText == '15 Minute'
+                      ? AppLocalizations.of(context)!.fifteenMinText
+                      : selectedText == '30 Dakika' ||
+                              selectedText == '30 Minute'
+                          ? AppLocalizations.of(context)!.thirtyMinText
+                          : selectedText == '45 Dakika' ||
+                                  selectedText == '45 Minute'
+                              ? AppLocalizations.of(context)!.fortyFiveMinText
+                              : selectedText == '60 Dakika' ||
+                                      selectedText == '60 Minute'
+                                  ? AppLocalizations.of(context)!.sixtyminText
+                                  : selectedText == '90 Dakika' ||
+                                          selectedText == '90 Minute'
+                                      ? AppLocalizations.of(context)!
+                                          .ninetyminText
+                                      : selectedText == '120 Dakika' ||
+                                              selectedText == '120 Minute'
+                                          ? AppLocalizations.of(context)!
+                                              .oneTwentyminText
+                                          : selectedText,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  )),
+                  style: const TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54)),
             ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xff3AB4F2),
-                  shadowColor: Colors.amber,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  backgroundColor: Color(0xff3AB4F2),
-                ),
-                onPressed: () {
-                  PredictionModel predictionModel = PredictionModel();
-                  predictionModel.loadModel(
-                      predictionController1.text,
-                      predictionController2.text,
-                      predictionController3.text,
-                      predictionController4.text,
-                      predictionController5.text,
-                      predictionController6.text);
-                },
-                child: Text('Tahmin Et'))
+            //     ))
           ],
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.45,
-          child: StackedCardCarousel(
-            onPageChanged: (pageIndex) {},
-            spaceBetweenItems: 180,
-            items: [
-              Card(
-                elevation: 4.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        child: Image.asset("assets/images/twenty-five.png"),
-                        height: 50,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-
-                          controller: predictionController1,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText: 'Enter your glucose value',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 4.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        child: Image.asset("assets/images/twenty.png"),
-                        height: 50,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-
-                          controller: predictionController2,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText: 'Enter your glucose value',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 4.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Image.asset("assets/images/fifteen.png"),
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-                          controller: predictionController3,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText: 'Enter your glucose value',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 4.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Image.asset("assets/images/ten.png"),
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-                          controller: predictionController4,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText: 'Enter your glucose value',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 4.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        child: Image.asset("assets/images/five.png"),
-                        height: 50,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-                          controller: predictionController5,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText: 'Enter your glucose value',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 4.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        child: Image.asset("assets/images/now.png"),
-                        height: 50,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-                          controller: predictionController6,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText: 'Enter your glucose value',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        selectedValue == '15 Dakika' || selectedValue == '15 Minute'
+            ? FifteenMinPrediction(
+                predictionController1: predictionController15_1,
+                predictionController2: predictionController15_2,
+                predictionController3: predictionController15_3,
+              )
+            : selectedValue == '30 Dakika' || selectedValue == '30 Minute'
+                ? ThirtyMinPrediction(
+                    predictionController1: predictionController30_1,
+                    predictionController2: predictionController30_2,
+                    predictionController3: predictionController30_3,
+                    predictionController4: predictionController30_4,
+                    predictionController5: predictionController30_5,
+                    predictionController6: predictionController30_6)
+                : selectedValue == '45 Dakika' || selectedValue == '45 Minute'
+                    ? FourtyFiveMinPrediction(
+                        predictionController1: predictionController45_1,
+                        predictionController2: predictionController45_2,
+                        predictionController3: predictionController45_3,
+                        predictionController4: predictionController45_4,
+                        predictionController5: predictionController45_5,
+                        predictionController6: predictionController45_6,
+                        predictionController7: predictionController45_7,
+                        predictionController8: predictionController45_8,
+                        predictionController9: predictionController45_9,
+                      )
+                    : selectedValue == '60 Dakika' ||
+                            selectedValue == '60 Minute'
+                        ? SixtyMinPrediction(
+                            predictionController1: predictionController60_1,
+                            predictionController2: predictionController60_2,
+                            predictionController3: predictionController60_3,
+                            predictionController4: predictionController60_4,
+                            predictionController5: predictionController60_5,
+                            predictionController6: predictionController60_6,
+                            predictionController7: predictionController60_7,
+                            predictionController8: predictionController60_8,
+                            predictionController9: predictionController60_9,
+                            predictionController10: predictionController60_10,
+                            predictionController11: predictionController60_11,
+                            predictionController12: predictionController60_12,
+                          )
+                        : selectedValue == '90 Dakika' ||
+                                selectedValue == '90 Minute'
+                            ? NinetyMinPrediction(
+                                predictionController1: predictionController60_1,
+                                predictionController2: predictionController90_2,
+                                predictionController3: predictionController90_3,
+                                predictionController4: predictionController90_4,
+                                predictionController5: predictionController90_5,
+                                predictionController6: predictionController90_6,
+                                predictionController7: predictionController90_7,
+                                predictionController8: predictionController90_8,
+                                predictionController9: predictionController90_9,
+                                predictionController10:
+                                    predictionController90_10,
+                                predictionController11:
+                                    predictionController90_11,
+                                predictionController12:
+                                    predictionController90_12,
+                                predictionController13:
+                                    predictionController90_13,
+                                predictionController14:
+                                    predictionController90_14,
+                                predictionController15:
+                                    predictionController90_15,
+                                predictionController16:
+                                    predictionController90_16,
+                                predictionController17:
+                                    predictionController90_17,
+                                predictionController18:
+                                    predictionController90_18,
+                              )
+                            : selectedValue == '120 Dakika' ||
+                                    selectedValue == '120 Minute'
+                                ? HundredTwentyPrediction(
+                                    predictionController1:
+                                        predictionController120_1,
+                                    predictionController2:
+                                        predictionController120_2,
+                                    predictionController3:
+                                        predictionController120_3,
+                                    predictionController4:
+                                        predictionController120_4,
+                                    predictionController5:
+                                        predictionController120_5,
+                                    predictionController6:
+                                        predictionController120_6,
+                                    predictionController7:
+                                        predictionController120_7,
+                                    predictionController8:
+                                        predictionController120_8,
+                                    predictionController9:
+                                        predictionController120_9,
+                                    predictionController10:
+                                        predictionController120_10,
+                                    predictionController11:
+                                        predictionController120_11,
+                                    predictionController12:
+                                        predictionController120_12,
+                                    predictionController13:
+                                        predictionController120_13,
+                                    predictionController14:
+                                        predictionController120_14,
+                                    predictionController15:
+                                        predictionController120_15,
+                                    predictionController16:
+                                        predictionController120_16,
+                                    predictionController17:
+                                        predictionController120_17,
+                                    predictionController18:
+                                        predictionController120_18,
+                                    predictionController19:
+                                        predictionController120_19,
+                                    predictionController20:
+                                        predictionController120_20,
+                                    predictionController21:
+                                        predictionController120_21,
+                                    predictionController22:
+                                        predictionController120_22,
+                                    predictionController23:
+                                        predictionController120_23,
+                                    predictionController24:
+                                        predictionController120_24,
+                                  )
+                                : FifteenMinPrediction(
+                                    predictionController1:
+                                        predictionController15_1,
+                                    predictionController2:
+                                        predictionController15_2,
+                                    predictionController3:
+                                        predictionController15_3,
+                                  ),
       ],
     );
   }
 }
-
-// class FancyCard extends StatelessWidget {
-//   const FancyCard({
-//     super.key,
-//     required this.image,
-//     required this.title,
-//     required this.predictionController,
-//   });
-//   final TextEditingController predictionController;
-
-//   final Image image;
-//   final String title;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     //TextEditingController? textEditingController =
-//     //context.watch<PredictionProvider>().predictionController;
-
-//     return Card(
-//       elevation: 4.0,
-//       child: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           children: <Widget>[
-//             SizedBox(
-//               width: 50,
-//               height: 50,
-//               child: image,
-//             ),
-//             TextField(
-//               controller: predictionController,
-//               decoration: InputDecoration(
-//                 border: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(20),
-//                 ),
-//                 labelText: 'Enter your glucose value',
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

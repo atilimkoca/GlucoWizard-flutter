@@ -4,6 +4,7 @@ import 'package:glucowizard_flutter/providers/appbar_provider.dart';
 import 'package:glucowizard_flutter/providers/bottom_navbar_provider.dart';
 import 'package:glucowizard_flutter/providers/health_page_provider.dart';
 import 'package:glucowizard_flutter/providers/language_provider.dart';
+import 'package:glucowizard_flutter/providers/prediction_provider.dart';
 import 'services/locale_strings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glucowizard_flutter/views/home_page.dart';
@@ -17,7 +18,8 @@ void main() {
     ChangeNotifierProvider(create: (_) => BottomNavBarProvider()),
     ChangeNotifierProvider(create: (_) => HealtPageProvider()),
     ChangeNotifierProvider(create: (_) => AppBarProvider()),
-    ChangeNotifierProvider(create: (_) => LanguageProvider())
+    ChangeNotifierProvider(create: (_) => LanguageProvider()),
+    ChangeNotifierProvider(create: (_) => PredictionProvider())
   ], child: const MyApp()));
 }
 

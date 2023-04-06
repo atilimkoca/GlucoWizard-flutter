@@ -49,6 +49,7 @@ dependencies:
   lottie: ^2.3.1
   tflite_flutter:
   flutter_animated_button: ^2.0.3
+  cool_alert: ^2.0.1
 
 dev_dependencies:
   flutter_test:
