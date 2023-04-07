@@ -150,9 +150,9 @@ class HomePage extends StatelessWidget {
                 : pageIndex == 1
                     ? AppLocalizations.of(context)!.trainingGuide
                     : pageIndex == 2
-                        ? AppLocalizations.of(context)!.prediction_page
+                        ? AppLocalizations.of(context)!.diagnose
                         : pageIndex == 3
-                            ? AppLocalizations.of(context)!.diagnose
+                            ? AppLocalizations.of(context)!.prediction_page
                             : pageIndex == 4
                                 ? AppLocalizations.of(context)!.alarm_page
                                 : AppLocalizations.of(context)!.tracking_page,

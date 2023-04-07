@@ -99,8 +99,9 @@ class FourtyFiveMinPrediction extends StatelessWidget {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.478,
           child: StackedCardCarousel(
+            type: StackedCardCarouselType.fadeOutStack,
             onPageChanged: (pageIndex) {},
-            spaceBetweenItems: 180,
+            spaceBetweenItems: 200,
             items: [
               Card(
                 shape: RoundedRectangleBorder(
@@ -274,7 +275,7 @@ class FourtyFiveMinPrediction extends StatelessWidget {
                             ),
                           ],
 
-                          controller: predictionController1,
+                          controller: predictionController4,
                           //controller: predictionController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -321,7 +322,7 @@ class FourtyFiveMinPrediction extends StatelessWidget {
                             ),
                           ],
 
-                          controller: predictionController2,
+                          controller: predictionController5,
                           //controller: predictionController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -367,7 +368,7 @@ class FourtyFiveMinPrediction extends StatelessWidget {
                               ),
                             ),
                           ],
-                          controller: predictionController3,
+                          controller: predictionController6,
                           //controller: predictionController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -413,7 +414,7 @@ class FourtyFiveMinPrediction extends StatelessWidget {
                               ),
                             ),
                           ],
-                          controller: predictionController4,
+                          controller: predictionController7,
                           //controller: predictionController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -459,7 +460,7 @@ class FourtyFiveMinPrediction extends StatelessWidget {
                               ),
                             ),
                           ],
-                          controller: predictionController5,
+                          controller: predictionController8,
                           //controller: predictionController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -505,7 +506,7 @@ class FourtyFiveMinPrediction extends StatelessWidget {
                               ),
                             ),
                           ],
-                          controller: predictionController6,
+                          controller: predictionController9,
                           //controller: predictionController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(

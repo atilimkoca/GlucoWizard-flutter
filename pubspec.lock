@@ -73,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  csv:
+    dependency: transitive
+    description:
+      name: csv
+      sha256: "18aef53ab72181a0b5384562d18c8cbd57e941e24cb8e54eb41409d3d8abdc6d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -168,6 +176,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.5"
+  injector:
+    dependency: transitive
+    description:
+      name: injector
+      sha256: "2a683124c716e93b45521794f55bfe770e069cb3d871fc4fbc65b5acef78e832"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   intl:
     dependency: "direct main"
     description:
@@ -184,6 +200,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      sha256: c33da08e136c3df0190bd5bbe51ae1df4a7d96e7954d1d7249fea2968a72d317
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.8.0"
   lints:
     dependency: transitive
     description:
@@ -224,6 +248,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
+  ml_algo:
+    dependency: "direct main"
+    description:
+      name: ml_algo
+      sha256: "9fff33cf997efeb0e3700a011a60cd289635883c4017e86fecf22a1138e06bc2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "16.17.7"
+  ml_dataframe:
+    dependency: "direct main"
+    description:
+      name: ml_dataframe
+      sha256: "75434865e7ff85edcf8b006cb7c580e65a7863bb853010f41e12597b69d55db7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.0"
+  ml_linalg:
+    dependency: transitive
+    description:
+      name: ml_linalg
+      sha256: "09b857fc522cda948d4898c2a8640c09cd3f992f7fd6720898871d3b1c279f48"
+      url: "https://pub.dev"
+    source: hosted
+    version: "13.11.30"
+  ml_preprocessing:
+    dependency: "direct main"
+    description:
+      name: ml_preprocessing
+      sha256: fdc7bdf65e53bf377db2ac6ad017d88f08d81827e1c6062b9348893c0bab9f26
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.2"
   nested:
     dependency: transitive
     description:
@@ -365,6 +421,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  xrange:
+    dependency: transitive
+    description:
+      name: xrange
+      sha256: "17bb75bd5eeae7152680f9b748880bf88a670b61f360266df56f7bd239cb6343"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
 sdks:
   dart: ">=2.19.5 <3.0.0"
   flutter: ">=3.3.0"

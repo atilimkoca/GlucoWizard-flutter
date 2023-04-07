@@ -38,9 +38,6 @@ class FifteenMinPrediction extends StatelessWidget {
     PredictionModel predictionModel = PredictionModel();
     var selectedText = context.watch<PredictionProvider>().selectedText ?? '';
     //String? selectedText = predictionProvider.selectedText ?? '15 Dakika';
-    predictionController1.text = "254";
-    predictionController2.text = "250";
-    predictionController3.text = "249";
 
     return Column(
       children: [
@@ -85,8 +82,9 @@ class FifteenMinPrediction extends StatelessWidget {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.478,
           child: StackedCardCarousel(
+            type: StackedCardCarouselType.fadeOutStack,
             onPageChanged: (pageIndex) {},
-            spaceBetweenItems: 180,
+            spaceBetweenItems: 200,
             items: [
               Card(
                 shape: RoundedRectangleBorder(

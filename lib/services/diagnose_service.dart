@@ -1,8 +1,14 @@
+import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:math';
-
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:collection/collection.dart';
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 class DiagnoseModel {
   late Interpreter _interpreter;
@@ -54,6 +60,19 @@ class DiagnoseModel {
       return result;
     }
 
+    findOutput(List<dynamic> output) {
+      var max = output[0][0];
+      var index = 0;
+      for (var i = 0; i < 4; i++) {
+        if (output[0][i] > max) {
+          max = output[0][i];
+          index = i;
+        }
+      }
+
+      return index;
+    }
+
     // var mean = calculateAverage(input);
     // var standardDeviation = calculateStandatdDeviation(input);
 
@@ -61,9 +80,12 @@ class DiagnoseModel {
     input = input.map((e) => e.map((e) => e.toDouble()).toList()).toList();
     var output = List.filled(1 * 4, 0).reshape([1, 4]);
     interpreter.run(input, output);
+    var label = findOutput(output);
 
     //output = inverseTransform(output, mean, standardDeviation);
     print(output);
-    return output;
+    return label;
   }
+
+  trainModel() async {}
 }

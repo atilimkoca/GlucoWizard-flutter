@@ -8,8 +8,7 @@ class PredictionModel {
   late Interpreter _interpreter;
   Future load30Model(String text1, String text2, String text3, String text4,
       String text5, String text6) async {
-    final interpreter =
-        await Interpreter.fromAsset('attention_lstm_teknofest.tflite');
+    final interpreter = await Interpreter.fromAsset('thirty_min.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),
@@ -77,8 +76,7 @@ class PredictionModel {
     String text2,
     String text3,
   ) async {
-    final interpreter =
-        await Interpreter.fromAsset('attention_lstm_teknofest.tflite');
+    final interpreter = await Interpreter.fromAsset('fifteen_min.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),
@@ -149,8 +147,7 @@ class PredictionModel {
     String text8,
     String text9,
   ) async {
-    final interpreter =
-        await Interpreter.fromAsset('attention_lstm_teknofest.tflite');
+    final interpreter = await Interpreter.fromAsset('forty_five_min.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),
@@ -230,8 +227,7 @@ class PredictionModel {
     String text11,
     String text12,
   ) async {
-    final interpreter =
-        await Interpreter.fromAsset('attention_lstm_teknofest.tflite');
+    final interpreter = await Interpreter.fromAsset('sixty_min.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),
@@ -320,8 +316,7 @@ class PredictionModel {
     String text17,
     String text18,
   ) async {
-    final interpreter =
-        await Interpreter.fromAsset('attention_lstm_teknofest.tflite');
+    final interpreter = await Interpreter.fromAsset('ninety_min.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),
