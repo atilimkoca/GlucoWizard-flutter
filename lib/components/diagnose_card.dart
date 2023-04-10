@@ -1,14 +1,9 @@
-import 'dart:convert';
-
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:glucowizard_flutter/services/diagnose_service.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 class DiagnoseCard extends StatelessWidget {
   const DiagnoseCard(
@@ -21,12 +16,9 @@ class DiagnoseCard extends StatelessWidget {
   static final _insulinkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    String text1 = '';
-    String text2 = '';
     glucoseController.text = '148';
     insulinController.text = '220';
     Future predictDiagnose() async {
-      List _items = [];
       String data = await DefaultAssetBundle.of(context)
           .loadString("assets/diabetestype.json");
 
@@ -40,7 +32,6 @@ class DiagnoseCard extends StatelessWidget {
       return prediction.rows.first.first;
     }
 
-    DiagnoseModel diagnoseModel = DiagnoseModel();
     return Column(
       children: [
         Padding(
@@ -61,10 +52,10 @@ class DiagnoseCard extends StatelessWidget {
                                       ? 'Tip 2 Diyabetlisiniz'
                                       : '',
                     ));
-                ;
-                bool _validate2 = _insulinkey.currentState!.validate();
-                bool _validate = _formKey.currentState!.validate();
-                if (_validate && _validate2) {
+
+                bool validate2 = _insulinkey.currentState!.validate();
+                bool validate = _formKey.currentState!.validate();
+                if (validate && validate2) {
                   // diagnoseModel
                   //     .loadModel(
                   //       glucoseController.text,
@@ -116,9 +107,7 @@ class DiagnoseCard extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: TextFormField(
-                          onSaved: (value) {
-                            text1 = value!;
-                          },
+                          onSaved: (value) {},
                           validator: (value) {
                             if (value!.isEmpty) {
                               return AppLocalizations.of(context)!
@@ -180,9 +169,7 @@ class DiagnoseCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: TextFormField(
-                        onSaved: (value) {
-                          text2 = value!;
-                        },
+                        onSaved: (value) {},
                         validator: (value) {
                           if (value!.isEmpty) {
                             return AppLocalizations.of(context)!
