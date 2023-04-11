@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>250052247093-q3jssqpb7q9ch09etftee5dc0gmq0ms4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.250052247093-q3jssqpb7q9ch09etftee5dc0gmq0ms4</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBlLukAv6CiT8yDwNFf4bgGiSk3K5c56ok</string>
+	<key>GCM_SENDER_ID</key>
+	<string>250052247093</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.glucowizardFlutter</string>
+	<key>PROJECT_ID</key>
+	<string>glucowizard</string>
+	<key>STORAGE_BUCKET</key>
+	<string>glucowizard.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:250052247093:ios:6daf5cf73be8562b733b7c</string>
+</dict>
+</plist>

@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_login: ^4.1.1
   flutter_localizations:
     sdk: flutter
   intl: any
@@ -53,6 +54,16 @@ dependencies:
   ml_dataframe: ^1.5.0
   ml_preprocessing: ^7.0.2
   ml_algo: ^16.17.7
+  firebase_core: ^2.9.0
+  firebase_auth: ^4.4.0
+  email_validator: "^2.1.16"
+  font_awesome_flutter: ^10.4.0
+  google_sign_in: ^6.1.0
+  flutter_dropdown_alert: ^1.0.7
+  another_flushbar: ^1.12.29
+  date_picker_timeline: ^1.2.3
+
+  cloud_firestore: ^4.5.0
 
 dev_dependencies:
   flutter_test:

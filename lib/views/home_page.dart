@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:glucowizard_flutter/components/bottom_navbar.dart';
@@ -6,11 +10,15 @@ import 'package:glucowizard_flutter/l10n/l10.dart';
 import 'package:glucowizard_flutter/providers/appbar_provider.dart';
 import 'package:glucowizard_flutter/providers/bottom_navbar_provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:glucowizard_flutter/providers/login_provider.dart';
 import 'package:glucowizard_flutter/providers/prediction_provider.dart';
+import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
 import 'package:glucowizard_flutter/views/alarms_page.dart';
 import 'package:glucowizard_flutter/views/diagnose_page.dart';
+import 'package:glucowizard_flutter/views/login_page.dart';
 import 'package:glucowizard_flutter/views/prediction_page.dart';
 import 'package:glucowizard_flutter/views/tracking_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../providers/language_provider.dart';
@@ -22,10 +30,41 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<LoginPageProvider>(context, listen: false);
+    TextEditingController popupController = TextEditingController();
+    Future<void> _displayTextInputDialog(BuildContext context) async {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('TextField in Dialog'),
+              content: TextField(
+                controller: popupController,
+                decoration: InputDecoration(hintText: "Text Field in Dialog"),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  color: Colors.green,
+                  textColor: Colors.white,
+                  child: Text('OK'),
+                  onPressed: () {
+                    context.read<TrackingChartProvider>().addTrackingChart(
+                        userProvider.userId!,
+                        DateTime.now(),
+                        popupController.text);
+                  },
+                ),
+              ],
+            );
+          });
+    }
+
+    FirebaseAuth auth = FirebaseAuth.instance;
     var languageProvider =
         Provider.of<LanguageProvider>(context, listen: false);
 
-    var lang = languageProvider.locale ?? const Locale('tr');
+    var lang =
+        languageProvider.locale ?? Locale(Platform.localeName.split('_')[0]);
     var title = context.watch<AppBarProvider>().title;
     var pageIndex = context.watch<BottomNavBarProvider>().selectedIndex;
 
@@ -59,14 +98,14 @@ class HomePage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 245, 239, 245),
+      backgroundColor: const Color.fromARGB(255, 245, 239, 245),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
           actions: [
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButton2(
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       overflow: TextOverflow.ellipsis,
@@ -142,6 +181,26 @@ class HomePage extends StatelessWidget {
                               child: Text(title2(e.languageCode)),
                             ))
                         .toList())),
+            IconButton(
+              icon: const Icon(Icons.logout),
+              color: Colors.white,
+              onPressed: () async {
+                context.read<BottomNavBarProvider>().onItemTapped(0);
+                context.read<AppBarProvider>().setTitle(0, context);
+                var loginProvider =
+                    Provider.of<LoginPageProvider>(context, listen: false);
+                if (loginProvider.isLogin!) {
+                  await GoogleSignIn().signOut();
+                } else {
+                  auth.signOut();
+                }
+
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (route) => false);
+              },
+            )
           ],
           backgroundColor: const Color(0xff3AB4F2),
           title: Text(
@@ -159,6 +218,15 @@ class HomePage extends StatelessWidget {
             style: const TextStyle(color: Colors.white),
           )),
       body: SafeArea(child: selectPage(pageIndex)),
+      floatingActionButton: pageIndex == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                _displayTextInputDialog(context);
+              },
+              child: const Icon(Icons.add),
+              backgroundColor: const Color(0xff3AB4F2),
+            )
+          : null,
       bottomNavigationBar: const BottomNavbar(),
     );
   }
