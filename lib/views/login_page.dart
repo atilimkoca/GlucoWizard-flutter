@@ -1,20 +1,21 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:cool_alert/cool_alert.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dropdown_alert/alert_controller.dart';
-import 'package:flutter_dropdown_alert/dropdown_alert.dart';
-import 'package:flutter_dropdown_alert/model/data_alert.dart';
+
 import 'package:flutter_login/flutter_login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:glucowizard_flutter/providers/language_provider.dart';
+
 import 'package:glucowizard_flutter/providers/register_provider.dart';
+import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
 import 'package:glucowizard_flutter/views/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../models/tracking_chart_model.dart';
 import '../providers/login_provider.dart';
 
 class LoginPage extends StatelessWidget {
@@ -87,6 +88,19 @@ class LoginPage extends StatelessWidget {
         // Once signed in, return the UserCredential
         await FirebaseAuth.instance.signInWithCredential(credential);
         context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
+        var now = DateTime.now();
+        var formatter = DateFormat('yyyy-MM-dd');
+        String formattedDate2 = formatter.format(now);
+
+        String formattedDate = formatter.format(now);
+        verified = true;
+
+        context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
+        TrackingChart _chart = TrackingChart(
+            date: formattedDate,
+            uid: context.read<LoginPageProvider>().userId,
+            hour: formattedDate2);
+        context.read<TrackingChartProvider>().getTrackingChart(_chart);
       } catch (e) {
         context.read<LoginPageProvider>().setLogin(false);
       }
@@ -125,7 +139,6 @@ class LoginPage extends StatelessWidget {
         }
       } catch (e) {
         registerStatus = false;
-        print('here2');
       }
     }
 
@@ -140,11 +153,21 @@ class LoginPage extends StatelessWidget {
         var currentUser = _userCredential.user;
         if (!currentUser!.emailVerified) {
         } else {
+          var now = DateTime.now();
+          var formatter = DateFormat('yyyy-MM-dd');
+          String formattedDate2 = formatter.format(now);
+
+          String formattedDate = formatter.format(now);
           verified = true;
+
           context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
+          TrackingChart _chart = TrackingChart(
+              date: formattedDate,
+              uid: context.read<LoginPageProvider>().userId,
+              hour: formattedDate2);
+          context.read<TrackingChartProvider>().getTrackingChart(_chart);
         }
       } catch (e) {
-        print('here');
         loginStatus = false;
       }
     }
@@ -153,7 +176,7 @@ class LoginPage extends StatelessWidget {
       'atilimkoca44@gmail.com': '123456',
       'hunter@gmail.com': 'hunter',
     };
-    print(users.keys.first);
+
     return FlutterLogin(
       loginProviders: <LoginProvider>[
         LoginProvider(
@@ -192,7 +215,6 @@ class LoginPage extends StatelessWidget {
       userValidator: (value) {
         final bool isValid = EmailValidator.validate(value!);
 
-        print('Email is valid? ' + (isValid ? 'yes' : 'no'));
         if (value.isEmpty) {
           return AppLocalizations.of(context)!.empty_email;
         } else if (!isValid) {
@@ -216,17 +238,14 @@ class LoginPage extends StatelessWidget {
             Provider.of<LoginPageProvider>(context, listen: false);
         if (loginProvider.isLogin!) {
           googleSign = false;
-          print('here*********');
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
           );
         } else {
-          print(GoogleSignIn().currentUser);
           if (process == 'register') {
             if (!registerStatus) {
-              print('object');
-
               registerStatus = false;
               Navigator.pushReplacement(
                 context,
@@ -244,8 +263,6 @@ class LoginPage extends StatelessWidget {
             }
           } else if (process == 'login') {
             if (!loginStatus) {
-              print('object');
-
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),

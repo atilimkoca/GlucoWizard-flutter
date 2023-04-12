@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:glucowizard_flutter/models/tracking_chart_model.dart';
 import 'package:glucowizard_flutter/services/tracking_chart_service.dart';
 
 class TrackingChartProvider extends ChangeNotifier {
   final _service = TrackingChartService();
-  List _users = [];
-  List get users => _users;
-  Future<void> addTrackingChart(String uid, DateTime date, String value) async {
-    _users = await _service.addTrackingChart(uid, date, value);
-
+  List _trackingCharts = [];
+  List get trackingCharts => _trackingCharts;
+  Future<void> addTrackingChart(TrackingChart chart) async {
+    await _service.addTrackingChart(chart);
+    getTrackingChart(chart);
     notifyListeners();
   }
   // Future<void> getTrackingChart(String uid, DateTime date) async {
@@ -15,8 +16,8 @@ class TrackingChartProvider extends ChangeNotifier {
 
   //   notifyListeners();
   // }
-  Future<void> getTrackingChart(String uid, String date) async {
-    _users = await _service.getTrackingChart(uid, date);
+  Future<void> getTrackingChart(TrackingChart chart) async {
+    _trackingCharts = await _service.getTrackingChart(chart);
 
     notifyListeners();
   }

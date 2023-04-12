@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:glucowizard_flutter/components/bottom_navbar.dart';
 import 'package:glucowizard_flutter/l10n/l10.dart';
+import 'package:glucowizard_flutter/models/tracking_chart_model.dart';
 
 import 'package:glucowizard_flutter/providers/appbar_provider.dart';
 import 'package:glucowizard_flutter/providers/bottom_navbar_provider.dart';
@@ -19,6 +20,7 @@ import 'package:glucowizard_flutter/views/login_page.dart';
 import 'package:glucowizard_flutter/views/prediction_page.dart';
 import 'package:glucowizard_flutter/views/tracking_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../providers/language_provider.dart';
@@ -48,10 +50,17 @@ class HomePage extends StatelessWidget {
                   textColor: Colors.white,
                   child: Text('OK'),
                   onPressed: () {
-                    context.read<TrackingChartProvider>().addTrackingChart(
-                        userProvider.userId!,
-                        DateTime.now(),
-                        popupController.text);
+                    var date = DateTime.now();
+                    var formatter = DateFormat('yyyy-MM-dd');
+                    String formattedDate = formatter.format(date);
+                    TrackingChart chart = TrackingChart(
+                        uid: context.read<LoginPageProvider>().userId,
+                        date: formattedDate,
+                        glucoseLevel: popupController.text);
+                    context
+                        .read<TrackingChartProvider>()
+                        .addTrackingChart(chart);
+                    Navigator.of(context).pop();
                   },
                 ),
               ],
