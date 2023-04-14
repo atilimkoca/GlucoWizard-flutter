@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:glucowizard_flutter/firebase_options.dart';
@@ -25,6 +26,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await AndroidAlarmManager.initialize();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => BottomNavBarProvider()),
     ChangeNotifierProvider(create: (_) => HealtPageProvider()),

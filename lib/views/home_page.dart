@@ -43,6 +43,7 @@ class HomePage extends StatelessWidget {
     TextEditingController popupController = TextEditingController();
     var lang =
         languageProvider.locale ?? Locale(Platform.localeName.split('_')[0]);
+    var currentDate = trackingChartProvider.currentDate ?? DateTime.now();
 
     Future<void> _displayTextInputDialog(BuildContext context) async {
       return showDialog(
@@ -82,6 +83,8 @@ class HomePage extends StatelessWidget {
                                     value: _time,
                                     onChange: (time) {},
                                     onChangeDateTime: (p0) {
+                                      var dateNow = DateTime.now();
+                                      print(dateNow);
                                       var stringDate = p0.toString();
                                       const dateTimeString =
                                           '2020-07-17T03:18:31.177769-04:00';
@@ -90,20 +93,19 @@ class HomePage extends StatelessWidget {
                                               RegExp(r'-\d\d:\d\d'), ''));
 
                                       final format = DateFormat.Hm();
-                                      final clockString =
-                                          format.format(dateTime);
-                                      var testTime = DateTime.parse(
-                                          trackingChartProvider.currentDate! +
-                                              'T' +
-                                              clockString);
-                                      print(testTime); // 03:18 AM
+                                      // final clockString =
+                                      //     format.format(dateTime);
+                                      // var testTime = DateTime.parse(
+                                      //     '${currentDate}T$clockString');
+                                      // print(
+                                      //     format.format(testTime)); // 03:18 AM
                                       var formatter = DateFormat.Hm();
-                                      if (languageProvider.locale.toString() ==
-                                          'tr_TR') {
-                                        formatter = DateFormat.Hm();
-                                      } else {
-                                        formatter = DateFormat.jm();
-                                      }
+                                      // if (languageProvider.locale.toString() ==
+                                      //     'tr_TR') {
+                                      //   formatter = DateFormat.Hm();
+                                      // } else {
+                                      //   formatter = DateFormat.jm();
+                                      // }
 
                                       String formattedHour =
                                           formatter.format(p0);
@@ -194,7 +196,7 @@ class HomePage extends StatelessWidget {
         case 3:
           return const PredictionPage();
         case 4:
-          return const AlarmsPage();
+          return const AlarmPage();
         default:
           return DiagnosePage();
       }

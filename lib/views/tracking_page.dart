@@ -192,7 +192,7 @@ class TrackingPage extends StatelessWidget {
             ),
             subtitle: Padding(
               padding: const EdgeInsets.only(left: 35.0),
-              child: Text('testtesttesttesttesttesttest'),
+              child: Text(''),
             ),
             trailing: Icon(Icons.swipe_left),
           )),
