@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:cool_alert/cool_alert.dart';
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../providers/language_provider.dart';
 
 import 'health_page.dart';
@@ -32,49 +34,141 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<LoginPageProvider>(context, listen: false);
+    Time _time = Time(hour: 11, minute: 30, second: 20);
+
+    var trackingChartProvider =
+        Provider.of<TrackingChartProvider>(context, listen: true);
+    var languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
     TextEditingController popupController = TextEditingController();
+    var lang =
+        languageProvider.locale ?? Locale(Platform.localeName.split('_')[0]);
+
     Future<void> _displayTextInputDialog(BuildContext context) async {
       return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('TextField in Dialog'),
-              content: TextField(
-                controller: popupController,
-                decoration: InputDecoration(hintText: "Text Field in Dialog"),
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                  color: Colors.green,
-                  textColor: Colors.white,
-                  child: Text('OK'),
-                  onPressed: () {
-                    var date = DateTime.now();
-                    var formatter = DateFormat('yyyy-MM-dd');
-                    String formattedDate = formatter.format(date);
-                    TrackingChart chart = TrackingChart(
-                        uid: context.read<LoginPageProvider>().userId,
-                        date: formattedDate,
-                        glucoseLevel: popupController.text);
-                    context
-                        .read<TrackingChartProvider>()
-                        .addTrackingChart(chart);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          });
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('TextField in Dialog'),
+                  content: TextField(
+                    controller: popupController,
+                    decoration:
+                        const InputDecoration(hintText: "Text Field in Dialog"),
+                  ),
+                  actions: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Checkbox(
+                              value: context
+                                  .watch<TrackingChartProvider>()
+                                  .checkboxValue,
+                              onChanged: (selected) {
+                                context
+                                    .read<TrackingChartProvider>()
+                                    .setcheckboxValue(
+                                        trackingChartProvider.checkboxValue!
+                                            ? false
+                                            : true);
+
+                                Navigator.of(context).push(
+                                  showPicker(
+                                    barrierDismissible: false,
+                                    is24HrFormat: true,
+                                    context: context,
+                                    value: _time,
+                                    onChange: (time) {},
+                                    onChangeDateTime: (p0) {
+                                      var stringDate = p0.toString();
+                                      const dateTimeString =
+                                          '2020-07-17T03:18:31.177769-04:00';
+                                      final dateTime = DateTime.parse(
+                                          stringDate.replaceFirst(
+                                              RegExp(r'-\d\d:\d\d'), ''));
+
+                                      final format = DateFormat.Hm();
+                                      final clockString =
+                                          format.format(dateTime);
+                                      var testTime = DateTime.parse(
+                                          trackingChartProvider.currentDate! +
+                                              'T' +
+                                              clockString);
+                                      print(testTime); // 03:18 AM
+                                      var formatter = DateFormat.Hm();
+                                      if (languageProvider.locale.toString() ==
+                                          'tr_TR') {
+                                        formatter = DateFormat.Hm();
+                                      } else {
+                                        formatter = DateFormat.jm();
+                                      }
+
+                                      String formattedHour =
+                                          formatter.format(p0);
+                                      //print(formattedHour);
+                                      context
+                                          .read<TrackingChartProvider>()
+                                          .setCurrentHour(formattedHour);
+                                      context
+                                          .read<TrackingChartProvider>()
+                                          .setcheckboxValue(false);
+
+                                      Navigator.pop(context);
+                                    },
+                                    onCancel: () {
+                                      context
+                                          .read<TrackingChartProvider>()
+                                          .setcheckboxValue(true);
+
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Text('Anlık değer'),
+                            )
+                          ],
+                        ),
+                        MaterialButton(
+                          color: Colors.green,
+                          textColor: Colors.white,
+                          child: const Text('OK'),
+                          onPressed: () {
+                            // var date = DateTime.now();
+                            // var formatter = DateFormat('yyyy-MM-dd');
+                            //String formattedDate = formatter.format(date);
+
+                            var currentDate = trackingChartProvider.currentDate;
+                            var currentHour = trackingChartProvider.currentHour;
+                            TrackingChart chart = TrackingChart(
+                                uid: context.read<LoginPageProvider>().userId,
+                                date: currentDate,
+                                hour: currentHour,
+                                glucoseLevel: popupController.text);
+                            context
+                                .read<TrackingChartProvider>()
+                                .addTrackingChart(chart,
+                                    trackingChartProvider.checkboxValue!);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                  actionsAlignment: MainAxisAlignment.spaceBetween,
+                );
+              })
+          .then((value) =>
+              context.read<TrackingChartProvider>().setcheckboxValue(true));
     }
 
     FirebaseAuth auth = FirebaseAuth.instance;
-    var languageProvider =
-        Provider.of<LanguageProvider>(context, listen: false);
 
-    var lang =
-        languageProvider.locale ?? Locale(Platform.localeName.split('_')[0]);
-    var title = context.watch<AppBarProvider>().title;
     var pageIndex = context.watch<BottomNavBarProvider>().selectedIndex;
 
     title2(String val) {
@@ -232,8 +326,8 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 _displayTextInputDialog(context);
               },
-              child: const Icon(Icons.add),
               backgroundColor: const Color(0xff3AB4F2),
+              child: const Icon(Icons.add),
             )
           : null,
       bottomNavigationBar: const BottomNavbar(),

@@ -6,8 +6,29 @@ class TrackingChartProvider extends ChangeNotifier {
   final _service = TrackingChartService();
   List _trackingCharts = [];
   List get trackingCharts => _trackingCharts;
-  Future<void> addTrackingChart(TrackingChart chart) async {
-    await _service.addTrackingChart(chart);
+  bool? _checkboxValue = true;
+  bool? get checkboxValue => _checkboxValue;
+  String? _currentDate;
+  String? get currentDate => _currentDate;
+  String? _currentHour;
+  String? get currentHour => _currentHour;
+  void setCurrentHour(String value) {
+    _currentHour = value;
+    notifyListeners();
+  }
+
+  void setCurrentDate(String value) {
+    _currentDate = value;
+    notifyListeners();
+  }
+
+  setcheckboxValue(bool? value) {
+    _checkboxValue = value;
+    notifyListeners();
+  }
+
+  Future<void> addTrackingChart(TrackingChart chart, bool checkboxValue) async {
+    await _service.addTrackingChart(chart, checkboxValue);
     getTrackingChart(chart);
     notifyListeners();
   }
@@ -19,6 +40,18 @@ class TrackingChartProvider extends ChangeNotifier {
   Future<void> getTrackingChart(TrackingChart chart) async {
     _trackingCharts = await _service.getTrackingChart(chart);
 
+    notifyListeners();
+  }
+
+  Future<void> updateTrackingChart(TrackingChart chart) async {
+    await _service.updateTrackingChart(chart);
+    getTrackingChart(chart);
+    notifyListeners();
+  }
+
+  Future<void> deleteTrackingChart(TrackingChart chart) async {
+    await _service.deleteTrackingChart(chart);
+    getTrackingChart(chart);
     notifyListeners();
   }
 }

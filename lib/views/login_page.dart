@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:another_flushbar/flushbar.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucowizard_flutter/providers/language_provider.dart';
 
 import 'package:glucowizard_flutter/providers/register_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
@@ -23,6 +26,10 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
+    var lang =
+        languageProvider.locale ?? Locale(Platform.localeName.split('_')[0]);
     errorAlert(String text) {
       Flushbar(
         icon: const Icon(Icons.error),
@@ -89,17 +96,16 @@ class LoginPage extends StatelessWidget {
         await FirebaseAuth.instance.signInWithCredential(credential);
         context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
         var now = DateTime.now();
-        var formatter = DateFormat('yyyy-MM-dd');
-        String formattedDate2 = formatter.format(now);
+        var formatter = DateFormat.Hm('yyyy-MM-dd');
 
         String formattedDate = formatter.format(now);
         verified = true;
 
         context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
         TrackingChart _chart = TrackingChart(
-            date: formattedDate,
-            uid: context.read<LoginPageProvider>().userId,
-            hour: formattedDate2);
+          date: formattedDate,
+          uid: context.read<LoginPageProvider>().userId,
+        );
         context.read<TrackingChartProvider>().getTrackingChart(_chart);
       } catch (e) {
         context.read<LoginPageProvider>().setLogin(false);
@@ -162,9 +168,9 @@ class LoginPage extends StatelessWidget {
 
           context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
           TrackingChart _chart = TrackingChart(
-              date: formattedDate,
-              uid: context.read<LoginPageProvider>().userId,
-              hour: formattedDate2);
+            date: formattedDate,
+            uid: context.read<LoginPageProvider>().userId,
+          );
           context.read<TrackingChartProvider>().getTrackingChart(_chart);
         }
       } catch (e) {

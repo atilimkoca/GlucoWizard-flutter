@@ -4,22 +4,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 import '../models/tracking_chart_model.dart';
+import '../providers/tracking_chart_provider.dart';
 
 class TrackingChartService {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  addTrackingChart(TrackingChart chart) async {
+  addTrackingChart(TrackingChart chart, bool checkboxValue) async {
     var date = DateTime.now();
     var formatter2 = DateFormat('yyyy-MM-dd', 'tr_TR');
-    var formatter = DateFormat('hh:mm:ss', 'tr_TR');
+
+    var formatter = DateFormat.Hm();
+    String formattedDate = '';
+    String formattedDate2 = '';
     formatter2.format(date);
-    formatter.format(date);
-    String formattedDate = formatter.format(date);
-    String formattedDate2 = formatter2.format(date);
+    if (checkboxValue == true) {
+      formattedDate = formatter.format(date);
+    } else {
+      formattedDate = chart.hour!;
+    }
+    if (chart.date == null) {
+      chart.date = formatter2.format(date);
+    }
+
     Map<String, dynamic> _eklenecekUser = <String, dynamic>{};
     _eklenecekUser['alarms'] = 'test';
     _eklenecekUser['trackingChart'] = {
-      formattedDate2: {formattedDate: chart.glucoseLevel}
+      chart.date: {formattedDate: chart.glucoseLevel}
     };
 
     await _firestore
@@ -45,5 +55,15 @@ class TrackingChartService {
     } catch (e) {}
 
     return _charts;
+  }
+
+  updateTrackingChart(TrackingChart chart) async {
+    await _firestore.doc('users/${chart.uid}').update(
+        {'trackingChart.${chart.date}.${chart.hour}': chart.glucoseLevel});
+  }
+
+  deleteTrackingChart(TrackingChart chart) async {
+    await _firestore.doc('users/${chart.uid}').update(
+        {'trackingChart.${chart.date}.${chart.hour}': FieldValue.delete()});
   }
 }
