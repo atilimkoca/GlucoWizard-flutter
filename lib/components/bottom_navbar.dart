@@ -25,6 +25,7 @@ class BottomNavbar extends StatelessWidget {
           Icon(Icons.online_prediction, size: 30, color: Colors.white),
           Icon(Icons.textsms_sharp, size: 30, color: Colors.white),
           Icon(Icons.alarm, size: 30, color: Colors.white),
+          Icon(Icons.person, size: 30, color: Colors.white)
         ],
         onTap: onTap);
   }

@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:glucowizard_flutter/firebase_options.dart';
 import 'package:glucowizard_flutter/l10n/l10.dart';
+import 'package:glucowizard_flutter/providers/alarms_provider.dart';
 import 'package:glucowizard_flutter/providers/appbar_provider.dart';
 import 'package:glucowizard_flutter/providers/bottom_navbar_provider.dart';
 import 'package:glucowizard_flutter/providers/health_page_provider.dart';
@@ -13,6 +16,8 @@ import 'package:glucowizard_flutter/providers/login_provider.dart';
 import 'package:glucowizard_flutter/providers/prediction_provider.dart';
 import 'package:glucowizard_flutter/providers/register_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
+import 'package:glucowizard_flutter/services/notification.dart';
+
 import 'package:glucowizard_flutter/views/login_page.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,11 +26,25 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // var initilizationSettingsAndroid =
+  //     AndroidInitializationSettings('@mipmap/ic_launcher');
+  // var InitalizationSettings =
+  //     InitializationSettings(android: initilizationSettingsAndroid);
+  // await flutterLocalNotificationsPlugin.initialize(InitalizationSettings,
+  //     onDidReceiveNotificationResponse: (payload) async {
+  //   if (payload != null) {
+  //     print('notification payload: $payload');
+  //   }
+  //   // await Navigator.pushNamed(context, '/second');
+  // });
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await NotificationService.initalizeNotification();
   await AndroidAlarmManager.initialize();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => BottomNavBarProvider()),
@@ -35,7 +54,8 @@ void main() async {
     ChangeNotifierProvider(create: (_) => PredictionProvider()),
     ChangeNotifierProvider(create: (_) => LoginPageProvider()),
     ChangeNotifierProvider(create: (_) => TrackingChartProvider()),
-    ChangeNotifierProvider(create: (_) => RegisterPageProvider())
+    ChangeNotifierProvider(create: (_) => RegisterPageProvider()),
+    ChangeNotifierProvider(create: (_) => AlarmsProvider()),
   ], child: const MyApp()));
 }
 

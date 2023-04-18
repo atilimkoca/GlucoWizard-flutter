@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,42 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text('Allow Notifications'),
+                  content:
+                      Text('Please allow notifications to receive reminders'),
+                  actions: [
+                    TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Don\'t Allow',
+                          style: TextStyle(color: Colors.grey, fontSize: 18),
+                        )),
+                    TextButton(
+                      onPressed: () => AwesomeNotifications()
+                          .requestPermissionToSendNotifications()
+                          .then((_) {
+                        Navigator.pop(context);
+                      }),
+                      child: Text(
+                        'Allow',
+                        style: TextStyle(
+                            color: Colors.teal,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                ));
+      }
+    });
+
     var languageProvider =
         Provider.of<LanguageProvider>(context, listen: false);
     var lang =

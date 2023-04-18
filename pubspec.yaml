@@ -41,7 +41,7 @@ dependencies:
   provider: ^6.0.5
   curved_navigation_bar: ^1.0.3
   flutter_staggered_animations: ^1.1.1
-
+  timezone: ^0.9.1
   vertical_card_pager: ^1.5.0
   popup_banner: ^1.0.0
   get:
@@ -73,6 +73,16 @@ dependencies:
   day_night_time_picker: ^1.2.0+2
   android_alarm_manager_plus: ^2.1.2
   audioplayers: ^4.0.1
+  flutter_local_notifications: ^12.0.4
+  awesome_notifications: ^0.7.4+1
+  dotted_border: ^2.0.0+3
+  modal_bottom_sheet: ^2.1.2
+  flutter_broadcasts: ^0.3.0
+  mobx: ^2.1.4
+  rxdart: ^0.27.7
+  percent_indicator: ^4.2.3
+  liquid_progress_indicator: ^0.4.0
+  pedometer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

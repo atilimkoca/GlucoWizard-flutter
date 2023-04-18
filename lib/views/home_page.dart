@@ -15,10 +15,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:glucowizard_flutter/providers/login_provider.dart';
 import 'package:glucowizard_flutter/providers/prediction_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
+
 import 'package:glucowizard_flutter/views/alarms_page.dart';
 import 'package:glucowizard_flutter/views/diagnose_page.dart';
 import 'package:glucowizard_flutter/views/login_page.dart';
 import 'package:glucowizard_flutter/views/prediction_page.dart';
+import 'package:glucowizard_flutter/views/profile_page.dart';
+
 import 'package:glucowizard_flutter/views/tracking_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +30,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../providers/language_provider.dart';
 
+import 'alarm.dart';
 import 'health_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -196,7 +200,9 @@ class HomePage extends StatelessWidget {
         case 3:
           return const PredictionPage();
         case 4:
-          return const AlarmPage();
+          return Alarm();
+        case 5:
+          return ProfilePage();
         default:
           return DiagnosePage();
       }
