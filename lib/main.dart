@@ -14,6 +14,7 @@ import 'package:glucowizard_flutter/providers/health_page_provider.dart';
 import 'package:glucowizard_flutter/providers/language_provider.dart';
 import 'package:glucowizard_flutter/providers/login_provider.dart';
 import 'package:glucowizard_flutter/providers/prediction_provider.dart';
+import 'package:glucowizard_flutter/providers/profile_provider.dart';
 import 'package:glucowizard_flutter/providers/register_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
 import 'package:glucowizard_flutter/services/notification.dart';
@@ -30,17 +31,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // var initilizationSettingsAndroid =
-  //     AndroidInitializationSettings('@mipmap/ic_launcher');
-  // var InitalizationSettings =
-  //     InitializationSettings(android: initilizationSettingsAndroid);
-  // await flutterLocalNotificationsPlugin.initialize(InitalizationSettings,
-  //     onDidReceiveNotificationResponse: (payload) async {
-  //   if (payload != null) {
-  //     print('notification payload: $payload');
-  //   }
-  //   // await Navigator.pushNamed(context, '/second');
-  // });
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -56,6 +47,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => TrackingChartProvider()),
     ChangeNotifierProvider(create: (_) => RegisterPageProvider()),
     ChangeNotifierProvider(create: (_) => AlarmsProvider()),
+    ChangeNotifierProvider(create: (_) => ProfileProvider())
   ], child: const MyApp()));
 }
 

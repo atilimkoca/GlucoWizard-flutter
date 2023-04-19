@@ -41,7 +41,7 @@ class DiagnoseCard extends StatelessWidget {
                 predictDiagnose().then((value) => CoolAlert.show(
                       context: context,
                       confirmBtnText: AppLocalizations.of(context)!.okay,
-                      type: CoolAlertType.error,
+                      type: CoolAlertType.success,
                       text: value.toString() == '0.0'
                           ? 'Sağlıklısınız'
                           : value.toString() == '1.0'

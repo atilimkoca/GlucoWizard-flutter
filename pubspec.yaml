@@ -40,16 +40,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.5
   curved_navigation_bar: ^1.0.3
-  flutter_staggered_animations: ^1.1.1
-  timezone: ^0.9.1
   vertical_card_pager: ^1.5.0
   popup_banner: ^1.0.0
-  get:
   dropdown_button2: ^2.0.0
   stacked_card_carousel: ^0.0.4
   lottie: ^2.3.1
   tflite_flutter:
-  flutter_animated_button: ^2.0.3
   cool_alert: ^2.0.1
   ml_dataframe: ^1.5.0
   ml_preprocessing: ^7.0.2
@@ -67,7 +63,6 @@ dependencies:
   horizontal_center_date_picker: ^2.1.1
   flutter_slidable: ^2.0.0
   quickalert: ^1.0.1
-  roundcheckbox: ^2.0.5
   flutter_material_pickers: ^3.1.4+1
   flutter_smart_dialog: ^4.9.0+5
   day_night_time_picker: ^1.2.0+2
@@ -77,7 +72,6 @@ dependencies:
   awesome_notifications: ^0.7.4+1
   dotted_border: ^2.0.0+3
   modal_bottom_sheet: ^2.1.2
-  flutter_broadcasts: ^0.3.0
   mobx: ^2.1.4
   rxdart: ^0.27.7
   percent_indicator: ^4.2.3

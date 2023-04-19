@@ -12,6 +12,11 @@ class RegisterService {
     _eklenecekUser['image'] = _userModel.image;
     _eklenecekUser['trackingChart'] = _userModel.trackingChart;
     _eklenecekUser['id'] = _userModel.id;
+    _eklenecekUser['surname'] = _userModel.surname;
+    _eklenecekUser['height'] = _userModel.height;
+    _eklenecekUser['weight'] = _userModel.weight;
+    _eklenecekUser['gender'] = _userModel.gender;
+    _eklenecekUser['water'] = _userModel.water;
 
     await _firestore.collection('users').doc(uid).set(_eklenecekUser);
   }

@@ -1,14 +1,19 @@
 import 'dart:async';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:glucowizard_flutter/views/waveView.dart';
+import 'package:glucowizard_flutter/providers/login_provider.dart';
+import 'package:glucowizard_flutter/providers/profile_provider.dart';
+
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
-import 'WaterView.dart';
+import '../models/tracking_chart_model.dart';
+import '../models/user_model.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -21,18 +26,35 @@ class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _ageController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
+  TextEditingController _genderController = TextEditingController();
+  TextEditingController _heightController = TextEditingController();
+  TextEditingController _weightController = TextEditingController();
+  var water;
+  final List<String> items = [
+    "Erkek",
+    "Kadın",
+  ];
+
   String _status = '?', _steps = '?';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initPlatformState();
+    _nameController.text = context.read<ProfileProvider>().users.name ?? "";
+    _surnameController.text =
+        context.read<ProfileProvider>().users.surname ?? "";
+    _ageController.text = context.read<ProfileProvider>().users.age ?? "";
+    _heightController.text = context.read<ProfileProvider>().users.height ?? "";
+    _weightController.text = context.read<ProfileProvider>().users.weight ?? "";
   }
 
   @override
   void dispose() {}
   void onStepCount(StepCount event) {
-    print(event);
     setState(() {
       _steps = event.steps.toString();
     });
@@ -74,7 +96,15 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size * 0.3;
+    water = double.parse(context.watch<ProfileProvider>().users.water!);
+    print(context.watch<ProfileProvider>().users.water);
+    var profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    if (DateTime.now().hour == 0 && DateTime.now().minute == 0) {
+      print('object');
+    }
+    //context.read<ProfileProvider>().setWater(-100);
+    var loginProvider = Provider.of<LoginPageProvider>(context, listen: false);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -83,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage>
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
             child: Card(
-              color: const Color.fromARGB(255, 7, 238, 255),
+              color: Colors.white,
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -95,67 +125,84 @@ class _ProfilePageState extends State<ProfilePage>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "Kişisel Bilgiler",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
-                          children: const [
-                            Text(
+                          children: [
+                            const Text(
                               "İsim: ",
                               style: TextStyle(fontSize: 16),
                             ),
-                            Text('\tatılım', style: TextStyle(fontSize: 16)),
+                            Text(
+                                '\t${context.watch<ProfileProvider>().users.name ?? ""}',
+                                style: const TextStyle(fontSize: 16)),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               "Soyisim: ",
                               style: TextStyle(fontSize: 16),
                             ),
-                            Text('\tatılım', style: TextStyle(fontSize: 16)),
+                            Text(
+                                '\t${context.watch<ProfileProvider>().users.surname ?? ""}',
+                                style: const TextStyle(fontSize: 16)),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               "Yaş :",
                               style: TextStyle(fontSize: 16),
                             ),
-                            Text('\tatılım', style: TextStyle(fontSize: 16)),
+                            Text(
+                                '\t${context.watch<ProfileProvider>().users.age ?? ""}',
+                                style: const TextStyle(fontSize: 16)),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               "Cinsiyet :",
                               style: TextStyle(fontSize: 16),
                             ),
-                            Text('\tatılım', style: TextStyle(fontSize: 16)),
+                            Text(
+                                '\t${context.watch<ProfileProvider>().users.gender ?? ""}',
+                                style: const TextStyle(fontSize: 16)),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               "Boy :",
                               style: TextStyle(fontSize: 16),
                             ),
-                            Text('\tatılım', style: TextStyle(fontSize: 16)),
+                            Text(
+                                '\t${context.watch<ProfileProvider>().users.height ?? ""}',
+                                style: const TextStyle(fontSize: 16)),
                           ],
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Kilo :",
-                          style: TextStyle(fontSize: 16),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Text(
+                              "Kilo :",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                                '\t${context.watch<ProfileProvider>().users.weight ?? ""}',
+                                style: const TextStyle(fontSize: 16)),
+                          ],
                         ),
                       ],
                     ),
@@ -166,6 +213,237 @@ class _ProfilePageState extends State<ProfilePage>
                     child: IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
+                        // context.read<ProfileProvider>().getInfos(
+                        //     context.read<LoginPageProvider>().userId!);
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.8,
+                                child: AlertDialog(
+                                  title: const Text('Kişisel Bilgiler'),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextField(
+                                            controller: _nameController,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              labelText: "Name",
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextField(
+                                            controller: _surnameController,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              labelText: "Surname",
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            controller: _ageController,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              labelText: "Age",
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            controller: _heightController,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              labelText: "Height",
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            controller: _weightController,
+                                            decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                labelText: "Weight"),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: DropdownButton2(
+                                              isExpanded: true,
+                                              hint: Row(
+                                                children: const [
+                                                  Icon(
+                                                    Icons.list,
+                                                    size: 16,
+                                                    color: Colors.white,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      "Cinsiyet",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              buttonStyleData: ButtonStyleData(
+                                                height: 50,
+                                                width: 160,
+                                                padding: const EdgeInsets.only(
+                                                    left: 14, right: 14),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                  border: Border.all(
+                                                    color: Colors.black26,
+                                                  ),
+                                                  color: const Color.fromARGB(
+                                                      255, 164, 201, 255),
+                                                ),
+                                                elevation: 2,
+                                              ),
+                                              iconStyleData:
+                                                  const IconStyleData(
+                                                icon: Icon(
+                                                  Icons.arrow_drop_down,
+                                                ),
+                                                iconSize: 14,
+                                                iconEnabledColor: Colors.white,
+                                                iconDisabledColor: Colors.grey,
+                                              ),
+                                              dropdownStyleData:
+                                                  DropdownStyleData(
+                                                      maxHeight: 200,
+                                                      width: 200,
+                                                      padding: null,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(14),
+                                                        color: const Color
+                                                                .fromARGB(
+                                                            255, 164, 201, 255),
+                                                      ),
+                                                      elevation: 8,
+                                                      offset:
+                                                          const Offset(-20, 0),
+                                                      scrollbarTheme:
+                                                          ScrollbarThemeData(
+                                                        radius: const Radius
+                                                            .circular(40),
+                                                        thickness:
+                                                            MaterialStateProperty
+                                                                .all(6),
+                                                        thumbVisibility:
+                                                            MaterialStateProperty
+                                                                .all(true),
+                                                      )),
+                                              menuItemStyleData:
+                                                  const MenuItemStyleData(
+                                                overlayColor:
+                                                    MaterialStatePropertyAll(
+                                                  Color.fromARGB(
+                                                      255, 210, 157, 218),
+                                                ),
+                                                height: 40,
+                                                padding: EdgeInsets.only(
+                                                    left: 14, right: 14),
+                                              ),
+                                              value: context
+                                                  .watch<ProfileProvider>()
+                                                  .gender,
+                                              items: items
+                                                  .map((item) =>
+                                                      DropdownMenuItem<String>(
+                                                        value: item,
+                                                        child: Text(
+                                                          item,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.white,
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                              onChanged: (e) {
+                                                profileProvider.setGender(e!);
+
+                                                print(e);
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    MaterialButton(
+                                      color: Colors.green,
+                                      textColor: Colors.white,
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        var loginProvider =
+                                            Provider.of<LoginPageProvider>(
+                                                context,
+                                                listen: false);
+                                        // Update user info
+                                        UserModel userModel = UserModel(
+                                          id: loginProvider.userId,
+                                          name: _nameController.text,
+                                          surname: _surnameController.text,
+                                          age: _ageController.text,
+                                          height: _heightController.text,
+                                          weight: _weightController.text,
+                                          gender: profileProvider.gender,
+                                        );
+                                        profileProvider
+                                            .updateTrackingChart(userModel);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+
                         // Edit button pressed
                       },
                     ),
@@ -174,97 +452,110 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
           ),
-          Container(
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.20,
             width: MediaQuery.of(context).size.width * 0.9,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              color: const Color.fromARGB(255, 242, 243, 204),
-              elevation: 30.0,
-              shadowColor: Colors.amber,
-              child: Padding(
+            child: LiquidLinearProgressIndicator(
+              value: water / 2000, // Defaults to 0.5.
+              valueColor: const AlwaysStoppedAnimation(
+                  Colors.blue), // Defaults to the current Theme's accentColor.
+              backgroundColor: Colors
+                  .white, // Defaults to the current Theme's backgroundColor.
+              borderColor: Colors.white,
+              borderWidth: 0.0,
+              borderRadius: 12.0,
+              direction: Axis
+                  .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
+              center: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
-                  children: <Widget>[
-                    Text(
-                      "Günlük Su Tüketim Miktarı",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text('Günlük su tüketim miktarı\n'),
+                        Text(
+                            '${context.watch<ProfileProvider>().users.water ?? 0}/2000 ml'),
+                      ],
                     ),
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: LiquidCircularProgressIndicator(
-                            value: 0.50, // Defaults to 0.5.
-                            valueColor: AlwaysStoppedAnimation(Colors
-                                .blue), // Defaults to the current Theme's accentColor.
-                            backgroundColor: Colors
-                                .white, // Defaults to the current Theme's backgroundColor.
-                            borderColor: Colors.black,
-                            borderWidth: 2,
-                            direction: Axis
-                                .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
-                            center: Text(
-                              "Loading...",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.water),
+                              onPressed: () {
+                                var newWater = profileProvider.water! + 100;
+                                context
+                                    .read<ProfileProvider>()
+                                    .setWater(newWater, loginProvider.userId!);
+                              },
+                              icon: const Icon(Icons.water),
                             ),
-                            Text('data')
+                            const Text('100 ml')
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.water),
+                              onPressed: () {
+                                var newWater = profileProvider.water! + 200;
+                                context
+                                    .read<ProfileProvider>()
+                                    .setWater(newWater, loginProvider.userId!);
+                              },
+                              icon: const Icon(
+                                Icons.water,
+                              ),
                             ),
-                            Text('data')
+                            const Text('200 ml')
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.water),
+                              onPressed: () {
+                                var newWater = profileProvider.water! + 300;
+                                context
+                                    .read<ProfileProvider>()
+                                    .setWater(newWater, loginProvider.userId!);
+                              },
+                              icon: const Icon(Icons.water),
                             ),
-                            Text('data')
+                            const Text('300 ml')
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.water),
+                              onPressed: () {
+                                var newWater = profileProvider.water! + 400;
+                                context
+                                    .read<ProfileProvider>()
+                                    .setWater(newWater, loginProvider.userId!);
+                              },
+                              icon: const Icon(Icons.water),
                             ),
-                            Text('data')
+                            const Text('400 ml')
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.water),
+                              onPressed: () {
+                                var newWater = profileProvider.water! + 500;
+                                context
+                                    .read<ProfileProvider>()
+                                    .setWater(newWater, loginProvider.userId!);
+                              },
+                              icon: const Icon(Icons.water),
                             ),
-                            Text('data')
+                            const Text('500 ml')
                           ],
                         ),
                       ],
@@ -275,49 +566,66 @@ class _ProfilePageState extends State<ProfilePage>
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.25,
             width: MediaQuery.of(context).size.width * 0.9,
             child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                color: const Color.fromARGB(255, 242, 243, 204),
+                color: Colors.white,
                 elevation: 30.0,
-                shadowColor: Colors.amber,
+                shadowColor: Colors.white,
                 child: Center(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Steps taken:',
-                          style: TextStyle(fontSize: 10),
+                          style: TextStyle(fontSize: 15),
                         ),
                         Text(
                           _steps,
-                          style: TextStyle(fontSize: 10),
+                          style: const TextStyle(fontSize: 15),
                         ),
-                        Divider(
-                          height: 50,
-                          thickness: 0,
-                          color: Colors.white,
-                        ),
-                        Text(
+                        // const Divider(
+                        //   height: 50,
+                        //   thickness: 0,
+                        //   color: Colors.white,
+                        // ),
+                        const Text(
                           'Pedestrian status:',
-                          style: TextStyle(fontSize: 10),
+                          style: TextStyle(fontSize: 15),
                         ),
-                        Icon(
-                          _status == 'walking'
-                              ? Icons.directions_walk
-                              : _status == 'stopped'
-                                  ? Icons.accessibility_new
-                                  : Icons.error,
-                          size: 100,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              _status == 'walking'
+                                  ? Icons.directions_walk
+                                  : _status == 'stopped'
+                                      ? Icons.accessibility_new
+                                      : Icons.error,
+                              size: 125,
+                            ),
+                            // new CircularPercentIndicator(
+                            //   radius: 55.0,
+                            //   lineWidth: 5.0,
+                            //   percent: _steps == '0'
+                            //       ? 0
+                            //       : _steps == null
+                            //           ? 0
+                            //           : int.parse(_steps) / 6000,
+                            //   center: new Text("100%"),
+                            //   progressColor: Colors.green,
+                            // )
+                          ],
                         ),
                         Center(
                           child: Text(
                             _status,
                             style: _status == 'walking' || _status == 'stopped'
-                                ? TextStyle(fontSize: 30)
-                                : TextStyle(fontSize: 20, color: Colors.red),
+                                ? const TextStyle(fontSize: 30)
+                                : const TextStyle(
+                                    fontSize: 20, color: Colors.red),
                           ),
                         )
                       ]),

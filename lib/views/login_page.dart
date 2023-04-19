@@ -10,6 +10,7 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucowizard_flutter/providers/language_provider.dart';
+import 'package:glucowizard_flutter/providers/profile_provider.dart';
 
 import 'package:glucowizard_flutter/providers/register_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
@@ -209,6 +210,10 @@ class LoginPage extends StatelessWidget {
             uid: context.read<LoginPageProvider>().userId,
           );
           context.read<TrackingChartProvider>().getTrackingChart(_chart);
+          context.read<ProfileProvider>().getInfos(auth.currentUser!.uid);
+          // context
+          //     .read<ProfileProvider>()
+          //     .setWaterFirstTime(context.watch<ProfileProvider>().users.water!);
         }
       } catch (e) {
         loginStatus = false;

@@ -6,7 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter_broadcasts/flutter_broadcasts.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:glucowizard_flutter/main.dart';
@@ -179,7 +179,7 @@ class _AlarmState extends State<Alarm> {
                                 ),
                               ),
                               FloatingActionButton.extended(
-                                onPressed: () {
+                                onPressed: () async {
                                   var alarmInfo = AlarmInfo(
                                       _alarmTime ?? DateTime.now(),
                                       gradientColors: GradientColors.sky,
@@ -191,6 +191,7 @@ class _AlarmState extends State<Alarm> {
                                   context
                                       .read<AlarmsProvider>()
                                       .setAlarmId(alarmId);
+                                  //AwesomeNotifications().cancelAllSchedules();
                                   onSaveAlarm(alarmInfo);
                                 },
                                 icon: Icon(Icons.alarm),

@@ -33,10 +33,11 @@ class NotificationService {
     //   }
     // });
     await AwesomeNotifications().setListeners(
-        onActionReceivedMethod: onActionReceivedMethod,
-        onNotificationCreatedMethod: onNotificationCreatedMethod,
-        onDismissActionReceivedMethod: onDismissActionReceivedMethod,
-        onNotificationDisplayedMethod: onNotificationDisplayedMethod);
+      onActionReceivedMethod: onActionReceivedMethod,
+      onNotificationCreatedMethod: onNotificationCreatedMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
+      //onNotificationDisplayedMethod: onNotificationDisplayedMethod
+    );
   }
 
   static Future<void> onActionReceivedMethod(
@@ -59,12 +60,12 @@ class NotificationService {
     debugPrint('onNotificationCreatedMethod');
   }
 
-  static Future<void> onNotificationDisplayedMethod(
-      ReceivedNotification receivedNotification) async {
-    debugPrint('onNotificationDisplayedMethod');
-    final payload = receivedNotification.payload ?? {};
-    if (payload["navigate"] == "true") {}
-  }
+  // static Future<void> onNotificationDisplayedMethod(
+  //     ReceivedNotification receivedNotification) async {
+  //   debugPrint('onNotificationDisplayedMethod');
+  //   final payload = receivedNotification.payload ?? {};
+  //   if (payload["navigate"] == "true") {}
+  // }
 
   static Future<void> showNotification(
       {required final String title,

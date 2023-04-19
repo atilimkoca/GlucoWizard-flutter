@@ -366,22 +366,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_animated_button:
-    dependency: "direct main"
-    description:
-      name: flutter_animated_button
-      sha256: deb125817322cfcc4dc05e43ab79f9597bfe4837200ff145c95247ab88c2f89d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
-  flutter_broadcasts:
-    dependency: "direct main"
-    description:
-      name: flutter_broadcasts
-      sha256: "5ff4fe59a8928319b5b66a4b6c654a04075401237df245938e5dea95ed7e814a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   flutter_colorpicker:
     dependency: transitive
     description:
@@ -483,14 +467,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0+5"
-  flutter_staggered_animations:
-    dependency: "direct main"
-    description:
-      name: flutter_staggered_animations
-      sha256: "81d3c816c9bb0dca9e8a5d5454610e21ffb068aedb2bde49d2f8d04f75538351"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -509,14 +485,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.4.0"
-  get:
-    dependency: "direct main"
-    description:
-      name: get
-      sha256: "2ba20a47c8f1f233bed775ba2dd0d3ac97b4cf32fc17731b3dfc672b06b0e92a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.6.5"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -885,14 +853,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
-  roundcheckbox:
-    dependency: "direct main"
-    description:
-      name: roundcheckbox
-      sha256: "5d6f607ed9d26fde0072af2545f56d84a6b6d2a45972b0c41f90c2d73224f339"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
   rxdart:
     dependency: "direct main"
     description:
@@ -987,7 +947,7 @@ packages:
     source: hosted
     version: "0.9.1"
   timezone:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: timezone
       sha256: "24c8fcdd49a805d95777a39064862133ff816ebfffe0ceff110fb5960e557964"
