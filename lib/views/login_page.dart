@@ -145,6 +145,25 @@ class LoginPage extends StatelessWidget {
           uid: context.read<LoginPageProvider>().userId,
         );
         context.read<TrackingChartProvider>().getTrackingChart(_chart);
+        var profileProvider =
+            Provider.of<ProfileProvider>(context, listen: false);
+        await context.read<ProfileProvider>().getInfos(auth.currentUser!.uid);
+
+        var data = profileProvider.users;
+        print(data.counter);
+        profileProvider.updateCounter(auth.currentUser!.uid, data.counter!);
+        //var data2 = context.watch<ProfileProvider>().users;
+        if (data.time!.day == DateTime.now().day) {
+          print('same day');
+        } else {
+          print('different day');
+          context.read<ProfileProvider>().setOldSteps(data.steps ?? 0);
+          context.read<ProfileProvider>().setWater(0, auth.currentUser!.uid);
+          //context.read<ProfileProvider>().setChangeTime(true);
+          context
+              .read<ProfileProvider>()
+              .updateTime(auth.currentUser!.uid, DateTime.now());
+        }
       } catch (e) {
         context.read<LoginPageProvider>().setLogin(false);
       }
@@ -187,6 +206,8 @@ class LoginPage extends StatelessWidget {
     }
 
     Future<String?>? _authUser(LoginData p1) async {
+      var profileProvider =
+          Provider.of<ProfileProvider>(context, listen: false);
       try {
         process = 'login';
         loginStatus = true;
@@ -209,11 +230,25 @@ class LoginPage extends StatelessWidget {
             date: formattedDate,
             uid: context.read<LoginPageProvider>().userId,
           );
+
           context.read<TrackingChartProvider>().getTrackingChart(_chart);
-          context.read<ProfileProvider>().getInfos(auth.currentUser!.uid);
-          // context
-          //     .read<ProfileProvider>()
-          //     .setWaterFirstTime(context.watch<ProfileProvider>().users.water!);
+          await context.read<ProfileProvider>().getInfos(auth.currentUser!.uid);
+
+          var data = profileProvider.users;
+          print(data.counter);
+          profileProvider.updateCounter(auth.currentUser!.uid, data.counter!);
+          //var data2 = context.watch<ProfileProvider>().users;
+          if (data.time!.day == DateTime.now().day) {
+            print('same day');
+          } else {
+            print('different day');
+            context.read<ProfileProvider>().setOldSteps(data.steps ?? 0);
+            context.read<ProfileProvider>().setWater(0, auth.currentUser!.uid);
+            //context.read<ProfileProvider>().setChangeTime(true);
+            context
+                .read<ProfileProvider>()
+                .updateTime(auth.currentUser!.uid, DateTime.now());
+          }
         }
       } catch (e) {
         loginStatus = false;

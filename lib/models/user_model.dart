@@ -15,6 +15,9 @@ class UserModel {
   String? image;
   TrackingChart? trackingChart;
   String? water;
+  DateTime? time;
+  int? steps;
+  int? counter;
   UserModel({
     this.id,
     this.name,
@@ -27,6 +30,9 @@ class UserModel {
     this.image,
     this.trackingChart,
     this.water,
+    this.time,
+    this.steps,
+    this.counter,
   });
 
   UserModel copyWith({
@@ -41,6 +47,9 @@ class UserModel {
     String? image,
     TrackingChart? trackingChart,
     String? water,
+    DateTime? time,
+    int? steps,
+    int? counter,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -54,6 +63,9 @@ class UserModel {
       image: image ?? this.image,
       trackingChart: trackingChart ?? this.trackingChart,
       water: water ?? this.water,
+      time: time ?? this.time,
+      steps: steps ?? this.steps,
+      counter: counter ?? this.counter,
     );
   }
 
@@ -70,6 +82,9 @@ class UserModel {
       'image': image,
       'trackingChart': trackingChart?.toMap(),
       'water': water,
+      'time': time?.millisecondsSinceEpoch,
+      'steps': steps,
+      'counter': counter,
     };
   }
 
@@ -88,6 +103,11 @@ class UserModel {
           ? TrackingChart.fromMap(map['trackingChart'] as Map<String, dynamic>)
           : null,
       water: map['water'] != null ? map['water'] as String : null,
+      time: map['time'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['time'] as int)
+          : null,
+      steps: map['steps'] != null ? map['steps'] as int : null,
+      counter: map['counter'] != null ? map['counter'] as int : null,
     );
   }
 
@@ -98,7 +118,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, surname: $surname, height: $height, weight: $weight, gender: $gender, age: $age, email: $email, image: $image, trackingChart: $trackingChart, water: $water)';
+    return 'UserModel(id: $id, name: $name, surname: $surname, height: $height, weight: $weight, gender: $gender, age: $age, email: $email, image: $image, trackingChart: $trackingChart, water: $water, time: $time, steps: $steps, counter: $counter)';
   }
 
   @override
@@ -115,7 +135,10 @@ class UserModel {
         other.email == email &&
         other.image == image &&
         other.trackingChart == trackingChart &&
-        other.water == water;
+        other.water == water &&
+        other.time == time &&
+        other.steps == steps &&
+        other.counter == counter;
   }
 
   @override
@@ -130,6 +153,9 @@ class UserModel {
         email.hashCode ^
         image.hashCode ^
         trackingChart.hashCode ^
-        water.hashCode;
+        water.hashCode ^
+        time.hashCode ^
+        steps.hashCode ^
+        counter.hashCode;
   }
 }

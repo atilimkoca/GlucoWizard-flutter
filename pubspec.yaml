@@ -77,7 +77,8 @@ dependencies:
   percent_indicator: ^4.2.3
   liquid_progress_indicator: ^0.4.0
   pedometer: ^3.0.0
-
+  flutter_gif: ^0.0.4
+  line_icons: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

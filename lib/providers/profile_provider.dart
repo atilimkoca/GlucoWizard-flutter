@@ -16,6 +16,28 @@ class ProfileProvider extends ChangeNotifier {
   String? tempWater;
   String? _savedDay;
   String? get savedDay => _savedDay;
+  String? _steps;
+  String? get steps => _steps;
+  int? _oldSteps;
+  int? get oldSteps => _oldSteps;
+  int? _newSteps;
+  int? get newSteps => _newSteps;
+
+  setOldSteps(int value) {
+    _oldSteps = value;
+    notifyListeners();
+  }
+
+  setNewSteps(int value) {
+    _newSteps = value;
+    notifyListeners();
+  }
+
+  setSteps(String value) {
+    _steps = value;
+    notifyListeners();
+  }
+
   setSavedDay(String day) {
     _savedDay = day;
     notifyListeners();
@@ -62,5 +84,22 @@ class ProfileProvider extends ChangeNotifier {
         _water = double.parse(water);
       }
     }
+  }
+
+  //updateTime
+  updateTime(String uid, DateTime time) {
+    _profileService.updateTime(uid, time);
+    notifyListeners();
+  }
+
+  updateSteps(String uid, int steps) {
+    _profileService.updateSteps(uid, steps);
+    notifyListeners();
+  }
+
+  updateCounter(String uid, int counter) {
+    _profileService.updateCounter(uid, counter);
+    getInfos(uid);
+    notifyListeners();
   }
 }

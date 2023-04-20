@@ -48,7 +48,7 @@ class TrackingPage extends StatelessWidget {
       child: Column(children: [
         Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Lottie.asset('assets/images/tracking_chart.json',
+          child: Lottie.asset('assets/images/chart_.json',
               height: MediaQuery.of(context).size.height * 0.18),
         ),
         Padding(

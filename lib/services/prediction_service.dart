@@ -92,7 +92,7 @@ class PredictionModel {
       for (var i = 0; i < 3; i++) {
         sum += output[0][i];
       }
-      return sum / 6;
+      return sum / 3;
     }
 
     double calculateStandatdDeviation(List<List<double>> output) {

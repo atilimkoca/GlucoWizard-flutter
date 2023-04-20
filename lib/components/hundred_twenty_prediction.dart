@@ -75,7 +75,7 @@ class HundredTwentyPrediction extends StatelessWidget {
             ),
             onPressed: () {
               predictionModel
-                  .load90Model(
+                  .load120Model(
                     predictionController1.text,
                     predictionController2.text,
                     predictionController3.text,
@@ -94,6 +94,12 @@ class HundredTwentyPrediction extends StatelessWidget {
                     predictionController16.text,
                     predictionController17.text,
                     predictionController18.text,
+                    predictionController19.text,
+                    predictionController20.text,
+                    predictionController21.text,
+                    predictionController22.text,
+                    predictionController23.text,
+                    predictionController24.text,
                   )
                   .then((value) => CoolAlert.show(
                         context: context,

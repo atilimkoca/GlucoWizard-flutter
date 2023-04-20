@@ -4,6 +4,7 @@ import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:glucowizard_flutter/components/bottom_navbar.dart';
 import 'package:glucowizard_flutter/l10n/l10.dart';
@@ -23,8 +24,10 @@ import 'package:glucowizard_flutter/views/prediction_page.dart';
 import 'package:glucowizard_flutter/views/profile_page.dart';
 
 import 'package:glucowizard_flutter/views/tracking_page.dart';
+import 'package:glucowizard_flutter/views/type2_prediction.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -203,6 +206,8 @@ class HomePage extends StatelessWidget {
           return Alarm();
         case 5:
           return ProfilePage();
+        case 6:
+          return TypetwoPredictionPage();
         default:
           return DiagnosePage();
       }
@@ -215,87 +220,94 @@ class HomePage extends StatelessWidget {
           actions: [
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: DropdownButton2(
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    dropdownStyleData: DropdownStyleData(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: const Color(0xff3AB4F2),
-                        ),
-                        elevation: 8,
-                        scrollbarTheme: ScrollbarThemeData(
-                          radius: const Radius.circular(40),
-                          thumbVisibility: MaterialStateProperty.all(true),
-                        )),
-                    menuItemStyleData: const MenuItemStyleData(),
-                    iconStyleData: const IconStyleData(
-                      icon: Icon(
-                        Icons.arrow_forward_ios_outlined,
+                child: Container(
+                  // decoration: BoxDecoration(
+                  //     image: DecorationImage(
+                  //         image: AssetImage('assets/images/world.png'))),
+                  child: DropdownButton2(
+
+                      //buttonStyleData: ButtonStyleData(),
+                      //customButton: Image.asset('assets/images/logout.png'),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        //overflow: TextOverflow.ellipsis,
                       ),
-                      iconSize: 14,
-                      iconEnabledColor: Colors.white,
-                      iconDisabledColor: Colors.grey,
-                    ),
-                    value: lang,
-                    onChanged: (Locale? val) {
-                      context.read<LanguageProvider>().setLocale(val!);
-                      var predictionProvider = Provider.of<PredictionProvider>(
-                          context,
-                          listen: false);
-                      var head = predictionProvider.head;
-                      if (head == '15 Dakika' &&
-                          languageProvider.locale.toString() == 'en') {
-                        predictionProvider.setHead('15 Minute');
-                      } else if (head == '15 Minute' &&
-                          languageProvider.locale.toString() == 'tr') {
-                        predictionProvider.setHead('15 Dakika');
-                      } else if (head == '30 Dakika' &&
-                          languageProvider.locale.toString() == 'en') {
-                        predictionProvider.setHead('30 Minute');
-                      } else if (head == '30 Minute' &&
-                          languageProvider.locale.toString() == 'tr') {
-                        predictionProvider.setHead('30 Dakika');
-                      } else if (head == '45 Dakika' &&
-                          languageProvider.locale.toString() == 'en') {
-                        predictionProvider.setHead('45 Minute');
-                      } else if (head == '45 Minute' &&
-                          languageProvider.locale.toString() == 'tr') {
-                        predictionProvider.setHead('45 Dakika');
-                      } else if (head == '60 Dakika' &&
-                          languageProvider.locale.toString() == 'en') {
-                        predictionProvider.setHead('60 Minute');
-                      } else if (head == '60 Minute' &&
-                          languageProvider.locale.toString() == 'tr') {
-                        predictionProvider.setHead('60 Dakika');
-                      } else if (head == '90 Dakika' &&
-                          languageProvider.locale.toString() == 'en') {
-                        predictionProvider.setHead('90 Minute');
-                      } else if (head == '90 Minute' &&
-                          languageProvider.locale.toString() == 'tr') {
-                        predictionProvider.setHead('90 Dakika');
-                      } else if (head == '120 Dakika' &&
-                          languageProvider.locale.toString() == 'en') {
-                        predictionProvider.setHead('120 Minute');
-                      } else if (head == '120 Minute' &&
-                          languageProvider.locale.toString() == 'tr') {
-                        predictionProvider.setHead('120 Dakika');
-                      }
-                      //context.read<PredictionProvider>().setHead(e!);
-                    },
-                    items: L10n.all
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(title2(e.languageCode)),
-                            ))
-                        .toList())),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              color: Colors.white,
-              onPressed: () async {
+                      dropdownStyleData: DropdownStyleData(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: const Color(0xff3AB4F2),
+                          ),
+                          elevation: 8,
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thumbVisibility: MaterialStateProperty.all(true),
+                          )),
+                      menuItemStyleData: const MenuItemStyleData(),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          LineIcons.globe,
+                          size: 20,
+                        ),
+                        iconSize: 14,
+                        iconEnabledColor: Colors.white,
+                      ),
+                      value: lang,
+                      onChanged: (Locale? val) {
+                        context.read<LanguageProvider>().setLocale(val!);
+                        var predictionProvider =
+                            Provider.of<PredictionProvider>(context,
+                                listen: false);
+                        var head = predictionProvider.head;
+                        if (head == '15 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead('15 Minute');
+                        } else if (head == '15 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead('15 Dakika');
+                        } else if (head == '30 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead('30 Minute');
+                        } else if (head == '30 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead('30 Dakika');
+                        } else if (head == '45 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead('45 Minute');
+                        } else if (head == '45 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead('45 Dakika');
+                        } else if (head == '60 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead('60 Minute');
+                        } else if (head == '60 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead('60 Dakika');
+                        } else if (head == '90 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead('90 Minute');
+                        } else if (head == '90 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead('90 Dakika');
+                        } else if (head == '120 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead('120 Minute');
+                        } else if (head == '120 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead('120 Dakika');
+                        }
+                        //context.read<PredictionProvider>().setHead(e!);
+                      },
+                      items: L10n.all
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(title2(e.languageCode)),
+                              ))
+                          .toList()),
+                )),
+
+            GestureDetector(
+              onTap: () async {
                 context.read<BottomNavBarProvider>().onItemTapped(0);
                 context.read<AppBarProvider>().setTitle(0, context);
                 var loginProvider =
@@ -311,7 +323,35 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                     (route) => false);
               },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  FontAwesomeIcons.powerOff,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
             )
+            // IconButton(
+            //   icon: const Icon(Icons.logout),
+            //   color: Colors.white,
+            //   onPressed: () async {
+            //     context.read<BottomNavBarProvider>().onItemTapped(0);
+            //     context.read<AppBarProvider>().setTitle(0, context);
+            //     var loginProvider =
+            //         Provider.of<LoginPageProvider>(context, listen: false);
+            //     if (loginProvider.isLogin!) {
+            //       await GoogleSignIn().signOut();
+            //     } else {
+            //       auth.signOut();
+            //     }
+
+            //     Navigator.pushAndRemoveUntil(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => const LoginPage()),
+            //         (route) => false);
+            //   },
+            // )
           ],
           backgroundColor: const Color(0xff3AB4F2),
           title: Text(

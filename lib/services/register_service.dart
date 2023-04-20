@@ -17,6 +17,8 @@ class RegisterService {
     _eklenecekUser['weight'] = _userModel.weight;
     _eklenecekUser['gender'] = _userModel.gender;
     _eklenecekUser['water'] = _userModel.water;
+    _eklenecekUser['time'] = DateTime.now().subtract(Duration(days: 1));
+    _eklenecekUser['counter'] = 0;
 
     await _firestore.collection('users').doc(uid).set(_eklenecekUser);
   }

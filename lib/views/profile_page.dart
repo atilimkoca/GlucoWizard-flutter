@@ -53,15 +53,31 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   @override
-  void dispose() {}
+  //void dispose() {}
   void onStepCount(StepCount event) {
+    var profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    var loginProvider = Provider.of<LoginPageProvider>(context, listen: false);
     setState(() {
-      _steps = event.steps.toString();
+      if (profileProvider.users.counter == 1) {
+        profileProvider.setOldSteps(event.steps);
+        profileProvider.updateCounter(
+            loginProvider.userId!, profileProvider.users.counter!);
+      }
+
+      context.read<ProfileProvider>().setNewSteps(event.steps);
+      _steps = (profileProvider.newSteps! - (profileProvider.oldSteps ?? 0))
+          .toString();
+      print(profileProvider.newSteps!);
+      context
+          .read<ProfileProvider>()
+          .updateSteps(loginProvider.userId!, event.steps);
+      //print(profileProvider.oldSteps!);
     });
   }
 
   void onPedestrianStatusChanged(PedestrianStatus event) {
     print(event);
+    if (!mounted) return;
     setState(() {
       _status = event.status;
     });
@@ -566,7 +582,7 @@ class _ProfilePageState extends State<ProfilePage>
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: MediaQuery.of(context).size.height * 0.3,
             width: MediaQuery.of(context).size.width * 0.9,
             child: Card(
                 shape: RoundedRectangleBorder(
