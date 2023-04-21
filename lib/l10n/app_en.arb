@@ -1,7 +1,9 @@
 {
     "tracking_page":"Tracking Page",
     "trainingGuide": "Training Guide",
-    "prediction_page": "Blood Sugar Prediction",
+    "type1_prediction": "Type 1 Prediction",
+    "type2_prediction": "Type 2 Prediction",
+    "profile_page":"Profile",
     "diagnose": "Diabetes Diagnosis",
     "alarm_page": "Alarms",
     "glucose_measurement":"Blood Sugar Measurement",

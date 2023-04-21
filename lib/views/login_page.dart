@@ -9,11 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucowizard_flutter/providers/alarms_provider.dart';
 import 'package:glucowizard_flutter/providers/language_provider.dart';
 import 'package:glucowizard_flutter/providers/profile_provider.dart';
 
 import 'package:glucowizard_flutter/providers/register_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
+import 'package:glucowizard_flutter/views/health_page.dart';
 import 'package:glucowizard_flutter/views/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -117,6 +119,9 @@ class LoginPage extends StatelessWidget {
 
     Future<void> signInWithGoogle() async {
       try {
+        process = 'google';
+        loginStatus = true;
+        googleSign = true;
         context.read<LoginPageProvider>().setLogin(true);
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -134,16 +139,16 @@ class LoginPage extends StatelessWidget {
         await FirebaseAuth.instance.signInWithCredential(credential);
         context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
         var now = DateTime.now();
-        var formatter = DateFormat.Hm('yyyy-MM-dd');
+        var formatter = DateFormat('yyyy-MM-dd');
 
         String formattedDate = formatter.format(now);
         verified = true;
 
-        context.read<LoginPageProvider>().setUserId(auth.currentUser!.uid);
         TrackingChart _chart = TrackingChart(
           date: formattedDate,
           uid: context.read<LoginPageProvider>().userId,
         );
+        //context.read<RegisterPageProvider>().addUser(auth.currentUser!.uid);
         context.read<TrackingChartProvider>().getTrackingChart(_chart);
         var profileProvider =
             Provider.of<ProfileProvider>(context, listen: false);
@@ -151,7 +156,7 @@ class LoginPage extends StatelessWidget {
 
         var data = profileProvider.users;
         print(data.counter);
-        profileProvider.updateCounter(auth.currentUser!.uid, data.counter!);
+        profileProvider.updateCounter(auth.currentUser!.uid, data.counter ?? 0);
         //var data2 = context.watch<ProfileProvider>().users;
         if (data.time!.day == DateTime.now().day) {
           print('same day');
@@ -165,6 +170,8 @@ class LoginPage extends StatelessWidget {
               .updateTime(auth.currentUser!.uid, DateTime.now());
         }
       } catch (e) {
+        googleSign = false;
+        loginStatus = false;
         context.read<LoginPageProvider>().setLogin(false);
       }
       // Trigger the authentication flow
@@ -210,6 +217,7 @@ class LoginPage extends StatelessWidget {
           Provider.of<ProfileProvider>(context, listen: false);
       try {
         process = 'login';
+        context.read<LoginPageProvider>().setOffline(false);
         loginStatus = true;
         registerStatus = false;
         var _userCredential = await auth.signInWithEmailAndPassword(
@@ -230,7 +238,7 @@ class LoginPage extends StatelessWidget {
             date: formattedDate,
             uid: context.read<LoginPageProvider>().userId,
           );
-
+          context.read<AlarmsProvider>().getAlarms(auth.currentUser!.uid);
           context.read<TrackingChartProvider>().getTrackingChart(_chart);
           await context.read<ProfileProvider>().getInfos(auth.currentUser!.uid);
 
@@ -261,129 +269,155 @@ class LoginPage extends StatelessWidget {
     };
 
     return FlutterLogin(
-      loginProviders: <LoginProvider>[
-        LoginProvider(
-          icon: FontAwesomeIcons.google,
-          label: 'Google',
-          callback: () async {
-            await signInWithGoogle();
-          },
+        loginProviders: <LoginProvider>[
+          // LoginProvider(
+          //   icon: FontAwesomeIcons.google,
+          //   label: 'Google',
+          //   callback: () async {
+          //     await signInWithGoogle();
+          //   },
+          // ),
+          LoginProvider(
+              callback: () async {
+                context.read<LoginPageProvider>().setOffline(true);
+              },
+              icon: FontAwesomeIcons.person,
+              label: 'offline')
+        ],
+        navigateBackAfterRecovery: false,
+        savedEmail: users.keys.first.toString(),
+        savedPassword: users.values.first.toString(),
+        title: 'GlucoWizard',
+        logo: const AssetImage('assets/images/wizard-hat.png'),
+        onLogin: _authUser,
+        onSignup: _signupUser,
+        disableCustomPageTransformer: true,
+        messages: LoginMessages(
+          recoverCodePasswordDescription: 'test',
+          recoverPasswordSuccess:
+              AppLocalizations.of(context)!.recoverPasswordSuccess,
+          passwordHint: AppLocalizations.of(context)!.password,
+          forgotPasswordButton: AppLocalizations.of(context)!.forgot_password,
+          loginButton: AppLocalizations.of(context)!.login,
+          signupButton: AppLocalizations.of(context)!.register,
+          confirmPasswordError: AppLocalizations.of(context)!.password_match,
+          confirmPasswordHint: AppLocalizations.of(context)!.confirm_password,
+          recoverPasswordButton: AppLocalizations.of(context)!.resetPassword,
+          goBackButton: AppLocalizations.of(context)!.back,
+          recoverPasswordIntro:
+              AppLocalizations.of(context)!.recoverPasswordIntro,
         ),
-        LoginProvider(
-            callback: () {}, icon: FontAwesomeIcons.person, label: 'offline')
-      ],
-      navigateBackAfterRecovery: false,
-      savedEmail: users.keys.first.toString(),
-      savedPassword: users.values.first.toString(),
-      title: 'GlucoWizard',
-      logo: const AssetImage('assets/images/wizard-hat.png'),
-      onLogin: _authUser,
-      onSignup: _signupUser,
-      disableCustomPageTransformer: true,
-      messages: LoginMessages(
-        recoverCodePasswordDescription: 'test',
-        recoverPasswordSuccess:
-            AppLocalizations.of(context)!.recoverPasswordSuccess,
-        passwordHint: AppLocalizations.of(context)!.password,
-        forgotPasswordButton: AppLocalizations.of(context)!.forgot_password,
-        loginButton: AppLocalizations.of(context)!.login,
-        signupButton: AppLocalizations.of(context)!.register,
-        confirmPasswordError: AppLocalizations.of(context)!.password_match,
-        confirmPasswordHint: AppLocalizations.of(context)!.confirm_password,
-        recoverPasswordButton: AppLocalizations.of(context)!.resetPassword,
-        goBackButton: AppLocalizations.of(context)!.back,
-        recoverPasswordIntro:
-            AppLocalizations.of(context)!.recoverPasswordIntro,
-      ),
-      userValidator: (value) {
-        final bool isValid = EmailValidator.validate(value!);
+        userValidator: (value) {
+          final bool isValid = EmailValidator.validate(value!);
 
-        if (value.isEmpty) {
-          return AppLocalizations.of(context)!.empty_email;
-        } else if (!isValid) {
-          return AppLocalizations.of(context)!.invalid_email;
-        }
+          if (value.isEmpty) {
+            return AppLocalizations.of(context)!.empty_email;
+          } else if (!isValid) {
+            return AppLocalizations.of(context)!.invalid_email;
+          }
 
-        return null;
-      },
-      passwordValidator: (value) {
-        if (value!.isEmpty) {
-          return AppLocalizations.of(context)!.empty_password;
-        } else if (value.length < 6) {
-          return AppLocalizations.of(context)!.short_password;
-        }
+          return null;
+        },
+        passwordValidator: (value) {
+          if (value!.isEmpty) {
+            return AppLocalizations.of(context)!.empty_password;
+          } else if (value.length < 6) {
+            return AppLocalizations.of(context)!.short_password;
+          }
 
-        return null;
-      },
-      onRecoverPassword: _recoverPassword,
-      onSubmitAnimationCompleted: () {
-        var loginProvider =
-            Provider.of<LoginPageProvider>(context, listen: false);
-        if (loginProvider.isLogin!) {
-          googleSign = false;
+          return null;
+        },
+        onRecoverPassword: _recoverPassword,
+        onSubmitAnimationCompleted: () {
+          var loginProvider =
+              Provider.of<LoginPageProvider>(context, listen: false);
+          if (loginProvider.offline) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: ((context) => const HomePage())));
+          } else {
+            if (loginProvider.isLogin!) {
+              googleSign = false;
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-          );
-        } else {
-          if (process == 'register') {
-            if (!registerStatus) {
-              registerStatus = false;
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-              errorAlert(AppLocalizations.of(context)!.register_error);
-              //showAlert(AppLocalizations.of(context)!.register_error,TypeAlert.error);
-            } else if (registerStatus) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-              successAlert(AppLocalizations.of(context)!.register_success);
-              //showAlert(AppLocalizations.of(context)!.register_success, TypeAlert.success);
-            }
-          } else if (process == 'login') {
-            if (!loginStatus) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-              errorAlert(AppLocalizations.of(context)!.register_error);
-              //showAlert(AppLocalizations.of(context)!.login_error, TypeAlert.error);
-            } else if (loginStatus && verified) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
-            } else if (loginStatus && !verified) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-              errorAlert(AppLocalizations.of(context)!.register_error);
-              //showAlert(AppLocalizations.of(context)!.email_not_verified, TypeAlert.error);
-            } else if (process == 'recover') {
-              if (!recoverStatus) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-                errorAlert(AppLocalizations.of(context)!.register_error);
-                //showAlert(AppLocalizations.of(context)!.recoverPasswordFailed,  TypeAlert.error);
-              } else if (recoverStatus) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-                successAlert(AppLocalizations.of(context)!.register_error);
-                //showAlert(AppLocalizations.of(context)!.recoverPasswordSuccess, TypeAlert.success);
+            } else {
+              if (process == 'register') {
+                if (!registerStatus) {
+                  registerStatus = false;
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                  errorAlert(AppLocalizations.of(context)!.register_error);
+                  //showAlert(AppLocalizations.of(context)!.register_error,TypeAlert.error);
+                } else if (registerStatus) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                  successAlert(AppLocalizations.of(context)!.register_success);
+                  //showAlert(AppLocalizations.of(context)!.register_success, TypeAlert.success);
+                }
+              } else if (process == 'login') {
+                if (!loginStatus) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                  errorAlert(AppLocalizations.of(context)!.register_error);
+                  //showAlert(AppLocalizations.of(context)!.login_error, TypeAlert.error);
+                } else if (loginStatus && verified) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
+                } else if (loginStatus && !verified) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                  errorAlert(AppLocalizations.of(context)!.register_error);
+                  //showAlert(AppLocalizations.of(context)!.email_not_verified, TypeAlert.error);
+                } else if (process == 'recover') {
+                  if (!recoverStatus) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                    errorAlert(AppLocalizations.of(context)!.register_error);
+                    //showAlert(AppLocalizations.of(context)!.recoverPasswordFailed,  TypeAlert.error);
+                  } else if (recoverStatus) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                    successAlert(AppLocalizations.of(context)!.register_error);
+                    //showAlert(AppLocalizations.of(context)!.recoverPasswordSuccess, TypeAlert.success);
+                  }
+                }
+              } else if (process == 'google') {
+                if (!googleSign) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                  errorAlert(AppLocalizations.of(context)!.register_error);
+                  //showAlert(AppLocalizations.of(context)!.recoverPasswordFailed,  TypeAlert.error);
+                } else if (googleSign) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
+                  successAlert(AppLocalizations.of(context)!.register_error);
+                  //showAlert(AppLocalizations.of(context)!.recoverPasswordSuccess, TypeAlert.success);
+                }
               }
             }
           }
-        }
-      },
-    );
+        });
   }
 }

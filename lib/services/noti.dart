@@ -27,8 +27,9 @@ class NotificationLogic {
     await _notifications.initialize(settings,
         onDidReceiveNotificationResponse: (payload) {
       try {
-        AlarmInfo waterModel =
-            AlarmInfo(DateTime.now().add(Duration(minutes: 1)), alarmId: 200);
+        AlarmInfo waterModel = AlarmInfo(
+            alarmDateTime: DateTime.now().add(Duration(minutes: 1)),
+            alarmId: 200);
         waterModel.alarmDateTime = DateTime.now();
         waterModel.alarmId = 200;
         // FirebaseFirestore.instance

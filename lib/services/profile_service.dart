@@ -29,6 +29,7 @@ class ProfileService {
           response.data()!['time'].millisecondsSinceEpoch);
       _users.steps = response.data()!['steps'] ?? 0;
       _users.counter = response.data()!['counter'];
+      _users.totalId = response.data()!['totalId'];
     } catch (e) {}
 
     return _users;

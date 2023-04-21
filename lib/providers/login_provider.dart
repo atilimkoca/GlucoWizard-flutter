@@ -24,6 +24,12 @@ class LoginPageProvider extends ChangeNotifier {
 
   //   notifyListeners();
   // }
+  bool _offline = false;
+  bool get offline => _offline;
+  void setOffline(bool value) {
+    _offline = value;
+    notifyListeners();
+  }
 
   String? _userId;
   String? get userId => _userId;

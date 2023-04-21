@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:glucowizard_flutter/models/alarm_info.dart';
 import 'package:glucowizard_flutter/models/tracking_chart_model.dart';
 
 class UserModel {
@@ -18,6 +19,8 @@ class UserModel {
   DateTime? time;
   int? steps;
   int? counter;
+  AlarmInfo? alarmInfo;
+  int? totalId;
   UserModel({
     this.id,
     this.name,
@@ -33,6 +36,8 @@ class UserModel {
     this.time,
     this.steps,
     this.counter,
+    this.alarmInfo,
+    this.totalId,
   });
 
   UserModel copyWith({
@@ -50,6 +55,8 @@ class UserModel {
     DateTime? time,
     int? steps,
     int? counter,
+    AlarmInfo? alarmInfo,
+    int? totalId,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -66,6 +73,8 @@ class UserModel {
       time: time ?? this.time,
       steps: steps ?? this.steps,
       counter: counter ?? this.counter,
+      alarmInfo: alarmInfo ?? this.alarmInfo,
+      totalId: totalId ?? this.totalId,
     );
   }
 
@@ -85,6 +94,8 @@ class UserModel {
       'time': time?.millisecondsSinceEpoch,
       'steps': steps,
       'counter': counter,
+      'alarmInfo': alarmInfo?.toMap(),
+      'totalId': totalId,
     };
   }
 
@@ -108,6 +119,10 @@ class UserModel {
           : null,
       steps: map['steps'] != null ? map['steps'] as int : null,
       counter: map['counter'] != null ? map['counter'] as int : null,
+      alarmInfo: map['alarmInfo'] != null
+          ? AlarmInfo.fromMap(map['alarmInfo'] as Map<String, dynamic>)
+          : null,
+      totalId: map['totalId'] != null ? map['totalId'] as int : null,
     );
   }
 
@@ -118,7 +133,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, surname: $surname, height: $height, weight: $weight, gender: $gender, age: $age, email: $email, image: $image, trackingChart: $trackingChart, water: $water, time: $time, steps: $steps, counter: $counter)';
+    return 'UserModel(id: $id, name: $name, surname: $surname, height: $height, weight: $weight, gender: $gender, age: $age, email: $email, image: $image, trackingChart: $trackingChart, water: $water, time: $time, steps: $steps, counter: $counter, alarmInfo: $alarmInfo, totalId: $totalId)';
   }
 
   @override
@@ -138,7 +153,9 @@ class UserModel {
         other.water == water &&
         other.time == time &&
         other.steps == steps &&
-        other.counter == counter;
+        other.counter == counter &&
+        other.alarmInfo == alarmInfo &&
+        other.totalId == totalId;
   }
 
   @override
@@ -156,6 +173,8 @@ class UserModel {
         water.hashCode ^
         time.hashCode ^
         steps.hashCode ^
-        counter.hashCode;
+        counter.hashCode ^
+        alarmInfo.hashCode ^
+        totalId.hashCode;
   }
 }

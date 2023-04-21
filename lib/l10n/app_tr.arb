@@ -1,7 +1,9 @@
 {
     "tracking_page":"Takip Çizelgesi",
     "trainingGuide": "Eğitim Kılavuzu",
-    "prediction_page": "Kan Şekeri Tahmini",
+    "type1_prediction": "Tip 1 Tahmin",
+    "type2_prediction": "Tip 2 Tahmin",
+    "profile_page":"Profil",
     "diagnose": "Diyabet Teşhisi",
     "alarm_page": "Alarmlar",
     "glucose_measurement":"Kan Şekeri Ölçümü",

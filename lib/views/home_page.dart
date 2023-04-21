@@ -41,6 +41,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var loginPageProvider = Provider.of<LoginPageProvider>(context);
     Time _time = Time(hour: 11, minute: 30, second: 20);
 
     var trackingChartProvider =
@@ -192,24 +193,42 @@ class HomePage extends StatelessWidget {
     }
 
     selectPage(int pageIndex) {
-      switch (pageIndex) {
-        case 0:
-          return TrackingPage();
+      var loginPageProvider = Provider.of<LoginPageProvider>(context);
+      if (loginPageProvider.offline) {
+        switch (pageIndex) {
+          case 0:
+            return HealthPage();
 
-        case 1:
-          return const HealthPage();
-        case 2:
-          return DiagnosePage();
-        case 3:
-          return const PredictionPage();
-        case 4:
-          return Alarm();
-        case 5:
-          return ProfilePage();
-        case 6:
-          return TypetwoPredictionPage();
-        default:
-          return DiagnosePage();
+          case 1:
+            return DiagnosePage();
+          case 2:
+            return PredictionPage();
+          case 3:
+            return const TypetwoPredictionPage();
+
+          default:
+            return DiagnosePage();
+        }
+      } else {
+        switch (pageIndex) {
+          case 0:
+            return TrackingPage();
+
+          case 1:
+            return const HealthPage();
+          case 2:
+            return DiagnosePage();
+          case 3:
+            return const PredictionPage();
+          case 4:
+            return TypetwoPredictionPage();
+          case 5:
+            return Alarm();
+          case 6:
+            return ProfilePage();
+          default:
+            return DiagnosePage();
+        }
       }
     }
 
@@ -355,17 +374,35 @@ class HomePage extends StatelessWidget {
           ],
           backgroundColor: const Color(0xff3AB4F2),
           title: Text(
-            pageIndex.toString() == '0'
-                ? AppLocalizations.of(context)!.tracking_page
-                : pageIndex == 1
+            loginPageProvider.offline == false
+                ? pageIndex.toString() == '0'
+                    ? AppLocalizations.of(context)!.tracking_page
+                    : pageIndex == 1
+                        ? AppLocalizations.of(context)!.trainingGuide
+                        : pageIndex == 2
+                            ? AppLocalizations.of(context)!.diagnose
+                            : pageIndex == 3
+                                ? AppLocalizations.of(context)!.type1_prediction
+                                : pageIndex == 4
+                                    ? AppLocalizations.of(context)!
+                                        .type2_prediction
+                                    : pageIndex == 5
+                                        ? AppLocalizations.of(context)!
+                                            .alarm_page
+                                        : pageIndex == 6
+                                            ? AppLocalizations.of(context)!
+                                                .profile_page
+                                            : AppLocalizations.of(context)!
+                                                .tracking_page
+                : pageIndex.toString() == '0'
                     ? AppLocalizations.of(context)!.trainingGuide
-                    : pageIndex == 2
+                    : pageIndex == 1
                         ? AppLocalizations.of(context)!.diagnose
-                        : pageIndex == 3
-                            ? AppLocalizations.of(context)!.prediction_page
-                            : pageIndex == 4
-                                ? AppLocalizations.of(context)!.alarm_page
-                                : AppLocalizations.of(context)!.tracking_page,
+                        : pageIndex == 2
+                            ? AppLocalizations.of(context)!.type1_prediction
+                            : pageIndex == 3
+                                ? AppLocalizations.of(context)!.type2_prediction
+                                : AppLocalizations.of(context)!.trainingGuide,
             style: const TextStyle(color: Colors.white),
           )),
       body: SafeArea(child: selectPage(pageIndex)),
@@ -378,7 +415,7 @@ class HomePage extends StatelessWidget {
               child: const Icon(Icons.add),
             )
           : null,
-      bottomNavigationBar: const BottomNavbar(),
+      bottomNavigationBar: BottomNavbar(),
     );
   }
 }

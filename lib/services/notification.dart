@@ -15,7 +15,7 @@ class NotificationService {
               defaultColor: Color(0xFF9D50DD),
               importance: NotificationImportance.High,
               ledColor: Colors.white,
-              playSound: false,
+              playSound: true,
               enableVibration: true,
               channelShowBadge: true),
         ],

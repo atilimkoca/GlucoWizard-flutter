@@ -27,7 +27,7 @@ class TrackingChartService {
     }
 
     Map<String, dynamic> _eklenecekUser = <String, dynamic>{};
-    _eklenecekUser['alarms'] = 'test';
+
     _eklenecekUser['trackingChart'] = {
       chart.date: {formattedDate: chart.glucoseLevel}
     };
