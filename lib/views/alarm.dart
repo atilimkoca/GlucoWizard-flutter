@@ -9,6 +9,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:glucowizard_flutter/components/reminder.dart';
 import 'package:glucowizard_flutter/main.dart';
 import 'package:glucowizard_flutter/models/alarm_info.dart';
 import 'package:glucowizard_flutter/models/gradient_colors.dart';
@@ -28,7 +29,8 @@ class Alarm extends StatefulWidget {
   State<Alarm> createState() => _AlarmState();
 }
 
-class _AlarmState extends State<Alarm> {
+class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
+  static final _formKey = GlobalKey<FormState>();
   bool _switch = false;
   bool _isRepeatSelected = false;
   DateTime? _alarmTime;
@@ -36,225 +38,288 @@ class _AlarmState extends State<Alarm> {
 
   @override
   Widget build(BuildContext context) {
+    TabController _tabController = TabController(length: 2, vsync: this);
     List<AlarmInfo> alarms = context.watch<AlarmsProvider>().alarmInfo ?? [];
     var alarmId = context.watch<AlarmsProvider>().alarmId;
     TextEditingController _alarmTitleController = TextEditingController();
     var formatter = new DateFormat.Hm();
 
-    return ListView(
-      padding: EdgeInsets.symmetric(horizontal: 32),
-      children: alarms
-          .map<Widget>((alarm) => Container(
-                margin: const EdgeInsets.only(bottom: 32),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: alarm.gradientColors!.last.withOpacity(0.4),
-                        blurRadius: 8,
-                        spreadRadius: 4,
-                        offset: Offset(4, 4))
-                  ],
-                  gradient: LinearGradient(
-                      colors: alarm.gradientColors!,
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight),
-                  borderRadius: BorderRadius.all(Radius.circular(24)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
+    return Column(children: [
+      TabBar(
+        indicatorColor: Colors.greenAccent,
+        indicatorWeight: 7,
+        labelColor: Colors.black,
+        unselectedLabelColor: Colors.grey,
+        controller: _tabController,
+        tabs: [
+          Tab(icon: Icon(Icons.alarm)),
+          Tab(icon: Icon(Icons.calendar_month)),
+        ],
+      ),
+      SizedBox(
+        width: double.maxFinite,
+        height: MediaQuery.of(context).size.height * 0.75,
+        child: TabBarView(controller: _tabController, children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 32),
+              children: alarms
+                  .map<Widget>((alarm) => Container(
+                        margin: const EdgeInsets.only(bottom: 32),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color:
+                                    alarm.gradientColors!.last.withOpacity(0.4),
+                                blurRadius: 8,
+                                spreadRadius: 4,
+                                offset: Offset(4, 4))
+                          ],
+                          gradient: LinearGradient(
+                              colors: alarm.gradientColors!,
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight),
+                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(
-                                Icons.label,
-                                color: Colors.white,
-                                size: 24,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.label,
+                                        color: Colors.white,
+                                        size: 24,
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        alarm.alarmTitle!,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'avenir'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                               const SizedBox(
-                                width: 8,
+                                height: 8,
                               ),
-                              Text(
-                                alarm.alarmTitle!,
-                                style: TextStyle(
-                                    color: Colors.white, fontFamily: 'avenir'),
+                              Text(alarm.isRepeating! ? 'Repeat' : 'No Repeat',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'avenir',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700)),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(formatter.format(alarm.alarmDateTime!),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'avenir',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700)),
+                                  IconButton(
+                                    onPressed: () async {
+                                      AlarmInfo data = AlarmInfo(
+                                        alarmId: alarmId,
+                                        alarmDateTime: _alarmTime,
+                                        gradientColors: GradientColors.sky,
+                                        alarmTitle: alarm.alarmTitle,
+                                      );
+                                      var loginProvider =
+                                          Provider.of<LoginPageProvider>(
+                                              context,
+                                              listen: false);
+                                      context
+                                          .read<AlarmsProvider>()
+                                          .deleteAlarm(
+                                              loginProvider.userId!, alarm);
+                                      _cancelAlarm(alarm.alarmId!);
+
+                                      setState(() {
+                                        alarms.remove(alarm);
+                                      });
+                                    },
+                                    icon: Icon(Icons.delete),
+                                    color: Colors.white,
+                                  )
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(formatter.format(alarm.alarmDateTime!),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'avenir',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700)),
-                          IconButton(
-                            onPressed: () async {
-                              AlarmInfo data = AlarmInfo(
-                                alarmId: alarmId,
-                                alarmDateTime: _alarmTime,
-                                gradientColors: GradientColors.sky,
-                                alarmTitle: alarm.alarmTitle,
-                              );
-                              var loginProvider =
-                                  Provider.of<LoginPageProvider>(context,
-                                      listen: false);
-                              context
-                                  .read<AlarmsProvider>()
-                                  .deleteAlarm(loginProvider.userId!, alarm);
-                              _cancelAlarm(alarm.alarmId!);
+                        ),
+                      ))
+                  .followedBy([
+                DottedBorder(
+                  dashPattern: [5, 4],
+                  strokeWidth: 2,
+                  color: Colors.grey,
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(24),
+                  child: Container(
+                    width: double.infinity,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: Color(0xFF444974)),
+                    child: MaterialButton(
+                      onPressed: () {
+                        var profileProvider = Provider.of<ProfileProvider>(
+                            context,
+                            listen: false);
+                        print(profileProvider.users.totalId!);
+                        // _scheduleAlarm();
+                        // print('Add Alarm');
+                        _alarmTimeString =
+                            DateFormat('HH:mm').format(DateTime.now());
+                        showModalBottomSheet(
+                            useRootNavigator: true,
+                            context: context,
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(24),
+                              ),
+                            ),
+                            builder: (context) {
+                              return StatefulBuilder(
+                                  builder: (context, setModalState) {
+                                return Container(
+                                  padding: const EdgeInsets.all(32),
+                                  child: Column(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          var selectedTime =
+                                              await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay.now(),
+                                          );
+                                          if (selectedTime != null) {
+                                            final now = DateTime.now();
+                                            var selectedDateTime = DateTime(
+                                                now.year,
+                                                now.month,
+                                                now.day,
+                                                selectedTime.hour,
+                                                selectedTime.minute);
+                                            _alarmTime = selectedDateTime;
+                                            setModalState(() {
+                                              _alarmTimeString =
+                                                  DateFormat('HH:mm')
+                                                      .format(selectedDateTime);
+                                            });
+                                          }
+                                        },
+                                        child: Text(
+                                          _alarmTimeString,
+                                          style: TextStyle(fontSize: 32),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('Repeat'),
+                                        trailing: Switch(
+                                          onChanged: (value) {
+                                            setModalState(() {
+                                              _isRepeatSelected = value;
+                                              print(_isRepeatSelected);
+                                            });
+                                          },
+                                          value: _isRepeatSelected,
+                                        ),
+                                      ),
+                                      Form(
+                                        key: _formKey,
+                                        child: ListTile(
+                                          title: TextFormField(
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'lütfen';
+                                              }
+                                              return null;
+                                            },
+                                            controller: _alarmTitleController,
+                                            decoration: InputDecoration(
+                                              hintText: 'Alarm Name',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      FloatingActionButton.extended(
+                                        onPressed: () async {
+                                          bool _validate =
+                                              _formKey.currentState!.validate();
+                                          if (!_validate) {
+                                            return;
+                                          } else {
+                                            var alarmInfo = AlarmInfo(
+                                                alarmDateTime: _alarmTime ??
+                                                    DateTime.now(),
+                                                gradientColors:
+                                                    GradientColors.sky,
+                                                alarmTitle:
+                                                    _alarmTitleController
+                                                            .text.isEmpty
+                                                        ? ''
+                                                        : _alarmTitleController
+                                                            .text,
+                                                alarmId: alarmId);
+                                            context
+                                                .read<AlarmsProvider>()
+                                                .setAlarmId(alarmId);
 
-                              setState(() {
-                                alarms.remove(alarm);
+                                            //AwesomeNotifications().cancelAllSchedules();
+                                            onSaveAlarm(alarmInfo);
+                                          }
+                                        },
+                                        icon: Icon(Icons.alarm),
+                                        label: Text('Save'),
+                                      ),
+                                    ],
+                                  ),
+                                );
                               });
-                            },
-                            icon: Icon(Icons.delete),
-                            color: Colors.white,
+                            });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/add_alarm.png',
+                            scale: 1.5,
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Text(
+                            'Add Alarm',
+                            style: const TextStyle(
+                                color: Colors.white, fontFamily: 'avenir'),
                           )
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ))
-          .followedBy([
-        DottedBorder(
-          dashPattern: [5, 4],
-          strokeWidth: 2,
-          color: Colors.grey,
-          borderType: BorderType.RRect,
-          radius: Radius.circular(24),
-          child: Container(
-            width: double.infinity,
-            height: 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                color: Color(0xFF444974)),
-            child: MaterialButton(
-              onPressed: () {
-                var profileProvider =
-                    Provider.of<ProfileProvider>(context, listen: false);
-                print(profileProvider.users.totalId!);
-                // _scheduleAlarm();
-                // print('Add Alarm');
-                _alarmTimeString = DateFormat('HH:mm').format(DateTime.now());
-                showModalBottomSheet(
-                    useRootNavigator: true,
-                    context: context,
-                    clipBehavior: Clip.antiAlias,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(24),
-                      ),
                     ),
-                    builder: (context) {
-                      return StatefulBuilder(builder: (context, setModalState) {
-                        return Container(
-                          padding: const EdgeInsets.all(32),
-                          child: Column(
-                            children: [
-                              TextButton(
-                                onPressed: () async {
-                                  var selectedTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  );
-                                  if (selectedTime != null) {
-                                    final now = DateTime.now();
-                                    var selectedDateTime = DateTime(
-                                        now.year,
-                                        now.month,
-                                        now.day,
-                                        selectedTime.hour,
-                                        selectedTime.minute);
-                                    _alarmTime = selectedDateTime;
-                                    setModalState(() {
-                                      _alarmTimeString = DateFormat('HH:mm')
-                                          .format(selectedDateTime);
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  _alarmTimeString,
-                                  style: TextStyle(fontSize: 32),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text('Repeat'),
-                                trailing: Switch(
-                                  onChanged: (value) {
-                                    setModalState(() {
-                                      _isRepeatSelected = value;
-                                    });
-                                  },
-                                  value: _isRepeatSelected,
-                                ),
-                              ),
-                              ListTile(
-                                title: TextField(
-                                  controller: _alarmTitleController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Alarm Name',
-                                  ),
-                                ),
-                              ),
-                              FloatingActionButton.extended(
-                                onPressed: () async {
-                                  var alarmInfo = AlarmInfo(
-                                      alarmDateTime:
-                                          _alarmTime ?? DateTime.now(),
-                                      gradientColors: GradientColors.sky,
-                                      alarmTitle:
-                                          _alarmTitleController.text.isEmpty
-                                              ? ''
-                                              : _alarmTitleController.text,
-                                      alarmId: alarmId);
-                                  context
-                                      .read<AlarmsProvider>()
-                                      .setAlarmId(alarmId);
-
-                                  //AwesomeNotifications().cancelAllSchedules();
-                                  onSaveAlarm(alarmInfo);
-                                },
-                                icon: Icon(Icons.alarm),
-                                label: Text('Save'),
-                              ),
-                            ],
-                          ),
-                        );
-                      });
-                    });
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/add_alarm.png',
-                    scale: 1.5,
                   ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    'Add Alarm',
-                    style: const TextStyle(
-                        color: Colors.white, fontFamily: 'avenir'),
-                  )
-                ],
-              ),
+                )
+              ]).toList(),
             ),
           ),
-        )
-      ]).toList(),
-    );
+          Reminder(),
+        ]),
+      )
+    ]);
   }
 
   void _cancelAlarm(int alarmId) async {
@@ -307,11 +372,11 @@ class _AlarmState extends State<Alarm> {
       scheduleAlarmDateTime = _alarmTime!.add(Duration(days: 1));
 
     var alarmInfo = AlarmInfo(
-      alarmDateTime: scheduleAlarmDateTime!,
-      gradientColors: [Colors.blue, Colors.indigo],
-      alarmTitle: alarminfo.alarmTitle,
-      alarmId: profileProvider.users.totalId! + 1,
-    );
+        alarmDateTime: scheduleAlarmDateTime!,
+        gradientColors: [Colors.blue, Colors.indigo],
+        alarmTitle: alarminfo.alarmTitle,
+        alarmId: profileProvider.users.totalId! + 1,
+        isRepeating: _isRepeatSelected);
     //alarms.add(alarmInfo);
     if (scheduleAlarmDateTime != null) {
       _scheduleAlarm(

@@ -8,14 +8,14 @@ class AlarmInfo {
   int? alarmId;
   DateTime? alarmDateTime;
   String? alarmTitle;
-  bool? isActive;
+  bool? isRepeating;
   List<Color>? gradientColors;
   int? totalId;
   AlarmInfo({
     this.alarmId,
     this.alarmDateTime,
     this.alarmTitle,
-    this.isActive,
+    this.isRepeating,
     this.gradientColors,
     this.totalId,
   });
@@ -24,7 +24,7 @@ class AlarmInfo {
     int? alarmId,
     DateTime? alarmDateTime,
     String? alarmTitle,
-    bool? isActive,
+    bool? isRepeating,
     List<Color>? gradientColors,
     int? totalId,
   }) {
@@ -32,7 +32,7 @@ class AlarmInfo {
       alarmId: alarmId ?? this.alarmId,
       alarmDateTime: alarmDateTime ?? this.alarmDateTime,
       alarmTitle: alarmTitle ?? this.alarmTitle,
-      isActive: isActive ?? this.isActive,
+      isRepeating: isRepeating ?? this.isRepeating,
       gradientColors: gradientColors ?? this.gradientColors,
       totalId: totalId ?? this.totalId,
     );
@@ -43,7 +43,7 @@ class AlarmInfo {
       'alarmId': alarmId,
       'alarmDateTime': alarmDateTime?.millisecondsSinceEpoch,
       'alarmTitle': alarmTitle,
-      'isActive': isActive,
+      'isRepeating': isRepeating,
       'gradientColors': gradientColors!.map((x) => x.value).toList(),
       'totalId': totalId,
     };
@@ -57,7 +57,8 @@ class AlarmInfo {
           : null,
       alarmTitle:
           map['alarmTitle'] != null ? map['alarmTitle'] as String : null,
-      isActive: map['isActive'] != null ? map['isActive'] as bool : null,
+      isRepeating:
+          map['isRepeating'] != null ? map['isRepeating'] as bool : null,
       gradientColors: map['gradientColors'] != null
           ? List<Color>.from(
               (map['gradientColors'] as List<int>).map<Color?>(
@@ -76,7 +77,7 @@ class AlarmInfo {
 
   @override
   String toString() {
-    return 'AlarmInfo(alarmId: $alarmId, alarmDateTime: $alarmDateTime, alarmTitle: $alarmTitle, isActive: $isActive, gradientColors: $gradientColors, totalId: $totalId)';
+    return 'AlarmInfo(alarmId: $alarmId, alarmDateTime: $alarmDateTime, alarmTitle: $alarmTitle, isRepeating: $isRepeating, gradientColors: $gradientColors, totalId: $totalId)';
   }
 
   @override
@@ -86,7 +87,7 @@ class AlarmInfo {
     return other.alarmId == alarmId &&
         other.alarmDateTime == alarmDateTime &&
         other.alarmTitle == alarmTitle &&
-        other.isActive == isActive &&
+        other.isRepeating == isRepeating &&
         listEquals(other.gradientColors, gradientColors) &&
         other.totalId == totalId;
   }
@@ -96,7 +97,7 @@ class AlarmInfo {
     return alarmId.hashCode ^
         alarmDateTime.hashCode ^
         alarmTitle.hashCode ^
-        isActive.hashCode ^
+        isRepeating.hashCode ^
         gradientColors.hashCode ^
         totalId.hashCode;
   }

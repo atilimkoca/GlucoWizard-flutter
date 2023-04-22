@@ -21,6 +21,7 @@ class RegisterService {
     _eklenecekUser['counter'] = 0;
     _eklenecekUser['alarms'] = _userModel.alarmInfo;
     _eklenecekUser['totalId'] = 0;
+    _eklenecekUser['reminders'] = _userModel.reminders;
 
     await _firestore.collection('users').doc(uid).set(_eklenecekUser);
   }

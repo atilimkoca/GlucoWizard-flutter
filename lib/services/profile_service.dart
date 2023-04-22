@@ -30,6 +30,7 @@ class ProfileService {
       _users.steps = response.data()!['steps'] ?? 0;
       _users.counter = response.data()!['counter'];
       _users.totalId = response.data()!['totalId'];
+      _users.pastSteps = response.data()!['pastSteps'];
     } catch (e) {}
 
     return _users;
@@ -72,5 +73,12 @@ class ProfileService {
     _counter['counter'] = counter + 1;
 
     await _firestore.doc('users/$uid').set(_counter, SetOptions(merge: true));
+  }
+
+  pastSteps(String uid, int steps) async {
+    Map<String, dynamic> _steps = <String, dynamic>{};
+    _steps['pastSteps'] = steps;
+
+    await _firestore.doc('users/$uid').set(_steps, SetOptions(merge: true));
   }
 }

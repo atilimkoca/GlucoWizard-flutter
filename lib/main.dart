@@ -16,6 +16,7 @@ import 'package:glucowizard_flutter/providers/login_provider.dart';
 import 'package:glucowizard_flutter/providers/prediction_provider.dart';
 import 'package:glucowizard_flutter/providers/profile_provider.dart';
 import 'package:glucowizard_flutter/providers/register_provider.dart';
+import 'package:glucowizard_flutter/providers/reminder_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
 import 'package:glucowizard_flutter/services/notification.dart';
 
@@ -47,7 +48,8 @@ void main() async {
     ChangeNotifierProvider(create: (_) => TrackingChartProvider()),
     ChangeNotifierProvider(create: (_) => RegisterPageProvider()),
     ChangeNotifierProvider(create: (_) => AlarmsProvider()),
-    ChangeNotifierProvider(create: (_) => ProfileProvider())
+    ChangeNotifierProvider(create: (_) => ProfileProvider()),
+    ChangeNotifierProvider(create: (_) => ReminderProvider())
   ], child: const MyApp()));
 }
 

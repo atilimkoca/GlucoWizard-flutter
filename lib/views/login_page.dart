@@ -157,6 +157,7 @@ class LoginPage extends StatelessWidget {
         var data = profileProvider.users;
         print(data.counter);
         profileProvider.updateCounter(auth.currentUser!.uid, data.counter ?? 0);
+        if (data.counter == 0)
         //var data2 = context.watch<ProfileProvider>().users;
         if (data.time!.day == DateTime.now().day) {
           print('same day');
@@ -165,6 +166,8 @@ class LoginPage extends StatelessWidget {
           context.read<ProfileProvider>().setOldSteps(data.steps ?? 0);
           context.read<ProfileProvider>().setWater(0, auth.currentUser!.uid);
           //context.read<ProfileProvider>().setChangeTime(true);
+          profileProvider.pastSteps(auth.currentUser!.uid, data.steps ?? 0);
+
           context
               .read<ProfileProvider>()
               .updateTime(auth.currentUser!.uid, DateTime.now());
@@ -256,6 +259,9 @@ class LoginPage extends StatelessWidget {
             context
                 .read<ProfileProvider>()
                 .updateTime(auth.currentUser!.uid, DateTime.now());
+            context
+                .read<ProfileProvider>()
+                .pastSteps(auth.currentUser!.uid, data.steps ?? 0);
           }
         }
       } catch (e) {

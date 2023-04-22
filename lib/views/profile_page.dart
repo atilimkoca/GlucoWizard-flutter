@@ -54,9 +54,13 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   //void dispose() {}
-  void onStepCount(StepCount event) {
+  void onStepCount(StepCount event) async {
     var profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     var loginProvider = Provider.of<LoginPageProvider>(context, listen: false);
+    if (profileProvider.users.counter == 1) {
+      await profileProvider.pastSteps(loginProvider.userId!, event.steps);
+    }
+    await context.read<ProfileProvider>().getInfos(loginProvider.userId!);
     setState(() {
       if (profileProvider.users.counter == 1) {
         profileProvider.setOldSteps(event.steps);
@@ -65,7 +69,9 @@ class _ProfilePageState extends State<ProfilePage>
       }
 
       context.read<ProfileProvider>().setNewSteps(event.steps);
-      _steps = (profileProvider.newSteps! - (profileProvider.oldSteps ?? 0))
+
+      _steps = (profileProvider.newSteps! -
+              (profileProvider.users.pastSteps ?? profileProvider.newSteps!))
           .toString();
       print(profileProvider.newSteps!);
       context

@@ -102,4 +102,10 @@ class ProfileProvider extends ChangeNotifier {
     getInfos(uid);
     notifyListeners();
   }
+
+  pastSteps(String uid, int steps) {
+    _profileService.pastSteps(uid, steps);
+    getInfos(uid);
+    notifyListeners();
+  }
 }

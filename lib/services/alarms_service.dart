@@ -23,7 +23,11 @@ class AlarmsService {
     Map<String, dynamic> _alarms = <String, dynamic>{};
 
     _alarms['alarms'] = {
-      alarmInfo.alarmTitle ?? '': {alarmInfo.alarmId, alarmInfo.alarmDateTime}
+      alarmInfo.alarmTitle ?? '': {
+        alarmInfo.alarmId,
+        alarmInfo.alarmDateTime,
+        alarmInfo.isRepeating
+      }
     };
 
     Map<String, dynamic> _totalId = <String, dynamic>{};
@@ -45,7 +49,8 @@ class AlarmsService {
                 response.data()!['alarms'][data][1].millisecondsSinceEpoch),
             alarmId: response.data()!['alarms'][data][0],
             alarmTitle: data.toString(),
-            gradientColors: GradientColors.sky));
+            gradientColors: GradientColors.sky,
+            isRepeating: response.data()!['alarms'][data][2]));
       }
     } catch (e) {}
 
