@@ -82,7 +82,7 @@ class DiagnoseCard extends StatelessWidget {
                                 : value.toString() == '2.0'
                                     ? Colors.red
                                     : Colors.red,
-                        fontSize: 30,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold)));
 
                 bool validate2 = _insulinkey.currentState!.validate();

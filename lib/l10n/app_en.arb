@@ -78,7 +78,7 @@
     "successful":"Successful",
     "recover_description":"We will send your plain-text password to this email account.",
     "or_login_with":"or login with",
-    "offline":"Offline",
+    "offline_login":"Offline",
     "email":"Email",
     "tracking_hypo":"You are at risk of hypoglycemia, you should seek medical support.",
     "tracking_hyper":"You are at risk of hyperglycemia, you should seek medical support.",

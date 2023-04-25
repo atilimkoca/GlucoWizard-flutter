@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucowizard_flutter/models/tracking_chart_model.dart';
@@ -127,6 +128,16 @@ class TrackingPage extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.update_glucose),
               content: TextField(
                   controller: popupController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                    TextInputFormatter.withFunction(
+                      (oldValue, newValue) => newValue.copyWith(
+                        text: newValue.text.replaceAll(',', '.'),
+                      ),
+                    ),
+                  ],
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),

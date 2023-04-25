@@ -4,6 +4,7 @@ import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:glucowizard_flutter/components/bottom_navbar.dart';
@@ -64,6 +65,16 @@ class HomePage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0))),
                   content: TextField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                      TextInputFormatter.withFunction(
+                        (oldValue, newValue) => newValue.copyWith(
+                          text: newValue.text.replaceAll(',', '.'),
+                        ),
+                      ),
+                    ],
                     controller: popupController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
