@@ -375,7 +375,7 @@ class _LoginPageState extends State<LoginPage> {
               label: AppLocalizations.of(context)!.offline_login)
         ],
         navigateBackAfterRecovery: false,
-        title: 'GlucoWizard',
+        title: 'DiyaSezi',
         logo: const AssetImage('assets/images/wizard-hat.png'),
         onLogin: _authUser,
         onSignup: _signupUser,

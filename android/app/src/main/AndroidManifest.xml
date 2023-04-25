@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
    <application
         
-        android:label="GlucoWizard"
+        android:label="DiyaSezi"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         

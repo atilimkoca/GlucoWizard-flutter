@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
           Image.asset('assets/images/wizard-hat.png', height: 180, width: 180),
           SizedBox(height: 20),
           const Text(
-            'Diyasezi',
+            'DiyaSezi',
             style: TextStyle(
                 fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
           )
