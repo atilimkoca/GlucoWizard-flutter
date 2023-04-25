@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:glucowizard_flutter/models/gradient_colors.dart';
 import 'package:intl/intl.dart';
 
@@ -45,12 +46,14 @@ class ReminderService {
 
       for (var data in response.data()!['reminders'].keys) {
         _reminders.add(ReminderModel(
-          alarmDateTime: DateTime.fromMillisecondsSinceEpoch(
-              response.data()!['reminders'][data][1].millisecondsSinceEpoch),
-          alarmId: response.data()!['reminders'][data][0],
-          alarmTitle: data.toString(),
-          gradientColors: GradientColors.sky,
-        ));
+            alarmDateTime: DateTime.fromMillisecondsSinceEpoch(
+                response.data()!['reminders'][data][1].millisecondsSinceEpoch),
+            alarmId: response.data()!['reminders'][data][0],
+            alarmTitle: data.toString(),
+            gradientColors: [
+              Color(0xffCCA8E9),
+              Color(0xffCADEFC),
+            ]));
       }
     } catch (e) {}
 

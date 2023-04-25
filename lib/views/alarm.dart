@@ -15,9 +15,10 @@ import 'package:glucowizard_flutter/models/alarm_info.dart';
 import 'package:glucowizard_flutter/models/gradient_colors.dart';
 import 'package:glucowizard_flutter/providers/alarms_provider.dart';
 import 'package:glucowizard_flutter/providers/login_provider.dart';
+import 'package:glucowizard_flutter/providers/reminder_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../providers/profile_provider.dart';
 import '../services/notification.dart';
 import 'alarms_page.dart';
@@ -35,25 +36,38 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
   bool _isRepeatSelected = false;
   DateTime? _alarmTime;
   late String _alarmTimeString;
+  int? _currentTabIndex;
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 2, vsync: this);
+    _currentTabIndex = context.watch<ReminderProvider>().currentTabIndex ?? 0;
+    TabController _tabController =
+        TabController(length: 2, vsync: this, initialIndex: _currentTabIndex!);
+
+    //print(_currentTabIndex);
     List<AlarmInfo> alarms = context.watch<AlarmsProvider>().alarmInfo ?? [];
     var alarmId = context.watch<AlarmsProvider>().alarmId;
     TextEditingController _alarmTitleController = TextEditingController();
     var formatter = new DateFormat.Hm();
-
+    print(_currentTabIndex);
     return Column(children: [
       TabBar(
-        indicatorColor: Colors.greenAccent,
-        indicatorWeight: 7,
+        onTap: (value) {
+          //print(value);
+          context.read<ReminderProvider>().setCurrentTabIndex(value);
+        },
+        indicatorColor: Color(0xffCCA8E9),
+        indicatorWeight: 5,
         labelColor: Colors.black,
         unselectedLabelColor: Colors.grey,
         controller: _tabController,
         tabs: [
-          Tab(icon: Icon(Icons.alarm)),
-          Tab(icon: Icon(Icons.calendar_month)),
+          Tab(
+              icon: Icon(
+            Icons.alarm,
+            size: 30,
+          )),
+          Tab(icon: Icon(Icons.calendar_month, size: 30)),
         ],
       ),
       SizedBox(
@@ -114,28 +128,53 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
                               const SizedBox(
                                 height: 8,
                               ),
-                              Text(alarm.isRepeating! ? 'Repeat' : 'No Repeat',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'avenir',
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700)),
+                              // Icon(
+                              //   alarm.isRepeating!
+                              //       ? Icons.repeat
+                              //       : Icons.looks_one,
+                              //   color: Colors.white,
+                              // ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(formatter.format(alarm.alarmDateTime!),
-                                      style: const TextStyle(
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.alarm,
+                                        color: Colors.white,
+                                        size: 26,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Icon(
+                                          alarm.isRepeating!
+                                              ? Icons.repeat
+                                              : Icons.looks_one,
                                           color: Colors.white,
-                                          fontFamily: 'avenir',
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w700)),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                            formatter
+                                                .format(alarm.alarmDateTime!),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'avenir',
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.w700)),
+                                      ),
+                                    ],
+                                  ),
                                   IconButton(
                                     onPressed: () async {
                                       AlarmInfo data = AlarmInfo(
                                         alarmId: alarmId,
                                         alarmDateTime: _alarmTime,
-                                        gradientColors: GradientColors.sky,
+                                        gradientColors: GradientColors.sunset,
                                         alarmTitle: alarm.alarmTitle,
                                       );
                                       var loginProvider =
@@ -165,7 +204,7 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
                 DottedBorder(
                   dashPattern: [5, 4],
                   strokeWidth: 2,
-                  color: Colors.grey,
+                  color: Color(0xffCCA8E9),
                   borderType: BorderType.RRect,
                   radius: Radius.circular(24),
                   child: Container(
@@ -173,7 +212,7 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
                     height: 100,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
-                        color: Color(0xFF444974)),
+                        color: Color(0xffC3BEF0)),
                     child: MaterialButton(
                       onPressed: () {
                         var profileProvider = Provider.of<ProfileProvider>(
@@ -229,7 +268,9 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       ListTile(
-                                        title: Text('Repeat'),
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .repeat),
                                         trailing: Switch(
                                           onChanged: (value) {
                                             setModalState(() {
@@ -246,13 +287,17 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
                                           title: TextFormField(
                                             validator: (value) {
                                               if (value!.isEmpty) {
-                                                return 'lütfen';
+                                                return AppLocalizations.of(
+                                                        context)!
+                                                    .alarm_error;
                                               }
                                               return null;
                                             },
                                             controller: _alarmTitleController,
                                             decoration: InputDecoration(
-                                              hintText: 'Alarm Name',
+                                              hintText:
+                                                  AppLocalizations.of(context)!
+                                                      .alarm_name,
                                             ),
                                           ),
                                         ),
@@ -285,7 +330,8 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
                                           }
                                         },
                                         icon: Icon(Icons.alarm),
-                                        label: Text('Save'),
+                                        label: Text(
+                                            AppLocalizations.of(context)!.save),
                                       ),
                                     ],
                                   ),
@@ -296,17 +342,16 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            'assets/images/add_alarm.png',
-                            scale: 1.5,
-                          ),
+                          Icon(Icons.add_alarm, color: Colors.white, size: 35),
                           SizedBox(
                             height: 6,
                           ),
                           Text(
-                            'Add Alarm',
+                            AppLocalizations.of(context)!.add_alarm,
                             style: const TextStyle(
-                                color: Colors.white, fontFamily: 'avenir'),
+                                color: Colors.white,
+                                fontFamily: 'avenir',
+                                fontSize: 22),
                           )
                         ],
                       ),
@@ -344,7 +389,7 @@ class _AlarmState extends State<Alarm> with TickerProviderStateMixin {
     AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: profileProvider.users.totalId! + 1,
-            channelKey: 'glucoWizard',
+            channelKey: 'glucoWizard1',
             title: formatter.format(alarmInfo.alarmDateTime!),
             body: alarmInfo.alarmTitle),
         schedule: NotificationCalendar(

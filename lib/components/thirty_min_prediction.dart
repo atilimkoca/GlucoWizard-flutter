@@ -62,7 +62,7 @@ class ThirtyMinPrediction extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              backgroundColor: const Color.fromARGB(255, 164, 201, 255),
+              backgroundColor: const Color(0xffB7A1E0),
             ),
             onPressed: () {
               bool _validate = _formKey.currentState!.validate();
@@ -78,26 +78,37 @@ class ThirtyMinPrediction extends StatelessWidget {
                       predictionController6.text,
                     )
                     .then((value) => CoolAlert.show(
-                          context: context,
-                          confirmBtnText: AppLocalizations.of(context)!.okay,
-                          type: value <= 70
-                              ? CoolAlertType.error
-                              : value > 70 && value <= 140
-                                  ? CoolAlertType.success
-                                  : value > 140 && value <= 200
-                                      ? CoolAlertType.warning
-                                      : CoolAlertType.error,
-                          title: value <= 70
-                              ? AppLocalizations.of(context)!.risk_hypo
-                              : value <= 140 && value > 70
-                                  ? AppLocalizations.of(context)!.normal_value
-                                  : value <= 200 && value > 140
-                                      ? AppLocalizations.of(context)!
-                                          .hidden_sugar
-                                      : AppLocalizations.of(context)!
-                                          .risk_hyper,
-                          text: value.toStringAsFixed(2),
-                        ));
+                        context: context,
+                        confirmBtnColor: Color.fromARGB(255, 142, 97, 209),
+                        confirmBtnText: AppLocalizations.of(context)!.okay,
+                        backgroundColor: Color.fromARGB(255, 213, 196, 238),
+                        type: CoolAlertType.success,
+                        loopAnimation: true,
+                        lottieAsset: value <= 70
+                            ? 'assets/images/hypo_prediction.json'
+                            : value <= 180 && value > 70
+                                ? 'assets/images/heart.json'
+                                : value > 180
+                                    ? 'assets/images/hyper_prediction.json'
+                                    : 'assets/images/hyper_prediction.json',
+                        title: value <= 70
+                            ? '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.risk_hypo}'
+                            : value <= 180 && value > 70
+                                ? '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.normal_value}'
+                                : value > 180
+                                    ? '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.risk_hyper}'
+                                    : '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.risk_hyper}',
+                        text: value.toStringAsFixed(2),
+                        textTextStyle: TextStyle(
+                            color: value <= 70
+                                ? Color.fromARGB(255, 150, 228, 235)
+                                : value <= 180 && value > 70
+                                    ? Colors.green
+                                    : value > 180
+                                        ? Colors.red
+                                        : Colors.red,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold)));
               } else {
                 print('hata yok');
               }
@@ -106,10 +117,11 @@ class ThirtyMinPrediction extends StatelessWidget {
               AppLocalizations.of(context)!.prediction,
             )),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.478,
+          height: MediaQuery.of(context).size.height * 0.41,
           child: Form(
             key: _formKey,
             child: StackedCardCarousel(
+              initialOffset: 6,
               type: StackedCardCarouselType.fadeOutStack,
               onPageChanged: (pageIndex) {},
               spaceBetweenItems: 200,
@@ -117,19 +129,21 @@ class ThirtyMinPrediction extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  color: const Color.fromARGB(255, 242, 243, 204),
+                  color: const Color(0xffFFEFEF),
                   elevation: 30.0,
-                  shadowColor: Colors.amber,
+                  shadowColor: const Color(0xffFFEFEF),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          width: 50,
-                          height: 50,
+                          width: 60,
+                          height: 60,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
-                            child: Image.asset("assets/images/twenty-five.png"),
+                            child: Image.asset(
+                              "assets/images/twenty_five.png",
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -149,10 +163,10 @@ class ThirtyMinPrediction extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],
@@ -175,16 +189,16 @@ class ThirtyMinPrediction extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  color: const Color.fromARGB(255, 242, 243, 204),
+                  color: const Color(0xffFFEFEF),
                   elevation: 30.0,
-                  shadowColor: Colors.amber,
+                  shadowColor: const Color(0xffFFEFEF),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          width: 50,
-                          height: 50,
+                          width: 60,
+                          height: 60,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Image.asset("assets/images/twenty.png"),
@@ -206,10 +220,10 @@ class ThirtyMinPrediction extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],
@@ -232,16 +246,16 @@ class ThirtyMinPrediction extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  color: const Color.fromARGB(255, 242, 243, 204),
+                  color: const Color(0xffFFEFEF),
                   elevation: 30.0,
-                  shadowColor: Colors.amber,
+                  shadowColor: const Color(0xffFFEFEF),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          width: 50,
-                          height: 50,
+                          width: 60,
+                          height: 60,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Image.asset("assets/images/fifteen.png"),
@@ -263,10 +277,10 @@ class ThirtyMinPrediction extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],
@@ -288,16 +302,16 @@ class ThirtyMinPrediction extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  color: const Color.fromARGB(255, 242, 243, 204),
+                  color: const Color(0xffFFEFEF),
                   elevation: 30.0,
-                  shadowColor: Colors.amber,
+                  shadowColor: const Color(0xffFFEFEF),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          width: 50,
-                          height: 50,
+                          width: 60,
+                          height: 60,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Image.asset("assets/images/ten.png"),
@@ -319,10 +333,10 @@ class ThirtyMinPrediction extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],
@@ -344,9 +358,9 @@ class ThirtyMinPrediction extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  color: const Color.fromARGB(255, 242, 243, 204),
+                  color: const Color(0xffFFEFEF),
                   elevation: 30.0,
-                  shadowColor: Colors.amber,
+                  shadowColor: const Color(0xffFFEFEF),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -375,10 +389,10 @@ class ThirtyMinPrediction extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],
@@ -400,19 +414,19 @@ class ThirtyMinPrediction extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  color: const Color.fromARGB(255, 242, 243, 204),
+                  color: const Color(0xffFFEFEF),
                   elevation: 30.0,
-                  shadowColor: Colors.amber,
+                  shadowColor: const Color(0xffFFEFEF),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          width: 50,
-                          height: 50,
+                          width: 60,
+                          height: 60,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
-                            child: Image.asset("assets/images/now.png"),
+                            child: Image.asset("assets/images/present.png"),
                           ),
                         ),
                         SizedBox(
@@ -431,10 +445,10 @@ class ThirtyMinPrediction extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                               TextInputFormatter.withFunction(
                                 (oldValue, newValue) => newValue.copyWith(
-                                  text: newValue.text.replaceAll('.', ','),
+                                  text: newValue.text.replaceAll(',', '.'),
                                 ),
                               ),
                             ],

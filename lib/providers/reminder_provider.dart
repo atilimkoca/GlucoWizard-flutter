@@ -48,4 +48,11 @@ class ReminderProvider extends ChangeNotifier {
     getReminders(uid);
     notifyListeners();
   }
+
+  int? _currentTabIndex;
+  int? get currentTabIndex => _currentTabIndex;
+  void setCurrentTabIndex(int index) {
+    _currentTabIndex = index;
+    notifyListeners();
+  }
 }

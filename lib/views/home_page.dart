@@ -15,6 +15,7 @@ import 'package:glucowizard_flutter/providers/bottom_navbar_provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:glucowizard_flutter/providers/login_provider.dart';
 import 'package:glucowizard_flutter/providers/prediction_provider.dart';
+import 'package:glucowizard_flutter/providers/profile_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
 
 import 'package:glucowizard_flutter/views/alarms_page.dart';
@@ -58,116 +59,134 @@ class HomePage extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text('TextField in Dialog'),
+                  insetPadding: EdgeInsets.all(5),
+                  title: Text(AppLocalizations.of(context)!.new_record),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32.0))),
                   content: TextField(
                     controller: popupController,
-                    decoration:
-                        const InputDecoration(hintText: "Text Field in Dialog"),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      labelText:
+                          AppLocalizations.of(context)!.enterGlucoseValue,
+                    ),
                   ),
                   actions: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Checkbox(
-                              value: context
-                                  .watch<TrackingChartProvider>()
-                                  .checkboxValue,
-                              onChanged: (selected) {
-                                context
-                                    .read<TrackingChartProvider>()
-                                    .setcheckboxValue(
-                                        trackingChartProvider.checkboxValue!
-                                            ? false
-                                            : true);
+                    Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: context
+                                    .watch<TrackingChartProvider>()
+                                    .checkboxValue,
+                                onChanged: (selected) {
+                                  context
+                                      .read<TrackingChartProvider>()
+                                      .setcheckboxValue(
+                                          trackingChartProvider.checkboxValue!
+                                              ? false
+                                              : true);
 
-                                Navigator.of(context).push(
-                                  showPicker(
-                                    barrierDismissible: false,
-                                    is24HrFormat: true,
-                                    context: context,
-                                    value: _time,
-                                    onChange: (time) {},
-                                    onChangeDateTime: (p0) {
-                                      var dateNow = DateTime.now();
-                                      print(dateNow);
-                                      var stringDate = p0.toString();
-                                      const dateTimeString =
-                                          '2020-07-17T03:18:31.177769-04:00';
-                                      final dateTime = DateTime.parse(
-                                          stringDate.replaceFirst(
-                                              RegExp(r'-\d\d:\d\d'), ''));
+                                  Navigator.of(context).push(
+                                    showPicker(
+                                      barrierDismissible: false,
+                                      is24HrFormat: true,
+                                      context: context,
+                                      cancelText:
+                                          AppLocalizations.of(context)!.cancel,
+                                      okText:
+                                          AppLocalizations.of(context)!.okay,
+                                      value: _time,
+                                      onChange: (time) {},
+                                      onChangeDateTime: (p0) {
+                                        var dateNow = DateTime.now();
+                                        print(dateNow);
+                                        var stringDate = p0.toString();
+                                        const dateTimeString =
+                                            '2020-07-17T03:18:31.177769-04:00';
+                                        final dateTime = DateTime.parse(
+                                            stringDate.replaceFirst(
+                                                RegExp(r'-\d\d:\d\d'), ''));
 
-                                      final format = DateFormat.Hm();
-                                      // final clockString =
-                                      //     format.format(dateTime);
-                                      // var testTime = DateTime.parse(
-                                      //     '${currentDate}T$clockString');
-                                      // print(
-                                      //     format.format(testTime)); // 03:18 AM
-                                      var formatter = DateFormat.Hm();
-                                      // if (languageProvider.locale.toString() ==
-                                      //     'tr_TR') {
-                                      //   formatter = DateFormat.Hm();
-                                      // } else {
-                                      //   formatter = DateFormat.jm();
-                                      // }
+                                        final format = DateFormat.Hm();
+                                        // final clockString =
+                                        //     format.format(dateTime);
+                                        // var testTime = DateTime.parse(
+                                        //     '${currentDate}T$clockString');
+                                        // print(
+                                        //     format.format(testTime)); // 03:18 AM
+                                        var formatter = DateFormat.Hm();
+                                        // if (languageProvider.locale.toString() ==
+                                        //     'tr_TR') {
+                                        //   formatter = DateFormat.Hm();
+                                        // } else {
+                                        //   formatter = DateFormat.jm();
+                                        // }
 
-                                      String formattedHour =
-                                          formatter.format(p0);
-                                      //print(formattedHour);
-                                      context
-                                          .read<TrackingChartProvider>()
-                                          .setCurrentHour(formattedHour);
-                                      context
-                                          .read<TrackingChartProvider>()
-                                          .setcheckboxValue(false);
+                                        String formattedHour =
+                                            formatter.format(p0);
+                                        //print(formattedHour);
+                                        context
+                                            .read<TrackingChartProvider>()
+                                            .setCurrentHour(formattedHour);
+                                        context
+                                            .read<TrackingChartProvider>()
+                                            .setcheckboxValue(false);
 
-                                      Navigator.pop(context);
-                                    },
-                                    onCancel: () {
-                                      context
-                                          .read<TrackingChartProvider>()
-                                          .setcheckboxValue(true);
+                                        Navigator.pop(context);
+                                      },
+                                      onCancel: () {
+                                        context
+                                            .read<TrackingChartProvider>()
+                                            .setcheckboxValue(true);
 
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text('Anlık değer'),
-                            )
-                          ],
-                        ),
-                        MaterialButton(
-                          color: Colors.green,
-                          textColor: Colors.white,
-                          child: const Text('OK'),
-                          onPressed: () {
-                            // var date = DateTime.now();
-                            // var formatter = DateFormat('yyyy-MM-dd');
-                            //String formattedDate = formatter.format(date);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 0.0),
+                                child: Text(
+                                    AppLocalizations.of(context)!.current_time),
+                              )
+                            ],
+                          ),
+                          MaterialButton(
+                            color: Colors.green,
+                            textColor: Colors.white,
+                            child: Text(AppLocalizations.of(context)!.okay),
+                            onPressed: () {
+                              // var date = DateTime.now();
+                              // var formatter = DateFormat('yyyy-MM-dd');
+                              //String formattedDate = formatter.format(date);
 
-                            var currentDate = trackingChartProvider.currentDate;
-                            var currentHour = trackingChartProvider.currentHour;
-                            TrackingChart chart = TrackingChart(
-                                uid: context.read<LoginPageProvider>().userId,
-                                date: currentDate,
-                                hour: currentHour,
-                                glucoseLevel: popupController.text);
-                            context
-                                .read<TrackingChartProvider>()
-                                .addTrackingChart(chart,
-                                    trackingChartProvider.checkboxValue!);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
+                              var currentDate =
+                                  trackingChartProvider.currentDate;
+                              var currentHour =
+                                  trackingChartProvider.currentHour;
+                              TrackingChart chart = TrackingChart(
+                                  uid: context.read<LoginPageProvider>().userId,
+                                  date: currentDate,
+                                  hour: currentHour,
+                                  glucoseLevel: popupController.text);
+                              context
+                                  .read<TrackingChartProvider>()
+                                  .addTrackingChart(chart,
+                                      trackingChartProvider.checkboxValue!);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                   actionsAlignment: MainAxisAlignment.spaceBetween,
@@ -233,7 +252,7 @@ class HomePage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 239, 245),
+      backgroundColor: const Color(0xffe8dff6),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
           actions: [
@@ -255,7 +274,7 @@ class HomePage extends StatelessWidget {
                       dropdownStyleData: DropdownStyleData(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(14),
-                            color: const Color(0xff3AB4F2),
+                            color: const Color.fromARGB(255, 142, 97, 209),
                           ),
                           elevation: 8,
                           scrollbarTheme: ScrollbarThemeData(
@@ -277,7 +296,25 @@ class HomePage extends StatelessWidget {
                         var predictionProvider =
                             Provider.of<PredictionProvider>(context,
                                 listen: false);
+                        var profileProvider = Provider.of<ProfileProvider>(
+                            context,
+                            listen: false);
                         var head = predictionProvider.head;
+                        var head2 = predictionProvider.head2;
+                        var gender = profileProvider.gender;
+                        if (gender == 'Erkek' &&
+                            languageProvider.locale.toString() == 'en') {
+                          profileProvider.setGender('Male');
+                        } else if (gender == 'Male' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          profileProvider.setGender('Erkek');
+                        } else if (gender == 'Female' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          profileProvider.setGender('Kadın');
+                        } else if (gender == 'Kadın' &&
+                            languageProvider.locale.toString() == 'en') {
+                          profileProvider.setGender('Female');
+                        }
                         if (head == '15 Dakika' &&
                             languageProvider.locale.toString() == 'en') {
                           predictionProvider.setHead('15 Minute');
@@ -316,6 +353,43 @@ class HomePage extends StatelessWidget {
                           predictionProvider.setHead('120 Dakika');
                         }
                         //context.read<PredictionProvider>().setHead(e!);
+                        if (head2 == '15 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead2('15 Minute');
+                        } else if (head2 == '15 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead2('15 Dakika');
+                        } else if (head2 == '30 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead2('30 Minute');
+                        } else if (head2 == '30 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead2('30 Dakika');
+                        } else if (head2 == '45 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead2('45 Minute');
+                        } else if (head2 == '45 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead2('45 Dakika');
+                        } else if (head2 == '60 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead2('60 Minute');
+                        } else if (head2 == '60 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead2('60 Dakika');
+                        } else if (head2 == '90 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead2('90 Minute');
+                        } else if (head2 == '90 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead2('90 Dakika');
+                        } else if (head2 == '120 Dakika' &&
+                            languageProvider.locale.toString() == 'en') {
+                          predictionProvider.setHead2('120 Minute');
+                        } else if (head2 == '120 Minute' &&
+                            languageProvider.locale.toString() == 'tr') {
+                          predictionProvider.setHead2('120 Dakika');
+                        }
                       },
                       items: L10n.all
                           .map((e) => DropdownMenuItem(
@@ -372,7 +446,7 @@ class HomePage extends StatelessWidget {
             //   },
             // )
           ],
-          backgroundColor: const Color(0xff3AB4F2),
+          backgroundColor: Color.fromARGB(255, 142, 97, 209),
           title: Text(
             loginPageProvider.offline == false
                 ? pageIndex.toString() == '0'
@@ -411,8 +485,12 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 _displayTextInputDialog(context);
               },
-              backgroundColor: const Color(0xff3AB4F2),
-              child: const Icon(Icons.add),
+              backgroundColor: const Color(0xff9971d6),
+              child: const Icon(
+                LineIcons.calendarPlus,
+                color: Colors.white,
+                size: 35,
+              ),
             )
           : null,
       bottomNavigationBar: BottomNavbar(),

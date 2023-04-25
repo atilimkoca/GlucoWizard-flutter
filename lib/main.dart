@@ -23,6 +23,7 @@ import 'package:glucowizard_flutter/services/notification.dart';
 import 'package:glucowizard_flutter/views/login_page.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:glucowizard_flutter/views/splash_screen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -59,6 +60,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    MaterialColor mycolor = MaterialColor(
+      0xFF8e61d1,
+      <int, Color>{
+        50: Color(0xFF8e61d1),
+        100: Color(0xFF9971d6),
+        200: Color(0xFFa581da),
+        300: Color(0xFFb090df),
+        400: Color(0xFFbba0e3),
+        500: Color(0xFFc7b0e8),
+        600: Color(0xFFd2c0ed),
+        700: Color(0xFFddd0f1),
+        800: Color(0xFFf4effa),
+        900: Color(0xFFffffff),
+      },
+    );
     return MaterialApp(
       // translations: LocaleStrings(),
 
@@ -66,8 +82,19 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
 
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          // primarySwatch: MaterialColor.new(1, {
+          //   50: Color(0xFF8E61D1),
+          //   100: Color(0xFF8E61D1),
+          //   200: Color(0xFF8E61D1),
+          //   300: Color(0xFF8E61D1),
+          //   400: Color(0xFF8E61D1),
+          //   500: Color(0xFF8E61D1),
+          //   600: Color(0xFF8E61D1),
+          //   700: Color(0xFF8E61D1),
+          //   800: Color(0xFF8E61D1),
+          //   900: Color(0xFF8E61D1),
+          // }),
+          primarySwatch: mycolor),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -75,7 +102,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: L10n.all,
-      home: const LoginPage(),
+      home: const SplashScreen(),
       locale: context.watch<LanguageProvider>().locale ??
           Locale(Platform.localeName.split('_')[0]),
     );

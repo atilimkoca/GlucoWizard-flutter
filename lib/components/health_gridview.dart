@@ -127,7 +127,7 @@ class HealthGridView extends StatelessWidget {
             'assets/images/foot_care/Slayt1.JPG',
             'assets/images/foot_care/Slayt3.JPG',
             'assets/images/foot_care/Slayt5.JPG',
-            'assets/images/foot_care/Slayt7.JPG',
+            'assets/images/foot_care/Slayt6.JPG',
             'assets/images/foot_care/Slayt9.JPG',
             'assets/images/foot_care/Slayt11.JPG',
             'assets/images/foot_care/Slayt13.JPG',
@@ -136,7 +136,7 @@ class HealthGridView extends StatelessWidget {
           return [
             'assets/images/foot_care/Slayt2.JPG',
             'assets/images/foot_care/Slayt4.JPG',
-            'assets/images/foot_care/Slayt6.JPG',
+            'assets/images/foot_care/Slayt7.JPG',
             'assets/images/foot_care/Slayt8.JPG',
             'assets/images/foot_care/Slayt10.JPG',
             'assets/images/foot_care/Slayt12.JPG',

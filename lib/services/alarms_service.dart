@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:glucowizard_flutter/models/gradient_colors.dart';
 import 'package:intl/intl.dart';
 
@@ -49,7 +50,10 @@ class AlarmsService {
                 response.data()!['alarms'][data][1].millisecondsSinceEpoch),
             alarmId: response.data()!['alarms'][data][0],
             alarmTitle: data.toString(),
-            gradientColors: GradientColors.sky,
+            gradientColors: [
+              Color(0xffCCA8E9),
+              Color(0xffCADEFC),
+            ],
             isRepeating: response.data()!['alarms'][data][2]));
       }
     } catch (e) {}

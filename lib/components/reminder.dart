@@ -7,7 +7,7 @@ import 'package:glucowizard_flutter/models/reminder_model.dart';
 import 'package:glucowizard_flutter/providers/reminder_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/gradient_colors.dart';
 import '../providers/login_provider.dart';
 import '../providers/profile_provider.dart';
@@ -87,21 +87,47 @@ class _ReminderState extends State<Reminder> {
                         const SizedBox(
                           height: 8,
                         ),
-                        Text(formatter.format(alarm.alarmDateTime!),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'avenir',
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700)),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.access_time,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                  formatter.format(alarm.alarmDateTime!),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'avenir',
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700)),
+                            ),
+                          ],
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(formatter1.format(alarm.alarmDateTime!),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'avenir',
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700)),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                      formatter1.format(alarm.alarmDateTime!),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'avenir',
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w700)),
+                                ),
+                              ],
+                            ),
                             IconButton(
                               onPressed: () async {
                                 ReminderModel data = ReminderModel(
@@ -135,7 +161,7 @@ class _ReminderState extends State<Reminder> {
           DottedBorder(
             dashPattern: [5, 4],
             strokeWidth: 2,
-            color: Colors.grey,
+            color: Color(0xffCCA8E9),
             borderType: BorderType.RRect,
             radius: Radius.circular(24),
             child: Container(
@@ -143,7 +169,7 @@ class _ReminderState extends State<Reminder> {
               height: 100,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
-                  color: Color(0xFF444974)),
+                  color: Color(0xffC3BEF0)),
               child: MaterialButton(
                 onPressed: () {
                   var profileProvider =
@@ -252,13 +278,15 @@ class _ReminderState extends State<Reminder> {
                                     title: TextFormField(
                                       validator: (value) {
                                         if (value!.isEmpty) {
-                                          return 'lütfen';
+                                          return AppLocalizations.of(context)!
+                                              .alarm_error;
                                         }
                                         return null;
                                       },
                                       controller: _alarmTitleController,
                                       decoration: InputDecoration(
-                                        hintText: 'Alarm Name',
+                                        hintText: AppLocalizations.of(context)!
+                                            .alarm_name,
                                       ),
                                     ),
                                   ),
@@ -289,7 +317,8 @@ class _ReminderState extends State<Reminder> {
                                     }
                                   },
                                   icon: Icon(Icons.alarm),
-                                  label: Text('Save'),
+                                  label:
+                                      Text(AppLocalizations.of(context)!.save),
                                 ),
                               ],
                             ),
@@ -300,17 +329,16 @@ class _ReminderState extends State<Reminder> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/add_alarm.png',
-                      scale: 1.5,
-                    ),
+                    Icon(Icons.add_alarm, color: Colors.white, size: 35),
                     SizedBox(
                       height: 6,
                     ),
                     Text(
-                      'Add Reminder',
+                      AppLocalizations.of(context)!.add_reminder,
                       style: const TextStyle(
-                          color: Colors.white, fontFamily: 'avenir'),
+                          color: Colors.white,
+                          fontFamily: 'avenir',
+                          fontSize: 22),
                     )
                   ],
                 ),

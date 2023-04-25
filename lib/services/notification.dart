@@ -9,7 +9,7 @@ class NotificationService {
         null,
         [
           NotificationChannel(
-              channelKey: 'glucoWizard',
+              channelKey: 'glucoWizard1',
               channelName: 'GlucoWizard notifications',
               channelDescription: 'GlucoWizard Application Notifications',
               defaultColor: Color(0xFF9D50DD),
@@ -83,7 +83,7 @@ class NotificationService {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: -1,
-          channelKey: 'glucoWizard',
+          channelKey: 'glucoWizard1',
           title: title,
           body: body,
           summary: summary,

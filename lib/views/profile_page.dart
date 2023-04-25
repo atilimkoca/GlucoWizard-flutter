@@ -4,6 +4,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:glucowizard_flutter/providers/language_provider.dart';
 import 'package:glucowizard_flutter/providers/login_provider.dart';
 import 'package:glucowizard_flutter/providers/profile_provider.dart';
 
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../models/tracking_chart_model.dart';
 import '../models/user_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -33,10 +35,6 @@ class _ProfilePageState extends State<ProfilePage>
   TextEditingController _heightController = TextEditingController();
   TextEditingController _weightController = TextEditingController();
   var water;
-  final List<String> items = [
-    "Erkek",
-    "Kadın",
-  ];
 
   String _status = '?', _steps = '?';
   @override
@@ -60,7 +58,11 @@ class _ProfilePageState extends State<ProfilePage>
     if (profileProvider.users.counter == 1) {
       await profileProvider.pastSteps(loginProvider.userId!, event.steps);
     }
+    print(event.steps);
     await context.read<ProfileProvider>().getInfos(loginProvider.userId!);
+    if (event.steps < profileProvider.users.pastSteps!) {
+      await profileProvider.pastSteps(loginProvider.userId!, event.steps);
+    }
     setState(() {
       if (profileProvider.users.counter == 1) {
         profileProvider.setOldSteps(event.steps);
@@ -118,6 +120,39 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
+    var profileProvider1 = Provider.of<ProfileProvider>(context, listen: false);
+    var gender = profileProvider1.users.gender == 'Male' &&
+            languageProvider.locale.toString() == 'en'
+        ? 'Male'
+        : profileProvider1.users.gender == 'Male' &&
+                languageProvider.locale.toString() == 'tr'
+            ? 'Erkek'
+            : profileProvider1.users.gender == 'Erkek' &&
+                    languageProvider.locale.toString() == 'en'
+                ? 'Male'
+                : profileProvider1.users.gender == 'Erkek' &&
+                        languageProvider.locale.toString() == 'tr'
+                    ? 'Erkek'
+                    : profileProvider1.users.gender == 'Kadın' &&
+                            languageProvider.locale.toString() == 'tr'
+                        ? 'Kadın'
+                        : profileProvider1.users.gender == 'Kadın' &&
+                                languageProvider.locale.toString() == 'en'
+                            ? 'Female'
+                            : profileProvider1.users.gender == 'Female' &&
+                                    languageProvider.locale.toString() == 'en'
+                                ? 'Female'
+                                : profileProvider1.users.gender == 'Female' &&
+                                        languageProvider.locale.toString() ==
+                                            'tr'
+                                    ? 'Kadın'
+                                    : "";
+    final List<String> items = [
+      AppLocalizations.of(context)!.male,
+      AppLocalizations.of(context)!.female,
+    ];
     water = double.parse(context.watch<ProfileProvider>().users.water!);
     print(context.watch<ProfileProvider>().users.water);
     var profileProvider = Provider.of<ProfileProvider>(context, listen: false);
@@ -135,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage>
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
             child: Card(
-              color: Colors.white,
+              color: Color.fromARGB(255, 246, 244, 248),
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -147,91 +182,318 @@ class _ProfilePageState extends State<ProfilePage>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Kişisel Bilgiler",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            const Text(
-                              "İsim: ",
-                              style: TextStyle(fontSize: 16),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                AppLocalizations.of(context)!.personal_info,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                            Text(
-                                '\t${context.watch<ProfileProvider>().users.name ?? ""}',
-                                style: const TextStyle(fontSize: 16)),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const Text(
-                              "Soyisim: ",
-                              style: TextStyle(fontSize: 16),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 107,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Image.asset(
+                                            'assets/images/person.png',
+                                            scale: 4,
+                                          ),
+                                        ),
+                                        Text(
+                                          AppLocalizations.of(context)!.name,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  ),
+                                  Container(
+                                    width: 107,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xffCCA8E9),
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(12),
+                                            bottomLeft: Radius.circular(12))),
+                                    child: Center(
+                                      child: Text(
+                                          '\t${context.watch<ProfileProvider>().users.name ?? ""}',
+                                          style: const TextStyle(fontSize: 20)),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  )
+                                ],
+                              ),
                             ),
-                            Text(
-                                '\t${context.watch<ProfileProvider>().users.surname ?? ""}',
-                                style: const TextStyle(fontSize: 16)),
+                            Container(
+                              width: 107,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 4),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 0.0),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 0.0, left: 0),
+                                            child: Image.asset(
+                                                'assets/images/surname.png',
+                                                scale: 4),
+                                          ),
+                                          Text(
+                                            AppLocalizations.of(context)!
+                                                .surname,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(11),
+                                  ),
+                                  Container(
+                                    width: 107,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xffCCA8E9),
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(12),
+                                            bottomLeft: Radius.circular(12))),
+                                    child: Center(
+                                      child: Text(
+                                          '\t${context.watch<ProfileProvider>().users.surname ?? ""}',
+                                          style: const TextStyle(fontSize: 20)),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 107,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 107,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 2.0),
+                                          child: Image.asset(
+                                              'assets/images/gender.png',
+                                              scale: 4),
+                                        ),
+                                        Text(
+                                          AppLocalizations.of(context)!.gender,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  ),
+                                  Container(
+                                    width: 107,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xffCCA8E9),
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(12),
+                                            bottomLeft: Radius.circular(12))),
+                                    child: Center(
+                                      child: Text('\t${gender}',
+                                          style: const TextStyle(fontSize: 20)),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 15,
+                        ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const Text(
-                              "Yaş :",
-                              style: TextStyle(fontSize: 16),
+                            Container(
+                              width: 107,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Image.asset(
+                                              'assets/images/age.png',
+                                              scale: 4),
+                                        ),
+                                        Text(
+                                          AppLocalizations.of(context)!.age,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  ),
+                                  Container(
+                                    width: 107,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xffCCA8E9),
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(12),
+                                            bottomLeft: Radius.circular(12))),
+                                    child: Center(
+                                      child: Text(
+                                          '\t${context.watch<ProfileProvider>().users.age ?? ""}',
+                                          style: const TextStyle(fontSize: 20)),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  )
+                                ],
+                              ),
                             ),
-                            Text(
-                                '\t${context.watch<ProfileProvider>().users.age ?? ""}',
-                                style: const TextStyle(fontSize: 16)),
+                            Container(
+                              width: 107,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 107,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Image.asset(
+                                              'assets/images/height.png',
+                                              scale: 4),
+                                        ),
+                                        Text(
+                                          AppLocalizations.of(context)!.height,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  ),
+                                  Container(
+                                    width: 107,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xffCCA8E9),
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(12),
+                                            bottomLeft: Radius.circular(12))),
+                                    child: Center(
+                                      child: Text(
+                                          '\t${context.watch<ProfileProvider>().users.height ?? ""}',
+                                          style: const TextStyle(fontSize: 20)),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 107,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 107,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
+                                          child: Image.asset(
+                                              'assets/images/weight.png',
+                                              scale: 4),
+                                        ),
+                                        Text(
+                                          AppLocalizations.of(context)!.weight,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  ),
+                                  Container(
+                                    width: 107,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xffCCA8E9),
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(12),
+                                            bottomLeft: Radius.circular(12))),
+                                    child: Center(
+                                      child: Text(
+                                          '\t${context.watch<ProfileProvider>().users.weight ?? ""}',
+                                          style: const TextStyle(fontSize: 20)),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 8),
                         Row(
-                          children: [
-                            const Text(
-                              "Cinsiyet :",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                                '\t${context.watch<ProfileProvider>().users.gender ?? ""}',
-                                style: const TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Text(
-                              "Boy :",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                                '\t${context.watch<ProfileProvider>().users.height ?? ""}',
-                                style: const TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Text(
-                              "Kilo :",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                                '\t${context.watch<ProfileProvider>().users.weight ?? ""}',
-                                style: const TextStyle(fontSize: 16)),
-                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [],
                         ),
                       ],
                     ),
                   ),
                   Positioned(
-                    top: 10,
-                    right: 10,
+                    top: 0.002,
+                    right: 0.002,
                     child: IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
@@ -244,7 +506,8 @@ class _ProfilePageState extends State<ProfilePage>
                                 height:
                                     MediaQuery.of(context).size.height * 0.8,
                                 child: AlertDialog(
-                                  title: const Text('Kişisel Bilgiler'),
+                                  title: Text(AppLocalizations.of(context)!
+                                      .personal_info),
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -258,7 +521,9 @@ class _ProfilePageState extends State<ProfilePage>
                                                 borderRadius:
                                                     BorderRadius.circular(20),
                                               ),
-                                              labelText: "Name",
+                                              labelText:
+                                                  AppLocalizations.of(context)!
+                                                      .name,
                                             ),
                                           ),
                                         ),
@@ -271,7 +536,9 @@ class _ProfilePageState extends State<ProfilePage>
                                                 borderRadius:
                                                     BorderRadius.circular(20),
                                               ),
-                                              labelText: "Surname",
+                                              labelText:
+                                                  AppLocalizations.of(context)!
+                                                      .surname,
                                             ),
                                           ),
                                         ),
@@ -285,7 +552,9 @@ class _ProfilePageState extends State<ProfilePage>
                                                 borderRadius:
                                                     BorderRadius.circular(20),
                                               ),
-                                              labelText: "Age",
+                                              labelText:
+                                                  AppLocalizations.of(context)!
+                                                      .age,
                                             ),
                                           ),
                                         ),
@@ -299,7 +568,9 @@ class _ProfilePageState extends State<ProfilePage>
                                                 borderRadius:
                                                     BorderRadius.circular(20),
                                               ),
-                                              labelText: "Height",
+                                              labelText:
+                                                  AppLocalizations.of(context)!
+                                                      .height,
                                             ),
                                           ),
                                         ),
@@ -313,7 +584,9 @@ class _ProfilePageState extends State<ProfilePage>
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
-                                                labelText: "Weight"),
+                                                labelText: AppLocalizations.of(
+                                                        context)!
+                                                    .weight),
                                           ),
                                         ),
                                         Padding(
@@ -321,7 +594,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           child: DropdownButton2(
                                               isExpanded: true,
                                               hint: Row(
-                                                children: const [
+                                                children: [
                                                   Icon(
                                                     Icons.list,
                                                     size: 16,
@@ -332,7 +605,9 @@ class _ProfilePageState extends State<ProfilePage>
                                                   ),
                                                   Expanded(
                                                     child: Text(
-                                                      "Cinsiyet",
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .gender,
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
@@ -356,8 +631,8 @@ class _ProfilePageState extends State<ProfilePage>
                                                   border: Border.all(
                                                     color: Colors.black26,
                                                   ),
-                                                  color: const Color.fromARGB(
-                                                      255, 164, 201, 255),
+                                                  color:
+                                                      const Color(0xffB7A1E0),
                                                 ),
                                                 elevation: 2,
                                               ),
@@ -379,9 +654,8 @@ class _ProfilePageState extends State<ProfilePage>
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(14),
-                                                        color: const Color
-                                                                .fromARGB(
-                                                            255, 164, 201, 255),
+                                                        color: const Color(
+                                                            0xffB7A1E0),
                                                       ),
                                                       elevation: 8,
                                                       offset:
@@ -438,9 +712,10 @@ class _ProfilePageState extends State<ProfilePage>
                                   ),
                                   actions: <Widget>[
                                     MaterialButton(
-                                      color: Colors.green,
+                                      color: const Color(0xffB7A1E0),
                                       textColor: Colors.white,
-                                      child: const Text('OK'),
+                                      child: Text(
+                                          AppLocalizations.of(context)!.okay),
                                       onPressed: () {
                                         var loginProvider =
                                             Provider.of<LoginPageProvider>(
@@ -495,9 +770,9 @@ class _ProfilePageState extends State<ProfilePage>
                   children: [
                     Column(
                       children: [
-                        Text('Günlük su tüketim miktarı\n'),
+                        Text('${AppLocalizations.of(context)!.water}\n'),
                         Text(
-                            '${context.watch<ProfileProvider>().users.water ?? 0}/2000 ml'),
+                            '${context.watch<ProfileProvider>().users.water ?? 0}/2000 mL'),
                       ],
                     ),
                     Row(
@@ -506,78 +781,100 @@ class _ProfilePageState extends State<ProfilePage>
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            IconButton(
-                              onPressed: () {
+                            GestureDetector(
+                              onTap: () {
                                 var newWater = profileProvider.water! + 100;
                                 context
                                     .read<ProfileProvider>()
                                     .setWater(newWater, loginProvider.userId!);
                               },
-                              icon: const Icon(Icons.water),
+                              child: Image.asset(
+                                'assets/images/100water.png',
+                                scale: 1.6,
+                              ),
                             ),
-                            const Text('100 ml')
+                            const Text('100 mL')
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            IconButton(
-                              onPressed: () {
+                            GestureDetector(
+                              onTap: () {
                                 var newWater = profileProvider.water! + 200;
                                 context
                                     .read<ProfileProvider>()
                                     .setWater(newWater, loginProvider.userId!);
                               },
-                              icon: const Icon(
-                                Icons.water,
+                              child: Image.asset(
+                                'assets/images/200water.png',
+                                scale: 2.5,
                               ),
                             ),
-                            const Text('200 ml')
+                            const Text('200 mL')
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            IconButton(
-                              onPressed: () {
+                            GestureDetector(
+                              onTap: () {
                                 var newWater = profileProvider.water! + 300;
                                 context
                                     .read<ProfileProvider>()
                                     .setWater(newWater, loginProvider.userId!);
                               },
-                              icon: const Icon(Icons.water),
+                              child: Image.asset(
+                                'assets/images/300water.png',
+                                scale: 3.2,
+                              ),
                             ),
-                            const Text('300 ml')
+                            const Text('300 mL')
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            IconButton(
-                              onPressed: () {
+                            GestureDetector(
+                              onTap: () {
                                 var newWater = profileProvider.water! + 400;
                                 context
                                     .read<ProfileProvider>()
                                     .setWater(newWater, loginProvider.userId!);
                               },
-                              icon: const Icon(Icons.water),
+                              child: Image.asset(
+                                'assets/images/400water.png',
+                                scale: 4,
+                              ),
                             ),
-                            const Text('400 ml')
+                            const Text('400 mL')
                           ],
                         ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(
-                              onPressed: () {
+                            // IconButton(
+                            //   onPressed: () {
+                            //     var newWater = profileProvider.water! + 500;
+                            //     context
+                            //         .read<ProfileProvider>()
+                            //         .setWater(newWater, loginProvider.userId!);
+                            //   },
+                            //   icon: const Icon(Icons.water),
+                            // ),
+                            GestureDetector(
+                              onTap: () {
                                 var newWater = profileProvider.water! + 500;
                                 context
                                     .read<ProfileProvider>()
                                     .setWater(newWater, loginProvider.userId!);
                               },
-                              icon: const Icon(Icons.water),
+                              child: Image.asset(
+                                'assets/images/500water.png',
+                                scale: 4.8,
+                              ),
                             ),
-                            const Text('500 ml')
+                            const Text('500 mL')
                           ],
                         ),
                       ],
@@ -600,12 +897,14 @@ class _ProfilePageState extends State<ProfilePage>
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Steps taken:',
+                        Text(
+                          AppLocalizations.of(context)!.step_taken,
                           style: TextStyle(fontSize: 15),
                         ),
                         Text(
-                          _steps,
+                          _steps == 'Step Count not available'
+                              ? AppLocalizations.of(context)!.step_not_avaliable
+                              : _steps,
                           style: const TextStyle(fontSize: 15),
                         ),
                         // const Divider(
@@ -613,8 +912,8 @@ class _ProfilePageState extends State<ProfilePage>
                         //   thickness: 0,
                         //   color: Colors.white,
                         // ),
-                        const Text(
-                          'Pedestrian status:',
+                        Text(
+                          AppLocalizations.of(context)!.pedestrian_status,
                           style: TextStyle(fontSize: 15),
                         ),
                         Row(
@@ -643,7 +942,11 @@ class _ProfilePageState extends State<ProfilePage>
                         ),
                         Center(
                           child: Text(
-                            _status,
+                            _status == 'walking'
+                                ? AppLocalizations.of(context)!.walking
+                                : _status == 'stopped'
+                                    ? AppLocalizations.of(context)!.stopped
+                                    : '?',
                             style: _status == 'walking' || _status == 'stopped'
                                 ? const TextStyle(fontSize: 30)
                                 : const TextStyle(

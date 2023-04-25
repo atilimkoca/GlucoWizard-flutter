@@ -105,7 +105,8 @@ class PredictionTextFields extends StatelessWidget {
       AppLocalizations.of(context)!.houndredMin,
     ];
 
-    var selectedText = context.watch<PredictionProvider>().selectedText ?? '';
+    var selectedText = context.watch<PredictionProvider>().selectedText ??
+        AppLocalizations.of(context)!.fifteenMinText;
 
     return Column(
       children: [
@@ -113,8 +114,10 @@ class PredictionTextFields extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Image.asset("assets/images/prediction.png",
-                  height: MediaQuery.of(context).size.height * 0.13),
+              child: Image.asset("assets/images/type1_page.png",
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  // width: MediaQuery.of(context).size.width * 0.8,
+                  scale: 0.5),
             ),
             DropdownButton2(
                 isExpanded: true,
@@ -150,7 +153,7 @@ class PredictionTextFields extends StatelessWidget {
                     border: Border.all(
                       color: Colors.black26,
                     ),
-                    color: const Color.fromARGB(255, 164, 201, 255),
+                    color: const Color(0xffB7A1E0),
                   ),
                   elevation: 2,
                 ),
@@ -168,7 +171,7 @@ class PredictionTextFields extends StatelessWidget {
                     padding: null,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      color: const Color.fromARGB(255, 164, 201, 255),
+                      color: const Color(0xffB7A1E0),
                     ),
                     elevation: 8,
                     offset: const Offset(-20, 0),
@@ -205,7 +208,7 @@ class PredictionTextFields extends StatelessWidget {
                   print(selectedValue);
                 }),
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(6),
               child: Text(
                   selectedText == '15 Dakika' || selectedText == '15 Minute'
                       ? AppLocalizations.of(context)!.fifteenMinText

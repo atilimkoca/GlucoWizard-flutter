@@ -267,7 +267,7 @@ class PredictionTwoModel {
     String text5,
     String text6,
   ) async {
-    final interpreter = await Interpreter.fromAsset('ninety_min.tflite');
+    final interpreter = await Interpreter.fromAsset('ninety_2.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),
@@ -340,8 +340,7 @@ class PredictionTwoModel {
     String text7,
     String text8,
   ) async {
-    final interpreter =
-        await Interpreter.fromAsset('attention_lstm_teknofest.tflite');
+    final interpreter = await Interpreter.fromAsset('onehundred_2.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),

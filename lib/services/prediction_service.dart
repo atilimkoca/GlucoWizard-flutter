@@ -417,8 +417,7 @@ class PredictionModel {
     String text23,
     String text24,
   ) async {
-    final interpreter =
-        await Interpreter.fromAsset('attention_lstm_teknofest.tflite');
+    final interpreter = await Interpreter.fromAsset('onehundred.tflite');
     List<List<double>> input = [
       [
         double.parse(text1),

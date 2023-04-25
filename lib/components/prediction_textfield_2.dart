@@ -59,7 +59,7 @@ class PredictionTextFieldsTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PredictionTwoModel predictionModel = PredictionTwoModel();
-    String? selectedValue = context.watch<PredictionProvider>().selectedValue;
+    String? selectedValue2 = context.watch<PredictionProvider>().selectedValue2;
     final List<String> items = [
       //AppLocalizations.of(context)!.fiveMin,
       AppLocalizations.of(context)!.thirtyMin,
@@ -69,7 +69,8 @@ class PredictionTextFieldsTwo extends StatelessWidget {
       AppLocalizations.of(context)!.houndredMin,
     ];
 
-    var selectedText = context.watch<PredictionProvider>().selectedText ?? '';
+    var selectedText = context.watch<PredictionProvider>().selectedText2 ??
+        AppLocalizations.of(context)!.thirtyMinText2;
 
     return Column(
       children: [
@@ -77,8 +78,11 @@ class PredictionTextFieldsTwo extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Image.asset("assets/images/prediction.png",
-                  height: MediaQuery.of(context).size.height * 0.13),
+              child: Image.asset(
+                "assets/images/type2_prediction.png",
+                height: MediaQuery.of(context).size.height * 0.20,
+                width: MediaQuery.of(context).size.width * 0.9,
+              ),
             ),
             DropdownButton2(
                 isExpanded: true,
@@ -114,7 +118,7 @@ class PredictionTextFieldsTwo extends StatelessWidget {
                     border: Border.all(
                       color: Colors.black26,
                     ),
-                    color: const Color.fromARGB(255, 164, 201, 255),
+                    color: const Color(0xffB7A1E0),
                   ),
                   elevation: 2,
                 ),
@@ -132,7 +136,7 @@ class PredictionTextFieldsTwo extends StatelessWidget {
                     padding: null,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      color: const Color.fromARGB(255, 164, 201, 255),
+                      color: const Color(0xffB7A1E0),
                     ),
                     elevation: 8,
                     offset: const Offset(-20, 0),
@@ -148,7 +152,7 @@ class PredictionTextFieldsTwo extends StatelessWidget {
                   height: 40,
                   padding: EdgeInsets.only(left: 14, right: 14),
                 ),
-                value: context.watch<PredictionProvider>().head,
+                value: context.watch<PredictionProvider>().head2,
                 items: items
                     .map((item) => DropdownMenuItem<String>(
                           value: item,
@@ -163,31 +167,31 @@ class PredictionTextFieldsTwo extends StatelessWidget {
                         ))
                     .toList(),
                 onChanged: (e) {
-                  context.read<PredictionProvider>().setSelectedValue(e!);
-                  context.read<PredictionProvider>().setHead(e);
-                  context.read<PredictionProvider>().setSelectedText(e);
-                  print(selectedValue);
+                  context.read<PredictionProvider>().setSelectedValue2(e!);
+                  context.read<PredictionProvider>().setHead2(e);
+                  context.read<PredictionProvider>().setSelectedText2(e);
+                  //print(selectedValue);
                 }),
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(6),
               child: Text(
                   // selectedText == '15 Dakika' || selectedText == '15 Minute'
                   //     ? AppLocalizations.of(context)!.fifteenMinText
                   selectedText == '30 Dakika' || selectedText == '30 Minute'
-                      ? AppLocalizations.of(context)!.thirtyMinText
+                      ? AppLocalizations.of(context)!.thirtyMinText2
                       : selectedText == '45 Dakika' ||
                               selectedText == '45 Minute'
-                          ? AppLocalizations.of(context)!.fortyFiveMinText
+                          ? AppLocalizations.of(context)!.fortyFiveMinText2
                           : selectedText == '60 Dakika' ||
                                   selectedText == '60 Minute'
-                              ? AppLocalizations.of(context)!.sixtyminText
+                              ? AppLocalizations.of(context)!.sixtyminText2
                               : selectedText == '90 Dakika' ||
                                       selectedText == '90 Minute'
-                                  ? AppLocalizations.of(context)!.ninetyminText
+                                  ? AppLocalizations.of(context)!.ninetyminText2
                                   : selectedText == '120 Dakika' ||
                                           selectedText == '120 Minute'
                                       ? AppLocalizations.of(context)!
-                                          .oneTwentyminText
+                                          .oneTwentyminText2
                                       : selectedText,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -203,26 +207,26 @@ class PredictionTextFieldsTwo extends StatelessWidget {
         //         predictionController1: predictionController15_1,
         //       )
         //     :
-        selectedValue == '30 Dakika' || selectedValue == '30 Minute'
+        selectedValue2 == '30 Dakika' || selectedValue2 == '30 Minute'
             ? ThirtyMinPredictionTwo(
                 predictionController1: predictionController30_1,
                 predictionController2: predictionController30_2,
               )
-            : selectedValue == '45 Dakika' || selectedValue == '45 Minute'
+            : selectedValue2 == '45 Dakika' || selectedValue2 == '45 Minute'
                 ? FourtyFiveMinPredictionTwo(
                     predictionController1: predictionController45_1,
                     predictionController2: predictionController45_2,
                     predictionController3: predictionController45_3,
                   )
-                : selectedValue == '60 Dakika' || selectedValue == '60 Minute'
+                : selectedValue2 == '60 Dakika' || selectedValue2 == '60 Minute'
                     ? SixtyMinPredictionTwo(
                         predictionController1: predictionController60_1,
                         predictionController2: predictionController60_2,
                         predictionController3: predictionController60_3,
                         predictionController4: predictionController60_4,
                       )
-                    : selectedValue == '90 Dakika' ||
-                            selectedValue == '90 Minute'
+                    : selectedValue2 == '90 Dakika' ||
+                            selectedValue2 == '90 Minute'
                         ? NinetyMinPredictionTwo(
                             predictionController1: predictionController60_1,
                             predictionController2: predictionController90_2,
@@ -231,8 +235,8 @@ class PredictionTextFieldsTwo extends StatelessWidget {
                             predictionController5: predictionController90_5,
                             predictionController6: predictionController90_6,
                           )
-                        : selectedValue == '120 Dakika' ||
-                                selectedValue == '120 Minute'
+                        : selectedValue2 == '120 Dakika' ||
+                                selectedValue2 == '120 Minute'
                             ? HundredTwentyPredictionTwo(
                                 predictionController1:
                                     predictionController120_1,

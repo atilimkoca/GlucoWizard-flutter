@@ -108,4 +108,11 @@ class ProfileProvider extends ChangeNotifier {
     getInfos(uid);
     notifyListeners();
   }
+
+  String? _genderLang;
+  String? get genderLang => _genderLang;
+  setGenderLang(String index) {
+    _genderLang = index;
+    notifyListeners();
+  }
 }

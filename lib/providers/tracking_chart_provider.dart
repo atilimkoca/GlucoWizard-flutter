@@ -39,7 +39,7 @@ class TrackingChartProvider extends ChangeNotifier {
   // }
   Future<void> getTrackingChart(TrackingChart chart) async {
     _trackingCharts = await _service.getTrackingChart(chart);
-
+    sortTrackingChart();
     notifyListeners();
   }
 
@@ -52,6 +52,11 @@ class TrackingChartProvider extends ChangeNotifier {
   Future<void> deleteTrackingChart(TrackingChart chart) async {
     await _service.deleteTrackingChart(chart);
     getTrackingChart(chart);
+    notifyListeners();
+  }
+
+  sortTrackingChart() {
+    _trackingCharts.sort((a, b) => a.date.compareTo(b.date));
     notifyListeners();
   }
 }

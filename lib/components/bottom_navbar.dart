@@ -24,7 +24,7 @@ class BottomNavbar extends StatelessWidget {
     Icon(FontAwesomeIcons.handHoldingMedical, size: 30, color: Colors.white),
     Icon(LineIcons.stethoscope, size: 40, color: Colors.white),
     Icon(LineIcons.dna, size: 40, color: Colors.white),
-    Icon(LineIcons.syringe, size: 40, color: Colors.white),
+    Icon(LineIcons.capsules, size: 40, color: Colors.white),
     Icon(Icons.alarm, size: 37, color: Colors.white),
     Icon(LineIcons.userCircle, size: 40, color: Colors.white),
   ];
@@ -48,8 +48,8 @@ class BottomNavbar extends StatelessWidget {
     }
 
     return CurvedNavigationBar(
-        backgroundColor: Color(0xffC3F8FF),
-        color: Color.fromARGB(255, 192, 131, 183),
+        backgroundColor: Color.fromARGB(255, 213, 196, 238),
+        color: Color.fromARGB(255, 142, 97, 209),
         height: MediaQuery.of(context).size.height * 0.07,
         animationDuration: Duration(milliseconds: 200),
         items: pages(),

@@ -16,8 +16,8 @@ class DiagnoseCard extends StatelessWidget {
   static final _insulinkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    glucoseController.text = '148';
-    insulinController.text = '220';
+    // glucoseController.text = '148';
+    // insulinController.text = '220';
     Future predictDiagnose() async {
       String data = await DefaultAssetBundle.of(context)
           .loadString("assets/diabetestype.json");
@@ -39,19 +39,51 @@ class DiagnoseCard extends StatelessWidget {
           child: ElevatedButton(
               onPressed: () async {
                 predictDiagnose().then((value) => CoolAlert.show(
-                      context: context,
-                      confirmBtnText: AppLocalizations.of(context)!.okay,
-                      type: CoolAlertType.success,
-                      text: value.toString() == '0.0'
-                          ? 'Sağlıklısınız'
-                          : value.toString() == '1.0'
-                              ? 'Gizli Şeker Hastası'
-                              : value.toString() == '2.0'
-                                  ? 'Tip 1 Diyabetlisiniz'
-                                  : value.toString() == '3.0'
-                                      ? 'Tip 2 Diyabetlisiniz'
-                                      : '',
-                    ));
+                    context: context,
+                    confirmBtnColor: Color.fromARGB(255, 142, 97, 209),
+                    lottieAsset: value.toString() == '0.0'
+                        ? 'assets/images/heart.json'
+                        : value.toString() == '1.0'
+                            ? 'assets/images/hidden_sugar_warning.json'
+                            : value.toString() == '2.0'
+                                ? 'assets/images/type1_warning.json'
+                                : value.toString() == '3.0'
+                                    ? 'assets/images/type2_warning (2).json'
+                                    : '',
+                    loopAnimation: true,
+                    confirmBtnText: AppLocalizations.of(context)!.okay,
+                    type: CoolAlertType.success,
+                    backgroundColor: Color.fromARGB(255, 213, 196, 238),
+                    title: value.toString() == '0.0'
+                        ? AppLocalizations.of(context)!.diagnose_healthy
+                        : value.toString() == '1.0'
+                            ? AppLocalizations.of(context)!.diagnose_hidden
+                            : value.toString() == '2.0'
+                                ? AppLocalizations.of(context)!
+                                    .diagnose_detected
+                                : value.toString() == '3.0'
+                                    ? AppLocalizations.of(context)!
+                                        .diagnose_detected
+                                    : '',
+                    text: value.toString() == '0.0'
+                        ? AppLocalizations.of(context)!.healthy_text
+                        : value.toString() == '1.0'
+                            ? AppLocalizations.of(context)!.type1_hidden
+                            : value.toString() == '2.0'
+                                ? AppLocalizations.of(context)!.type1
+                                : value.toString() == '3.0'
+                                    ? AppLocalizations.of(context)!.type2
+                                    : '',
+                    textTextStyle: TextStyle(
+                        color: value.toString() == '1.0'
+                            ? Colors.red
+                            : value.toString() == '0.0'
+                                ? Colors.green
+                                : value.toString() == '2.0'
+                                    ? Colors.red
+                                    : Colors.red,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold)));
 
                 bool validate2 = _insulinkey.currentState!.validate();
                 bool validate = _formKey.currentState!.validate();
@@ -88,9 +120,9 @@ class DiagnoseCard extends StatelessWidget {
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: const Color.fromARGB(255, 242, 243, 204),
+              color: const Color(0xffFAF0D7),
               elevation: 30.0,
-              shadowColor: Colors.amber,
+              shadowColor: Color(0xffFAF0D7),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -118,10 +150,10 @@ class DiagnoseCard extends StatelessWidget {
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                                RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                             TextInputFormatter.withFunction(
                               (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
+                                text: newValue.text.replaceAll(',', '.'),
                               ),
                             ),
                           ],
@@ -149,9 +181,9 @@ class DiagnoseCard extends StatelessWidget {
           child: Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: const Color.fromARGB(255, 242, 243, 204),
+            color: const Color(0xffFAF0D7),
             elevation: 30.0,
-            shadowColor: Colors.amber,
+            shadowColor: Color(0xffFAF0D7),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -161,7 +193,7 @@ class DiagnoseCard extends StatelessWidget {
                     height: 50,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 0),
-                      child: Image.asset("assets/images/insulin.png"),
+                      child: Image.asset("assets/images/insulin (1).png"),
                     ),
                   ),
                   SizedBox(
@@ -180,10 +212,10 @@ class DiagnoseCard extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(
-                              RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
+                              RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
                           TextInputFormatter.withFunction(
                             (oldValue, newValue) => newValue.copyWith(
-                              text: newValue.text.replaceAll('.', ','),
+                              text: newValue.text.replaceAll(',', '.'),
                             ),
                           ),
                         ],

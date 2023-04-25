@@ -14,57 +14,133 @@ import 'package:glucowizard_flutter/providers/language_provider.dart';
 import 'package:glucowizard_flutter/providers/profile_provider.dart';
 
 import 'package:glucowizard_flutter/providers/register_provider.dart';
+import 'package:glucowizard_flutter/providers/reminder_provider.dart';
 import 'package:glucowizard_flutter/providers/tracking_chart_provider.dart';
 import 'package:glucowizard_flutter/views/health_page.dart';
 import 'package:glucowizard_flutter/views/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../models/tracking_chart_model.dart';
 import '../providers/login_provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text('Allow Notifications'),
-                  content:
-                      Text('Please allow notifications to receive reminders'),
-                  actions: [
-                    TextButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Don\'t Allow',
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        )),
-                    TextButton(
-                      onPressed: () => AwesomeNotifications()
-                          .requestPermissionToSendNotifications()
-                          .then((_) {
-                        Navigator.pop(context);
-                      }),
-                      child: Text(
-                        'Allow',
-                        style: TextStyle(
-                            color: Colors.teal,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                ));
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  var internetConnection = false;
+  @override
+  void initState() {
+    super.initState();
+    requestPermission();
+    notificationPermission();
+  }
+
+  Future<void> requestPermission() async {
+    final status = await Permission.activityRecognition.status;
+    if (status.isDenied) {
+      final result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.permission_requiered),
+            content:
+                Text(AppLocalizations.of(context)!.physical_activity_required),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text(AppLocalizations.of(context)!.okay),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+              ElevatedButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+            ],
+          );
+        },
+      );
+      if (result != null && result) {
+        await Permission.activityRecognition.request();
       }
-    });
+    }
+  }
+
+  Future<void> notificationPermission() async {
+    final status = await Permission.notification.status;
+    if (status.isDenied) {
+      final result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.permission_requiered),
+            content: Text(AppLocalizations.of(context)!.notification_required),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text(AppLocalizations.of(context)!.okay),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+              ElevatedButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+            ],
+          );
+        },
+      );
+      if (result != null && result) {
+        await Permission.notification.request();
+      }
+    }
+  }
+
+  Future<bool> checkInternet() async {
+    return await InternetConnectionChecker().hasConnection;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    checkInternet().then((value) => internetConnection = value);
+    //print(internetConnection);
+    // AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    //   if (!isAllowed) {
+    //     showDialog(
+    //         context: context,
+    //         builder: (context) => AlertDialog(
+    //               title:
+    //                   Text(AppLocalizations.of(context)!.permission_requiered),
+    //               content:
+    //                   Text(AppLocalizations.of(context)!.notification_required),
+    //               actions: [
+    //                 ElevatedButton(
+    //                   onPressed: () => AwesomeNotifications()
+    //                       .requestPermissionToSendNotifications()
+    //                       .then((_) {
+    //                     Navigator.pop(context);
+    //                   }),
+    //                   child: Text(
+    //                     AppLocalizations.of(context)!.okay,
+    //                   ),
+    //                 ),
+    //                 ElevatedButton(
+    //                     onPressed: () async {
+    //                       Navigator.pop(context);
+    //                     },
+    //                     child: Text(
+    //                       AppLocalizations.of(context)!.cancel,
+    //                     )),
+
+    //               ],
+    //             ));
+    //   }
+    // });
 
     var languageProvider =
         Provider.of<LanguageProvider>(context, listen: false);
@@ -74,7 +150,7 @@ class LoginPage extends StatelessWidget {
       Flushbar(
         icon: const Icon(Icons.error),
         duration: const Duration(seconds: 3),
-        title: '',
+        title: AppLocalizations.of(context)!.error,
         message: text,
         backgroundGradient:
             const LinearGradient(colors: [Colors.red, Colors.orange]),
@@ -93,7 +169,7 @@ class LoginPage extends StatelessWidget {
       Flushbar(
         icon: const Icon(Icons.check),
         duration: const Duration(seconds: 3),
-        title: "Hey Ninja",
+        title: AppLocalizations.of(context)!.successful,
         message: text,
         backgroundGradient:
             const LinearGradient(colors: [Colors.green, Colors.teal]),
@@ -182,6 +258,7 @@ class LoginPage extends StatelessWidget {
 
     Future<String?>? _recoverPassword(String p1) async {
       try {
+        checkInternet().then((value) => internetConnection = value);
         process = 'recover';
         recoverStatus = true;
         var _userCredential = await auth.sendPasswordResetEmail(email: p1);
@@ -197,6 +274,8 @@ class LoginPage extends StatelessWidget {
 
     Future<String?>? _signupUser(SignupData p1) async {
       try {
+        checkInternet().then((value) => internetConnection = value);
+        context.read<LoginPageProvider>().setOffline(false);
         process = 'register';
         registerStatus = true;
         loginStatus = false;
@@ -219,6 +298,7 @@ class LoginPage extends StatelessWidget {
       var profileProvider =
           Provider.of<ProfileProvider>(context, listen: false);
       try {
+        checkInternet().then((value) => internetConnection = value);
         process = 'login';
         context.read<LoginPageProvider>().setOffline(false);
         loginStatus = true;
@@ -241,6 +321,7 @@ class LoginPage extends StatelessWidget {
             date: formattedDate,
             uid: context.read<LoginPageProvider>().userId,
           );
+          context.read<ReminderProvider>().getReminders(auth.currentUser!.uid);
           context.read<AlarmsProvider>().getAlarms(auth.currentUser!.uid);
           context.read<TrackingChartProvider>().getTrackingChart(_chart);
           await context.read<ProfileProvider>().getInfos(auth.currentUser!.uid);
@@ -249,6 +330,11 @@ class LoginPage extends StatelessWidget {
           print(data.counter);
           profileProvider.updateCounter(auth.currentUser!.uid, data.counter!);
           //var data2 = context.watch<ProfileProvider>().users;
+          if (context.read<LanguageProvider>().locale == null) {
+            context
+                .read<LanguageProvider>()
+                .setLocale(Locale(Platform.localeName.split('_')[0]));
+          }
           if (data.time!.day == DateTime.now().day) {
             print('same day');
           } else {
@@ -269,12 +355,10 @@ class LoginPage extends StatelessWidget {
       }
     }
 
-    const users = {
-      'atilimkoca44@gmail.com': '123456',
-      'hunter@gmail.com': 'hunter',
-    };
-
     return FlutterLogin(
+        theme: LoginTheme(
+          primaryColor: Color(0xff8E61D1),
+        ),
         loginProviders: <LoginProvider>[
           // LoginProvider(
           //   icon: FontAwesomeIcons.google,
@@ -288,18 +372,20 @@ class LoginPage extends StatelessWidget {
                 context.read<LoginPageProvider>().setOffline(true);
               },
               icon: FontAwesomeIcons.person,
-              label: 'offline')
+              label: AppLocalizations.of(context)!.offline_login)
         ],
         navigateBackAfterRecovery: false,
-        savedEmail: users.keys.first.toString(),
-        savedPassword: users.values.first.toString(),
         title: 'GlucoWizard',
         logo: const AssetImage('assets/images/wizard-hat.png'),
         onLogin: _authUser,
         onSignup: _signupUser,
         disableCustomPageTransformer: true,
         messages: LoginMessages(
-          recoverCodePasswordDescription: 'test',
+          userHint: AppLocalizations.of(context)!.email,
+          providersTitleFirst: AppLocalizations.of(context)!.or_login_with,
+          flushbarTitleSuccess: AppLocalizations.of(context)!.successful,
+          recoverPasswordDescription:
+              AppLocalizations.of(context)!.recover_description,
           recoverPasswordSuccess:
               AppLocalizations.of(context)!.recoverPasswordSuccess,
           passwordHint: AppLocalizations.of(context)!.password,
@@ -341,51 +427,59 @@ class LoginPage extends StatelessWidget {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: ((context) => const HomePage())));
           } else {
-            if (loginProvider.isLogin!) {
-              googleSign = false;
+            if (internetConnection) {
+              if (loginProvider.isLogin!) {
+                googleSign = false;
 
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            } else {
-              if (process == 'register') {
-                if (!registerStatus) {
-                  registerStatus = false;
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                  errorAlert(AppLocalizations.of(context)!.register_error);
-                  //showAlert(AppLocalizations.of(context)!.register_error,TypeAlert.error);
-                } else if (registerStatus) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                  successAlert(AppLocalizations.of(context)!.register_success);
-                  //showAlert(AppLocalizations.of(context)!.register_success, TypeAlert.success);
-                }
-              } else if (process == 'login') {
-                if (!loginStatus) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                  errorAlert(AppLocalizations.of(context)!.register_error);
-                  //showAlert(AppLocalizations.of(context)!.login_error, TypeAlert.error);
-                } else if (loginStatus && verified) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
-                } else if (loginStatus && !verified) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                  errorAlert(AppLocalizations.of(context)!.register_error);
-                  //showAlert(AppLocalizations.of(context)!.email_not_verified, TypeAlert.error);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              } else {
+                if (process == 'register') {
+                  if (!registerStatus) {
+                    registerStatus = false;
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                    errorAlert(AppLocalizations.of(context)!.register_error);
+                    //showAlert(AppLocalizations.of(context)!.register_error,TypeAlert.error);
+                  } else if (registerStatus) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                    successAlert(
+                        AppLocalizations.of(context)!.register_success);
+                    //showAlert(AppLocalizations.of(context)!.register_success, TypeAlert.success);
+                  }
+                } else if (process == 'login') {
+                  if (!loginStatus) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                    errorAlert(AppLocalizations.of(context)!.login_error);
+                    //showAlert(AppLocalizations.of(context)!.login_error, TypeAlert.error);
+                  } else if (loginStatus && verified) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  } else if (loginStatus && !verified) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                    errorAlert(
+                        AppLocalizations.of(context)!.email_not_verified);
+                    //showAlert(AppLocalizations.of(context)!.email_not_verified, TypeAlert.error);
+                  }
                 } else if (process == 'recover') {
                   if (!recoverStatus) {
                     Navigator.pushReplacement(
@@ -393,7 +487,8 @@ class LoginPage extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => const LoginPage()),
                     );
-                    errorAlert(AppLocalizations.of(context)!.register_error);
+                    errorAlert(
+                        AppLocalizations.of(context)!.recoverPasswordFailed);
                     //showAlert(AppLocalizations.of(context)!.recoverPasswordFailed,  TypeAlert.error);
                   } else if (recoverStatus) {
                     Navigator.pushReplacement(
@@ -401,27 +496,36 @@ class LoginPage extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => const LoginPage()),
                     );
-                    successAlert(AppLocalizations.of(context)!.register_error);
+                    successAlert(
+                        AppLocalizations.of(context)!.recoverPasswordSuccess);
                     //showAlert(AppLocalizations.of(context)!.recoverPasswordSuccess, TypeAlert.success);
                   }
                 }
-              } else if (process == 'google') {
-                if (!googleSign) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                  errorAlert(AppLocalizations.of(context)!.register_error);
-                  //showAlert(AppLocalizations.of(context)!.recoverPasswordFailed,  TypeAlert.error);
-                } else if (googleSign) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
-                  successAlert(AppLocalizations.of(context)!.register_error);
-                  //showAlert(AppLocalizations.of(context)!.recoverPasswordSuccess, TypeAlert.success);
-                }
+                // else if (process == 'google') {
+                //   if (!googleSign) {
+                //     Navigator.pushReplacement(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => const LoginPage()),
+                //     );
+                //     errorAlert(AppLocalizations.of(context)!.recoverPasswordFailed);
+                //     //showAlert(AppLocalizations.of(context)!.recoverPasswordFailed,  TypeAlert.error);
+                //   } else if (googleSign) {
+                //     Navigator.pushReplacement(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => const HomePage()),
+                //     );
+                //     successAlert(AppLocalizations.of(context)!.register_error);
+                //     //showAlert(AppLocalizations.of(context)!.recoverPasswordSuccess, TypeAlert.success);
+                //   }
+                // }
               }
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+              errorAlert(AppLocalizations.of(context)!.internet_error);
             }
           }
         });
