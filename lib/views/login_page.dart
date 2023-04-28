@@ -376,7 +376,7 @@ class _LoginPageState extends State<LoginPage> {
         ],
         navigateBackAfterRecovery: false,
         title: 'DiyaSezi',
-        logo: const AssetImage('assets/images/wizard-hat.png'),
+        logo: const AssetImage('assets/images/Logo_app.png'),
         onLogin: _authUser,
         onSignup: _signupUser,
         disableCustomPageTransformer: true,

@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
     return AnimatedSplashScreen(
         duration: 1000,
         splash: Column(children: [
-          Image.asset('assets/images/wizard-hat.png', height: 180, width: 180),
+          Image.asset('assets/images/Logo_app.png', height: 180, width: 180),
           SizedBox(height: 20),
           const Text(
             'DiyaSezi',
