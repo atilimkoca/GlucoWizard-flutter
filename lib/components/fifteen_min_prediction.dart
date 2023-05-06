@@ -18,7 +18,7 @@ class FifteenMinPrediction extends StatelessWidget {
   final TextEditingController predictionController1;
   final TextEditingController predictionController2;
   final TextEditingController predictionController3;
-
+  static final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final List<String> items = [
@@ -38,195 +38,238 @@ class FifteenMinPrediction extends StatelessWidget {
     PredictionModel predictionModel = PredictionModel();
     var selectedText = context.watch<PredictionProvider>().selectedText ?? '';
     //String? selectedText = predictionProvider.selectedText ?? '15 Dakika';
-    predictionController1.text = "254";
-    predictionController2.text = "250";
-    predictionController3.text = "249";
 
     return Column(
       children: [
-        ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shadowColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+        Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shadowColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                backgroundColor: const Color(0xffB7A1E0),
               ),
-              backgroundColor: const Color.fromARGB(255, 164, 201, 255),
-            ),
-            onPressed: () {
-              predictionModel
-                  .load15Model(
-                    predictionController1.text,
-                    predictionController2.text,
-                    predictionController3.text,
-                  )
-                  .then((value) => CoolAlert.show(
-                        context: context,
-                        confirmBtnText: AppLocalizations.of(context)!.okay,
-                        type: value <= 70
-                            ? CoolAlertType.error
-                            : value > 70 && value <= 140
-                                ? CoolAlertType.success
-                                : value > 140 && value <= 200
-                                    ? CoolAlertType.warning
-                                    : CoolAlertType.error,
-                        title: value <= 70
-                            ? AppLocalizations.of(context)!.risk_hypo
-                            : value <= 140 && value > 70
-                                ? AppLocalizations.of(context)!.normal_value
-                                : value <= 200 && value > 140
-                                    ? AppLocalizations.of(context)!.hidden_sugar
-                                    : AppLocalizations.of(context)!.risk_hyper,
-                        text: value.toStringAsFixed(2),
-                      ));
-            },
-            child: Text(
-              AppLocalizations.of(context)!.prediction,
-            )),
+              onPressed: () {
+                bool _validate = _formKey.currentState!.validate();
+                if (_validate) {
+                  predictionModel
+                      .load15Model(
+                        predictionController1.text,
+                        predictionController2.text,
+                        predictionController3.text,
+                      )
+                      .then((value) => CoolAlert.show(
+                          context: context,
+                          confirmBtnColor: Color.fromARGB(255, 142, 97, 209),
+                          confirmBtnText: AppLocalizations.of(context)!.okay,
+                          backgroundColor: Color.fromARGB(255, 213, 196, 238),
+                          type: CoolAlertType.success,
+                          loopAnimation: true,
+                          lottieAsset: value <= 70
+                              ? 'assets/images/hypo_prediction.json'
+                              : value <= 180 && value > 70
+                                  ? 'assets/images/heart.json'
+                                  : value > 180
+                                      ? 'assets/images/hyper_prediction.json'
+                                      : 'assets/images/hyper_prediction.json',
+                          title: value <= 70
+                              ? '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.risk_hypo}'
+                              : value <= 180 && value > 70
+                                  ? '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.normal_value}'
+                                  : value > 180
+                                      ? '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.risk_hyper}'
+                                      : '${AppLocalizations.of(context)!.thirty_min_later} ${AppLocalizations.of(context)!.risk_hyper}',
+                          text: value.toStringAsFixed(2),
+                          textTextStyle: TextStyle(
+                              color: value <= 70
+                                  ? Color.fromARGB(255, 150, 228, 235)
+                                  : value <= 180 && value > 70
+                                      ? Colors.green
+                                      : value > 180
+                                          ? Colors.red
+                                          : Colors.red,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold)));
+                }
+              },
+              child: Text(
+                AppLocalizations.of(context)!.prediction,
+              )),
+        ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.478,
-          child: StackedCardCarousel(
-            onPageChanged: (pageIndex) {},
-            spaceBetweenItems: 180,
-            items: [
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: Color.fromARGB(255, 243, 243, 229),
-                elevation: 30.0,
-                shadowColor: Colors.amber,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Image.asset("assets/images/ten.png"),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-                          controller: predictionController1,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText:
-                                AppLocalizations.of(context)!.enterGlucoseValue,
+          height: MediaQuery.of(context).size.height * 0.41,
+          child: Form(
+            key: _formKey,
+            child: StackedCardCarousel(
+              initialOffset: 6,
+              type: StackedCardCarouselType.fadeOutStack,
+              onPageChanged: (pageIndex) {},
+              spaceBetweenItems: 200,
+              items: [
+                Card(
+                  margin: EdgeInsets.only(top: 0, bottom: 0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: const Color(0xffFFEFEF),
+                  elevation: 30.0,
+                  shadowColor: const Color(0xffFFEFEF),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Image.asset("assets/images/ten.png"),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: const Color.fromARGB(255, 242, 243, 204),
-                elevation: 30.0,
-                shadowColor: Colors.amber,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Image.asset("assets/images/five.png"),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
+                        SizedBox(
+                          width: 200,
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return AppLocalizations.of(context)!
+                                    .enterGlucoseValue;
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                              TextInputFormatter.withFunction(
+                                (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.replaceAll(',', '.'),
+                                ),
                               ),
+                            ],
+                            controller: predictionController1,
+                            //controller: predictionController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              labelText: AppLocalizations.of(context)!
+                                  .enterGlucoseValue,
                             ),
-                          ],
-                          controller: predictionController2,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText:
-                                AppLocalizations.of(context)!.enterGlucoseValue,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: const Color.fromARGB(255, 242, 243, 204),
-                elevation: 30.0,
-                shadowColor: Colors.amber,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Image.asset("assets/images/now.png"),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]+[,]{0,1}[0-9]*')),
-                            TextInputFormatter.withFunction(
-                              (oldValue, newValue) => newValue.copyWith(
-                                text: newValue.text.replaceAll('.', ','),
-                              ),
-                            ),
-                          ],
-                          controller: predictionController3,
-                          //controller: predictionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            labelText:
-                                AppLocalizations.of(context)!.enterGlucoseValue,
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: const Color(0xffFFEFEF),
+                  elevation: 30.0,
+                  shadowColor: const Color(0xffFFEFEF),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Image.asset("assets/images/five.png"),
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          width: 200,
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return AppLocalizations.of(context)!
+                                    .enterGlucoseValue;
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                              TextInputFormatter.withFunction(
+                                (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.replaceAll(',', '.'),
+                                ),
+                              ),
+                            ],
+                            controller: predictionController2,
+                            //controller: predictionController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              labelText: AppLocalizations.of(context)!
+                                  .enterGlucoseValue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  color: const Color(0xffFFEFEF),
+                  elevation: 30.0,
+                  shadowColor: const Color(0xffFFEFEF),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Image.asset("assets/images/present.png"),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return AppLocalizations.of(context)!
+                                    .enterGlucoseValue;
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]+[.]{0,1}[0-9]*')),
+                              TextInputFormatter.withFunction(
+                                (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.replaceAll(',', '.'),
+                                ),
+                              ),
+                            ],
+                            controller: predictionController3,
+                            //controller: predictionController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              labelText: AppLocalizations.of(context)!
+                                  .enterGlucoseValue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

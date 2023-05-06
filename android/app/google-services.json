@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "250052247093",
+    "project_id": "glucowizard",
+    "storage_bucket": "glucowizard.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250052247093:android:a5424d57eb73d5b9733b7c",
+        "android_client_info": {
+          "package_name": "com.example.glucowizard_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250052247093-29hhbn8114mkf37i6o2qg6o19v8fkm9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.glucowizard_flutter",
+            "certificate_hash": "75fe5654232246544d25c9306c4b3a95c3c0d344"
+          }
+        },
+        {
+          "client_id": "250052247093-etcd2oqj06ehd0c41g1dt3ci1lb0irtr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBUYVBPI1z-jwW-Ie63gj1DInDsIM47ME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250052247093-etcd2oqj06ehd0c41g1dt3ci1lb0irtr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "250052247093-q3jssqpb7q9ch09etftee5dc0gmq0ms4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.glucowizardFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
