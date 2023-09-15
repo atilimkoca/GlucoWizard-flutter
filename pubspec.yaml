@@ -33,8 +33,9 @@ dependencies:
   flutter_login: ^4.1.1
   flutter_localizations:
     sdk: flutter
-  intl: any
-
+  intl: ^0.18.0
+dependency_overrides:
+  intl: ^0.17.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -60,7 +61,7 @@ dependencies:
   date_picker_timeline: ^1.2.3
   flutter_ringtone_player: ^3.2.0
   cloud_firestore: ^4.5.0
-  horizontal_center_date_picker: ^2.1.1
+  horizontal_center_date_picker: ^2.1.0
   flutter_slidable: ^2.0.0
   quickalert: ^1.0.1
   flutter_material_pickers: ^3.1.4+1
@@ -69,7 +70,7 @@ dependencies:
   android_alarm_manager_plus: ^2.1.2
   audioplayers: ^4.0.1
   flutter_local_notifications: ^12.0.4
-  awesome_notifications: ^0.7.4+1
+  awesome_notifications:
   dotted_border: ^2.0.0+3
   modal_bottom_sheet: ^2.1.2
   mobx: ^2.1.4

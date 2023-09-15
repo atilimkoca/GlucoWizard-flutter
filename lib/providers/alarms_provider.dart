@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glucowizard_flutter/models/alarm_info.dart';
 import 'package:glucowizard_flutter/services/alarms_service.dart';
 
