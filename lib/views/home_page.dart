@@ -36,6 +36,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../providers/language_provider.dart';
 
 import 'alarm.dart';
+import 'bluetooth_page.dart';
 import 'health_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -235,7 +236,8 @@ class HomePage extends StatelessWidget {
             return PredictionPage();
           case 3:
             return const TypetwoPredictionPage();
-
+          case 4:
+            return BluetoothConnectionPage();
           default:
             return DiagnosePage();
         }
@@ -256,6 +258,8 @@ class HomePage extends StatelessWidget {
             return Alarm();
           case 6:
             return ProfilePage();
+          case 7:
+            return BluetoothConnectionPage();
           default:
             return DiagnosePage();
         }

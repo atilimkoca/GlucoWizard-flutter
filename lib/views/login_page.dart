@@ -40,8 +40,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    requestBluetoothScanPermission();
     requestPermission();
     notificationPermission();
+  }
+
+  Future<void> requestBluetoothScanPermission() async {
+    var status = await Permission.bluetoothScan.request();
+    if (status != PermissionStatus.granted) {
+      // The user denied the permission.
+      // You can show a snackbar or dialog to explain why the permission is needed and ask the user to grant it again.
+      debugPrint('Bluetooth permission not granted');
+    } else {
+      debugPrint('Bluetooth permission granted');
+    }
   }
 
   Future<void> requestPermission() async {
@@ -108,40 +120,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     checkInternet().then((value) => internetConnection = value);
-    //print(internetConnection);
-    // AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-    //   if (!isAllowed) {
-    //     showDialog(
-    //         context: context,
-    //         builder: (context) => AlertDialog(
-    //               title:
-    //                   Text(AppLocalizations.of(context)!.permission_requiered),
-    //               content:
-    //                   Text(AppLocalizations.of(context)!.notification_required),
-    //               actions: [
-    //                 ElevatedButton(
-    //                   onPressed: () => AwesomeNotifications()
-    //                       .requestPermissionToSendNotifications()
-    //                       .then((_) {
-    //                     Navigator.pop(context);
-    //                   }),
-    //                   child: Text(
-    //                     AppLocalizations.of(context)!.okay,
-    //                   ),
-    //                 ),
-    //                 ElevatedButton(
-    //                     onPressed: () async {
-    //                       Navigator.pop(context);
-    //                     },
-    //                     child: Text(
-    //                       AppLocalizations.of(context)!.cancel,
-    //                     )),
-
-    //               ],
-    //             ));
-    //   }
-    // });
-
     var languageProvider =
         Provider.of<LanguageProvider>(context, listen: false);
     var lang =
@@ -356,6 +334,8 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return FlutterLogin(
+        savedEmail: 'atilimkoca44@gmail.com',
+        savedPassword: '123456',
         theme: LoginTheme(
           primaryColor: Color(0xff8E61D1),
         ),
@@ -375,7 +355,7 @@ class _LoginPageState extends State<LoginPage> {
               label: AppLocalizations.of(context)!.offline_login)
         ],
         navigateBackAfterRecovery: false,
-        title: 'DiyaSezi',
+        title: 'GlucoWizard',
         logo: const AssetImage('assets/images/Logo_app.png'),
         onLogin: _authUser,
         onSignup: _signupUser,

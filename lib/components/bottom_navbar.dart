@@ -12,7 +12,8 @@ class BottomNavbar extends StatelessWidget {
     Icon(FontAwesomeIcons.handHoldingMedical, size: 30, color: Colors.white),
     Icon(LineIcons.stethoscope, size: 40, color: Colors.white),
     Icon(LineIcons.dna, size: 40, color: Colors.white),
-    Icon(LineIcons.capsules, size: 40, color: Colors.white)
+    Icon(LineIcons.capsules, size: 40, color: Colors.white),
+    Icon(LineIcons.bluetooth, size: 40, color: Colors.white),
   ];
   var listOnline = [
     Icon(
@@ -27,6 +28,7 @@ class BottomNavbar extends StatelessWidget {
     Icon(LineIcons.capsules, size: 40, color: Colors.white),
     Icon(Icons.alarm, size: 37, color: Colors.white),
     Icon(LineIcons.userCircle, size: 40, color: Colors.white),
+    Icon(LineIcons.bluetooth, size: 40, color: Colors.white),
   ];
 
   BottomNavbar({super.key});

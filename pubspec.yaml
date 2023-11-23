@@ -34,6 +34,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.0
+  flutter_blue_plus: ^1.15.8
+  flutter_blue: ^0.8.0
+  permission_handler: ^12.3.0
+  get: ^4.6.6
 dependency_overrides:
   intl: ^0.17.0
   # The following adds the Cupertino Icons font to your application.
@@ -57,7 +61,7 @@ dependency_overrides:
   font_awesome_flutter: ^10.4.0
   google_sign_in: ^6.1.0
   flutter_dropdown_alert: ^1.0.7
-  another_flushbar: ^1.12.29
+  another_flushbar: ^1.12.30
   date_picker_timeline: ^1.2.3
   flutter_ringtone_player: ^3.2.0
   cloud_firestore: ^4.5.0
