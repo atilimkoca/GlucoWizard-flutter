@@ -24,6 +24,7 @@ import 'package:glucowizard_flutter/views/login_page.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:glucowizard_flutter/views/splash_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:provider/provider.dart';
 
@@ -39,19 +40,30 @@ void main() async {
   );
   await NotificationService.initalizeNotification();
   await AndroidAlarmManager.initialize();
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => BottomNavBarProvider()),
-    ChangeNotifierProvider(create: (_) => HealtPageProvider()),
-    ChangeNotifierProvider(create: (_) => AppBarProvider()),
-    ChangeNotifierProvider(create: (_) => LanguageProvider()),
-    ChangeNotifierProvider(create: (_) => PredictionProvider()),
-    ChangeNotifierProvider(create: (_) => LoginPageProvider()),
-    ChangeNotifierProvider(create: (_) => TrackingChartProvider()),
-    ChangeNotifierProvider(create: (_) => RegisterPageProvider()),
-    ChangeNotifierProvider(create: (_) => AlarmsProvider()),
-    ChangeNotifierProvider(create: (_) => ProfileProvider()),
-    ChangeNotifierProvider(create: (_) => ReminderProvider())
-  ], child: const MyApp()));
+  if (Platform.isAndroid) {
+    WidgetsFlutterBinding.ensureInitialized();
+    [
+      Permission.location,
+      Permission.storage,
+      Permission.bluetooth,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan
+    ].request().then((status) {
+      runApp(MultiProvider(providers: [
+        ChangeNotifierProvider(create: (_) => BottomNavBarProvider()),
+        ChangeNotifierProvider(create: (_) => HealtPageProvider()),
+        ChangeNotifierProvider(create: (_) => AppBarProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => PredictionProvider()),
+        ChangeNotifierProvider(create: (_) => LoginPageProvider()),
+        ChangeNotifierProvider(create: (_) => TrackingChartProvider()),
+        ChangeNotifierProvider(create: (_) => RegisterPageProvider()),
+        ChangeNotifierProvider(create: (_) => AlarmsProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => ReminderProvider())
+      ], child: const MyApp()));
+    });
+  }
 }
 
 class MyApp extends StatelessWidget {

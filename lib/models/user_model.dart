@@ -5,8 +5,6 @@ import 'package:glucowizard_flutter/models/alarm_info.dart';
 import 'package:glucowizard_flutter/models/reminder_model.dart';
 import 'package:glucowizard_flutter/models/tracking_chart_model.dart';
 
-import '../components/reminder.dart';
-
 class UserModel {
   String? id;
   String? name;
