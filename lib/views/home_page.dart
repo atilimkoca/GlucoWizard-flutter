@@ -236,8 +236,8 @@ class HomePage extends StatelessWidget {
             return PredictionPage();
           case 3:
             return const TypetwoPredictionPage();
-          case 4:
-            return BluetoothConnectionPage();
+          // case 4:
+          //   return BluetoothConnectionPage();
           default:
             return DiagnosePage();
         }
@@ -258,8 +258,8 @@ class HomePage extends StatelessWidget {
             return Alarm();
           case 6:
             return ProfilePage();
-          case 7:
-            return BluetoothConnectionPage();
+          // case 7:
+          //   return BluetoothConnectionPage();
           default:
             return DiagnosePage();
         }
